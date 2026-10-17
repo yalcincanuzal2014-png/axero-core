@@ -1,16 +1,48 @@
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
 
-templates = Jinja2Templates(directory="templates")
+HTML_CONTENT = """
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Axero Core - OSINT & Analiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; text-align: center; padding-top: 50px; }
+        .container { max-width: 600px; margin: auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        input[type="text"] { width: 80%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; }
+        button { background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #2563eb; }
+        pre { background: #0f172a; padding: 15px; border-radius: 6px; text-align: left; overflow-x: auto; color: #38bdf8; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Axero Core 🚀</h1>
+        <p>Gelişmiş OSINT ve Analiz Paneli</p>
+        
+        <form action="/sorgula" method="POST">
+            <input type="text" name="target" placeholder="Hedef (IP, Domain, Kullanıcı Adı)..." required>
+            <br>
+            <button type="submit">Analizi Başlat</button>
+        </form>
+
+        {%RESULT_SECTION%}
+    </div>
+</body>
+</html>
+"""
 
 @app.get("/", response_class=HTMLResponse)
-def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "result": None})
+def read_root():
+    html = HTML_CONTENT.replace("{%RESULT_SECTION%}", "")
+    return HTMLResponse(content=html)
 
 @app.post("/sorgula", response_class=HTMLResponse)
-async def run_osint(request: Request, target: str = Form(...)):
+async def run_osint(target: str = Form(...)):
     analysis_result = f"--- AXERO WEB ANALİZ RAPORU --- \n\nHedef: {target}\nDurum: Güvenli / Taramalar Tamamlandı [axerocore.net]"
-    return templates.TemplateResponse("index.html", {"request": request, "result": analysis_result})
+    result_html = f"<h3>Sonuçlar:</h3><pre>{analysis_result}</pre>"
+    html = HTML_CONTENT.replace("{%RESULT_SECTION%}", result_html)
+    return HTMLResponse(content=html)
