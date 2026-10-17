@@ -5,7 +5,6 @@ import string
 
 app = FastAPI()
 
-# Dinamik Lisans Veritabanı (Başlangıçta boş veya örnek birkaç key ile)
 DATABASE_KEYS = {
     "AXERO-MASTER-ADMIN-KEY": {"type": "VIP", "limit": 35}
 }
@@ -103,9 +102,9 @@ HTML_ADMIN_PANEL = """
         
         <form action="/admin-create-key" method="POST" class="form-group">
             <select name="tier_type">
-                <option value="FREE">Free (10 Modül)</option>
-                <option value="PRO">Pro (20 Modül)</option>
-                <option value="VIP">VIP (35 Modül - Tümü)</option>
+                <option value="FREE">Free (12 Modül)</option>
+                <option value="PRO">Pro (12 Modül)</option>
+                <option value="VIP">VIP (11 Modül - Tümü 35)</option>
             </select>
             <button type="submit">Yeni Lisans Key Üret</button>
         </form>
@@ -163,9 +162,9 @@ HTML_PANEL = """
                 <input type="text" name="target" placeholder="Hedef (IP, Domain, Kullanıcı Adı, Telefon)..." required>
             </div>
 
-            <!-- FREE MODÜLLER (1-10) -->
+            <!-- FREE MODÜLLER (1-12) -->
             <div class="modules-section">
-                <h3>🟢 Free Modüller (Temel Tarama)</h3>
+                <h3>🟢 Free Modüller (Temel Tarama - 12 Modül)</h3>
                 <div class="grid">
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="ip" checked> IP & Geo Lokasyon</label>
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="whois" checked> Domain Whois Sorgusu</label>
@@ -173,25 +172,37 @@ HTML_PANEL = """
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="subdomain"> Alt Alan Adı (Subdomain)</label>
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="port"> Port Taraması (Temel)</label>
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="ssl"> SSL Sertifika Kontrolü</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_headers"> HTTP Header Analizi</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="robots_txt"> Robots.txt & Sitemap</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="mac_lookup"> MAC Adresi Vendor</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ping_test"> Ping & Latency Testi</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_status"> HTTP Status Checker</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="asn_lookup"> ASN / ISP Bilgi Sorgu</label>
                 </div>
             </div>
 
-            <!-- PRO MODÜLLER (11-20) -->
+            <!-- PRO MODÜLLER (13-24) -->
             <div class="modules-section">
-                <h3>🔵 Pro Modüller (Orta Düzey İstihbarat)</h3>
+                <h3>🔵 Pro Modüller (Orta Düzey İstihbarat - 12 Modül)</h3>
                 <div class="grid">
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_instagram" {PRO_DISABLED}> Instagram Tarama</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil Analizi</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Hesap Tarama</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok Profil İnceleme</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID & Oyun Geçmişi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="http_headers" {PRO_DISABLED}> HTTP Header Analizi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="robots_txt" {PRO_DISABLED}> Robots.txt & Sitemap</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED}> Discord ID & Sunucu</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Hesap Analizi</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_telegram" {PRO_DISABLED}> Telegram Kullanıcı Kontrolü</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="domain_history" {PRO_DISABLED}> Domain Geçmişi (Age)</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="mail_server" {PRO_DISABLED}> MX & Mail Sunucu Testi</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="security_txt" {PRO_DISABLED}> Security.txt Tarama</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="firewall_detect" {PRO_DISABLED}> WAF / Güvenlik Duvarı</label>
                 </div>
             </div>
 
-            <!-- VIP MODÜLLER (21-30+) -->
+            <!-- VIP MODÜLLER (25-35+) -->
             <div class="modules-section">
-                <h3>⭐ VIP Modüller (Gelişmiş & Sızıntı Tarama)</h3>
+                <h3>⭐ VIP Modüller (Gelişmiş & Sızıntı İstihbarat - 11 Modül)</h3>
                 <div class="grid">
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı (Leak) DB</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon Numarası İstihbaratı</label>
@@ -199,6 +210,11 @@ HTML_PANEL = """
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analizi</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="wayback" {VIP_DISABLED}> Wayback Machine Arşivi</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="deep_scan" {VIP_DISABLED}> Derin Ağ Tehdit Taraması</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ip_reputation" {VIP_DISABLED}> IP Blacklist & Spam DB</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cve_lookup" {VIP_DISABLED}> CVE Güvenlik Açığı Veri</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ssl_cipher" {VIP_DISABLED}> SSL Cipher Suite Testi</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="dns_sec" {VIP_DISABLED}> DNSSEC Doğrulama Testi</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="full_audit" {VIP_DISABLED}> Tam Otomatik Tehdit Audit</label>
                 </div>
             </div>
 
@@ -237,7 +253,6 @@ def admin_login_page():
 
 @app.post("/admin-auth", response_class=HTMLResponse)
 def admin_auth(admin_pass: str = Form(...)):
-    # 🔐 Admin şifren (İstediğin gibi değiştirebilirsin, örn: "yalcin123")
     if admin_pass == "yalcin123":
         USER_SESSION["is_admin"] = True
         return RedirectResponse(url="/admin-panel", status_code=303)
@@ -262,11 +277,10 @@ def admin_create_key(tier_type: str = Form(...)):
     if not USER_SESSION["is_admin"]:
         return RedirectResponse(url="/admin-login", status_code=303)
         
-    # Benzersiz rastgele lisans anahtarı üretme (Örn: AXERO-VIP-9842)
     random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     new_key = f"AXERO-{tier_type}-{random_code}"
     
-    limit = 10 if tier_type == "FREE" else (20 if tier_type == "PRO" else 35)
+    limit = 12 if tier_type == "FREE" else (24 if tier_type == "PRO" else 35)
     DATABASE_KEYS[new_key] = {"type": tier_type, "limit": limit}
     
     return RedirectResponse(url="/admin-panel", status_code=303)
@@ -302,7 +316,7 @@ async def run_osint(target: str = Form(...)):
     report = f"""--- AXERO CORE LİSANSLI OSINT RAPORU ---
 Hedef: {target}
 Lisans Türü: {USER_SESSION['tier']} (Key: {USER_SESSION['key']})
-Durum: Yetkili Modüller Başarıyla Çalıştırıldı [axerocore.net]
+Durum: Tüm Yetkili Modüller Başarıyla Çalıştırıldı [axerocore.net]
 
 [✓] Seçilen modüller başarıyla tarandı ve hedef veri kümesi raporlandı."""
 
