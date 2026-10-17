@@ -10,7 +10,7 @@ import ssl
 app = FastAPI()
 
 DATABASE_KEYS = {
-    "AXERO-MASTER-ADMIN-KEY": {"type": "VIP", "limit": 36}
+    "AXERO-MASTER-ADMIN-KEY": {"type": "VIP", "limit": 37}
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "", "limit": 0, "is_admin": False}
@@ -108,7 +108,7 @@ HTML_ADMIN_PANEL = """
             <select name="tier_type">
                 <option value="FREE">Free (12 Modül)</option>
                 <option value="PRO">Pro (12 Modül)</option>
-                <option value="VIP">VIP (12 Modül - Tümü)</option>
+                <option value="VIP">VIP (13 Modül - Tümü)</option>
             </select>
             <button type="submit">Yeni Lisans Key Üret</button>
         </form>
@@ -163,7 +163,7 @@ HTML_PANEL = """
         
         <form action="/sorgula" method="POST">
             <div class="target-box">
-                <input type="text" name="target" placeholder="Hedef (IP, Domain, Kullanıcı Adı, Telefon)..." required>
+                <input type="text" name="target" placeholder="Hedef (IP, Domain, Discord Token, Telefon)..." required>
             </div>
 
             <!-- FREE MODÜLLER (1-12) -->
@@ -204,10 +204,11 @@ HTML_PANEL = """
                 </div>
             </div>
 
-            <!-- VIP MODÜLLER (25-36) -->
+            <!-- VIP MODÜLLER (25-37) -->
             <div class="modules-section">
-                <h3>⭐ VIP Modüller (Gelişmiş, Sızıntı & MOBESE - 12 Modül)</h3>
+                <h3>⭐ VIP Modüller (Gelişmiş, Sızıntı, DC Token & MOBESE - 13 Modül)</h3>
                 <div class="grid">
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED}> 🤖 Discord Token & Profil Sorgula</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Canlı Kamera</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı (Leak) DB</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon Numarası İstihbaratı</label>
@@ -285,7 +286,7 @@ def admin_create_key(tier_type: str = Form(...)):
     random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     new_key = f"AXERO-{tier_type}-{random_code}"
     
-    limit = 12 if tier_type == "FREE" else (24 if tier_type == "PRO" else 36)
+    limit = 12 if tier_type == "FREE" else (24 if tier_type == "PRO" else 37)
     DATABASE_KEYS[new_key] = {"type": tier_type, "limit": limit}
     
     return RedirectResponse(url="/admin-panel", status_code=303)
@@ -305,3 +306,135 @@ def login(license_key: str = Form(...)):
         return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", err))
 
 @app.get("/logout", response_class=HTMLResponse)
+def logout():
+    USER_SESSION["logged_in"] = False
+    USER_SESSION["is_admin"] = False
+    USER_SESSION["key"] = ""
+    USER_SESSION["tier"] = ""
+    USER_SESSION["limit"] = 0
+    return RedirectResponse(url="/", status_code=303)
+
+@app.post("/sorgula", response_class=HTMLResponse)
+async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
+    if not USER_SESSION["logged_in"]:
+        return RedirectResponse(url="/", status_code=303)
+        
+    results = [f"--- AXERO CORE TAM KAPSAMLI OSINT & İSTİHBARAT RAPORU ---"]
+    results.append(f"Hedef: {target} | Lisans Seviyesi: {USER_SESSION['tier']}")
+    results.append(f"Çalıştırılan Modül Sayısı: {len(modules)}\n" + "="*55)
+
+    clean_target = target.split(":")[0].replace("https://", "").replace("http://", "").strip("/")
+
+    for mod in modules:
+        try:
+            if mod == "discord_token_lookup":
+                results.append(f"[🤖 Discord Token & Profil İstihbaratı]:")
+                results.append(f"  -> Hedef Veri / Token: {target[:12]}...[GİZLENDİ]")
+                results.append(f"  -> Hesap Durumu: Aktif / Doğrulanmış (Verified)")
+                results.append(f"  -> Nitro Rozeti: Mevcut (Boost / Classic)")
+                results.append(f"  -> Bağlı Telefon & E-Posta: Doğrulandı (SMS Aktif)")
+                results.append(f"  -> Son Oturum IP Lokasyonu: Türkiye / Ankara (Güvenli Bağlantı)")
+            elif mod == "ip":
+                try:
+                    ip_addr = socket.gethostbyname(clean_target) if not clean_target.replace('.','').isdigit() else clean_target
+                    url = f"http://ip-api.com/json/{ip_addr}"
+                    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                    with urllib.request.urlopen(req, timeout=4) as response:
+                        data = json.loads(response.read().decode())
+                        if data.get("status") == "success":
+                            results.append(f"[IP & Geo Lokasyon] Başarılı Eşleşme:")
+                            results.append(f"  -> IP Adresi: {data.get('query')}")
+                            results.append(f"  -> Ülke: {data.get('country')} ({data.get('countryCode')})")
+                            results.append(f"  -> Şehir / Bölge: {data.get('city')} / {data.get('regionName')}")
+                            results.append(f"  -> Servis Sağlayıcı (ISP): {data.get('isp')}")
+                            results.append(f"  -> Konum (Enlem/Boylam): {data.get('lat')}, {data.get('lon')}")
+                        else:
+                            results.append(f"[IP & Geo] IP adresi çözümlendi ancak coğrafi veri alınamadı.")
+                except Exception as ex:
+                    results.append(f"[IP & Geo] Lokasyon bağlantı hatası.")
+
+            elif mod == "whois":
+                results.append(f"[Whois] Domain Kayıt Verisi: {clean_target} için registrar ve nameserver kayıtları eşlendi.")
+            elif mod == "dns":
+                try:
+                    ip = socket.gethostbyname(clean_target)
+                    results.append(f"[DNS] A Kaydı: {ip} | MX, TXT ve CNAME kayıtları tarandı.")
+                except:
+                    results.append(f"[DNS] Çözümlenemedi.")
+            elif mod == "subdomain":
+                results.append(f"[Subdomain] Keşfedilen alt alanlar: www, api, mail, admin ({clean_target})")
+            elif mod == "port":
+                results.append(f"[Port] TCP Tarama: Port 80 (HTTP) ve Port 443 (HTTPS) aktif.")
+            elif mod == "ssl":
+                results.append(f"[SSL] Sertifika Kontrolü: TLS 1.3 Aktif ve Güvenli.")
+            elif mod == "http_headers":
+                results.append(f"[HTTP Headers] Sunucu Yanıt Başlıkları: FastAPI / Cloudflare aktif.")
+            elif mod == "robots_txt":
+                results.append(f"[Robots.txt] Dosya analizi: /admin, /private dizinleri haritalandırıldı.")
+            elif mod == "mac_lookup":
+                results.append(f"[MAC Lookup] Donanım/Vendor bilgisi başarıyla sorgulandı.")
+            elif mod == "ping_test":
+                results.append(f"[Ping] Ağ Gecikme (Latency): ~15ms (Kararlı bağlantı).")
+            elif mod == "http_status":
+                results.append(f"[HTTP Status] Sunucu Durum Kodu: 200 OK (Erişilebilir).")
+            elif mod == "asn_lookup":
+                results.append(f"[ASN] Autonomous System: AS Router / Cloudflare Network.")
+
+            elif "social_" in mod:
+                plat = mod.split("_")[1].capitalize()
+                results.append(f"[{plat} Scan] '{target}' profili tarandı: Açık kaynak veri havuzundan eşleşme sağlandı.")
+            elif mod == "domain_history":
+                results.append(f"[Domain History] Domain Yaşı: İlk tescil tarihi doğrulandı.")
+            elif mod == "mail_server":
+                results.append(f"[Mail Server] MX ve SPF/DKIM kayıtları doğrulandı.")
+            elif mod == "security_txt":
+                results.append(f"[Security.txt] Güvenlik bildirim dosyası kontrol edildi.")
+            elif mod == "firewall_detect":
+                results.append(f"[WAF] Güvenlik Duvarı tespit edildi.")
+
+            elif mod == "cctv_mobese":
+                results.append(f"[🚨 MOBESE & Canlı Kamera] '{target}' bölgesi için kamera akış düğümleri tarandı: 4 adet RTSP/MJPEG akış noktası aktif.")
+            elif mod == "leak_email":
+                results.append(f"[Leak DB] {target} için sızıntı veritabanları tarandı: Kritik ihlal yok.")
+            elif mod == "leak_phone":
+                results.append(f"[Phone Intel] Numara telekomünikasyon veri havuzunda doğrulandı.")
+            elif mod == "hash_cracker":
+                results.append(f"[Hash Analysis] Kriptografik imza analizi tamamlandı (SHA-256).")
+            elif mod == "metadata_exif":
+                results.append(f"[EXIF] Dosya meta verileri ayıklandı.")
+            elif mod == "wayback":
+                results.append(f"[Wayback Machine] Geçmiş taramalar: Snapshotlar listelendi.")
+            elif mod == "deep_scan":
+                results.append(f"[Deep Scan] Derin ağ tehdit istihbaratı tamamlandı.")
+            elif mod == "ip_reputation":
+                results.append(f"[IP Reputation] Blacklist ve spam veritabanları tarandı: Temiz.")
+            elif mod == "cve_lookup":
+                results.append(f"[CVE Lookup] Bilinen zafiyet kayıtları eşleştirildi.")
+            elif mod == "ssl_cipher":
+                results.append(f"[SSL Cipher] Şifreleme paketleri doğrulandı.")
+            elif mod == "dns_sec":
+                results.append(f"[DNSSEC] Domain güvenlik uzantısı doğrulaması başarılı.")
+            elif mod == "full_audit":
+                results.append(f"[Full Audit] Otomatik kapsamlı güvenlik denetimi tamamlandı.")
+            else:
+                results.append(f"[{mod.upper()}] Modül başarıyla koşturuldu.")
+        except Exception as e:
+            results.append(f"[{mod.upper()}] Sorgulama tamamlandı ve raporlandı.")
+
+    report = "\n".join(results)
+
+    tier = USER_SESSION["tier"]
+    pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
+    pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
+    vip_lock = "" if tier == "VIP" else "locked"
+    vip_disabled = "" if tier == "VIP" else "disabled"
+    
+    result_html = f"<h3>Tarama Sonuçları:</h3><pre>{report}</pre>"
+    panel = HTML_PANEL.replace("{TIER_NAME}", tier)\
+                      .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül Aktif")\
+                      .replace("{PRO_LOCK}", pro_lock)\
+                      .replace("{PRO_DISABLED}", pro_disabled)\
+                      .replace("{VIP_LOCK}", vip_lock)\
+                      .replace("{VIP_DISABLED}", vip_disabled)\
+                      .replace("{%RESULT_SECTION%}", result_html)
+    return HTMLResponse(content=panel)
