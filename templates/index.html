@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Axero Core - Web Portal</title>
+    <style>
+        body { background-color: #0f111a; color: #00ffcc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding-top: 50px; }
+        .container { background-color: #151821; width: 600px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        input[type="text"] { width: 80%; padding: 10px; background-color: #1f2330; border: none; color: white; font-size: 16px; border-radius: 4px; margin-bottom: 15px; }
+        button { background-color: #00ffcc; color: #0f111a; border: none; padding: 12px 25px; font-weight: bold; font-size: 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #00cca3; }
+        pre { background-color: #1f2330; color: #00ffcc; padding: 15px; text-align: left; border-radius: 4px; margin-top: 20px; font-family: Consolas, monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ AXERO CORE WEB PORTAL</h1>
+        <p style="color: #8f93af;">7/24 OSINT ve Güvenlik Süiti</p>
+        
+        <form action="/sorgula" method="post">
+            <input type="text" name="target" placeholder="Hedef IP, Domain veya Kullanıcı Adı girin..." required><br>
+            <button type="submit">WEB ÜZERİNDEN SORGULA</button>
+        </form>
+
+        {% if result %}
+            <h3>Analiz Sonucu:</h3>
+            <pre>{{ result }}</pre>
+        {% endif %}
+    </div>
+</body>
+</html>
