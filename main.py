@@ -13,7 +13,4 @@ def read_root(request: Request):
 @app.post("/sorgula", response_class=HTMLResponse)
 async def run_osint(request: Request, target: str = Form(...)):
     analysis_result = f"--- AXERO WEB ANALİZ RAPORU --- \n\nHedef: {target}\nDurum: Güvenli / Taramalar Tamamlandı [axerocore.net]"
-    
-    return templates.TemplateResponse(
-        "index.html", {"request": request, "result": analysis_result}
-    )
+    return templates.TemplateResponse("index.html", {"request": request, "result": analysis_result})
