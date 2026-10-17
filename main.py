@@ -1,18 +1,16 @@
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
+import random
+import string
 
 app = FastAPI()
 
-# 🔐 Lisans ve Yetki Veritabanı (Admin Panelinden Üretilen Geçerli Keyler)
-# Format: "KEY": {"type": "FREE" / "PRO" / "VIP", "modules_limit": sayı}
+# Dinamik Lisans Veritabanı (Başlangıçta boş veya örnek birkaç key ile)
 DATABASE_KEYS = {
-    "AXERO-FREE-2026": {"type": "FREE", "limit": 10},
-    "AXERO-PRO-2026": {"type": "PRO", "limit": 20},
-    "AXERO-VIP-2026": {"type": "VIP", "limit": 35},
-    "ADMIN-MASTER-KEY": {"type": "VIP", "limit": 35}
+    "AXERO-MASTER-ADMIN-KEY": {"type": "VIP", "limit": 35}
 }
 
-USER_SESSION = {"logged_in": False, "key": "", "tier": "", "limit": 0}
+USER_SESSION = {"logged_in": False, "key": "", "tier": "", "limit": 0, "is_admin": False}
 
 HTML_LOGIN = """
 <!DOCTYPE html>
@@ -29,7 +27,8 @@ HTML_LOGIN = """
         button { width: 100%; background: #3b82f6; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
         button:hover { background: #2563eb; }
         .error { color: #ef4444; font-size: 13px; margin-top: 10px; }
-        .info-box { background: #0f172a; padding: 10px; border-radius: 6px; font-size: 12px; color: #94a3b8; margin-top: 15px; text-align: left; }
+        .admin-link { display: block; margin-top: 15px; color: #94a3b8; font-size: 12px; text-decoration: none; }
+        .admin-link:hover { color: #38bdf8; }
     </style>
 </head>
 <body>
@@ -41,12 +40,85 @@ HTML_LOGIN = """
             <button type="submit">Sisteme Giriş Yap</button>
         </form>
         {ERROR_MSG}
-        <div class="info-box">
-            <b>Test Anahtarları:</b><br>
-            • Free: AXERO-FREE-2026 (10 Modül)<br>
-            • Pro: AXERO-PRO-2026 (20 Modül)<br>
-            • VIP: AXERO-VIP-2026 (Tüm 30+ Modül)
-        </div>
+        <a href="/admin-login" class="admin-link">🔒 Admin Paneline Git</a>
+    </div>
+</body>
+</html>
+"""
+
+HTML_ADMIN_LOGIN = """
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Axero Core - Admin Girişi</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); width: 380px; text-align: center; }
+        h1 { color: #ef4444; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; box-sizing: border-box; }
+        button { width: 100%; background: #ef4444; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        button:hover { background: #dc2626; }
+        .error { color: #ef4444; font-size: 13px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>Admin Paneli 🔒</h1>
+        <p style="color:#94a3b8; font-size:14px;">Yönetici Şifresini Girin</p>
+        <form action="/admin-auth" method="POST">
+            <input type="password" name="admin_pass" placeholder="Admin Şifresi..." required>
+            <button type="submit">Giriş Yap</button>
+        </form>
+        {ERROR_MSG}
+    </div>
+</body>
+</html>
+"""
+
+HTML_ADMIN_PANEL = """
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Axero Core - Key Yönetim Paneli</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        h1 { color: #ef4444; text-align: center; }
+        .form-group { margin-bottom: 20px; text-align: center; }
+        select, button { padding: 12px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; font-size: 16px; }
+        button { background: #22c55e; cursor: pointer; font-weight: bold; border: none; }
+        button:hover { background: #16a34a; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0f172a; border-radius: 6px; overflow: hidden; }
+        th, td { padding: 12px; border-bottom: 1px solid #334155; text-align: left; font-size: 14px; }
+        th { background: #334155; color: #38bdf8; }
+        .back-link { color: #38bdf8; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Ana Sayfaya Dön</a>
+        <h1>🔑 Admin Lisans Üretim Paneli</h1>
+        
+        <form action="/admin-create-key" method="POST" class="form-group">
+            <select name="tier_type">
+                <option value="FREE">Free (10 Modül)</option>
+                <option value="PRO">Pro (20 Modül)</option>
+                <option value="VIP">VIP (35 Modül - Tümü)</option>
+            </select>
+            <button type="submit">Yeni Lisans Key Üret</button>
+        </form>
+
+        <h3>Aktif Lisans Anahtarları</h3>
+        <table>
+            <tr>
+                <th>Lisans Anahtarı</th>
+                <th>Paket Türü</th>
+                <th>Modül Limiti</th>
+            </tr>
+            {KEY_LIST_ROWS}
+        </table>
     </div>
 </body>
 </html>
@@ -144,7 +216,6 @@ def read_root():
     if not USER_SESSION["logged_in"]:
         return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", ""))
     
-    # Kullanıcı yetkisine göre arayüzü kilitleme / açma ayarları
     tier = USER_SESSION["tier"]
     pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
     pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
@@ -160,6 +231,46 @@ def read_root():
                       .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
 
+@app.get("/admin-login", response_class=HTMLResponse)
+def admin_login_page():
+    return HTMLResponse(content=HTML_ADMIN_LOGIN.replace("{ERROR_MSG}", ""))
+
+@app.post("/admin-auth", response_class=HTMLResponse)
+def admin_auth(admin_pass: str = Form(...)):
+    # 🔐 Admin şifren (İstediğin gibi değiştirebilirsin, örn: "yalcin123")
+    if admin_pass == "yalcin123":
+        USER_SESSION["is_admin"] = True
+        return RedirectResponse(url="/admin-panel", status_code=303)
+    else:
+        err = '<div class="error">Hatalı yönetici şifresi!</div>'
+        return HTMLResponse(content=HTML_ADMIN_LOGIN.replace("{ERROR_MSG}", err))
+
+@app.get("/admin-panel", response_class=HTMLResponse)
+def admin_panel():
+    if not USER_SESSION["is_admin"]:
+        return RedirectResponse(url="/admin-login", status_code=303)
+    
+    rows = ""
+    for k, v in DATABASE_KEYS.items():
+        rows += f"<tr><td><b>{k}</b></td><td>{v['type']}</td><td>{v['limit']} Modül</td></tr>"
+        
+    page = HTML_ADMIN_PANEL.replace("{KEY_LIST_ROWS}", rows)
+    return HTMLResponse(content=page)
+
+@app.post("/admin-create-key", response_class=HTMLResponse)
+def admin_create_key(tier_type: str = Form(...)):
+    if not USER_SESSION["is_admin"]:
+        return RedirectResponse(url="/admin-login", status_code=303)
+        
+    # Benzersiz rastgele lisans anahtarı üretme (Örn: AXERO-VIP-9842)
+    random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+    new_key = f"AXERO-{tier_type}-{random_code}"
+    
+    limit = 10 if tier_type == "FREE" else (20 if tier_type == "PRO" else 35)
+    DATABASE_KEYS[new_key] = {"type": tier_type, "limit": limit}
+    
+    return RedirectResponse(url="/admin-panel", status_code=303)
+
 @app.post("/login", response_class=HTMLResponse)
 def login(license_key: str = Form(...)):
     key = license_key.strip()
@@ -171,12 +282,13 @@ def login(license_key: str = Form(...)):
         USER_SESSION["limit"] = info["limit"]
         return RedirectResponse(url="/", status_code=303)
     else:
-        err = '<div class="error">Geçersiz lisans anahtarı! Admin onaylı bir key giriniz.</div>'
+        err = '<div class="error">Geçersiz veya kullanılmamış lisans anahtarı!</div>'
         return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", err))
 
 @app.get("/logout", response_class=HTMLResponse)
 def logout():
     USER_SESSION["logged_in"] = False
+    USER_SESSION["is_admin"] = False
     USER_SESSION["key"] = ""
     USER_SESSION["tier"] = ""
     USER_SESSION["limit"] = 0
@@ -192,10 +304,8 @@ Hedef: {target}
 Lisans Türü: {USER_SESSION['tier']} (Key: {USER_SESSION['key']})
 Durum: Yetkili Modüller Başarıyla Çalıştırıldı [axerocore.net]
 
-[✓] Seçilen modüller başarıyla tarandı ve hedef veri kümesi raporlandı.
-[✓] Güvenlik duvarı ve yetki doğrulama testi onaylandı."""
+[✓] Seçilen modüller başarıyla tarandı ve hedef veri kümesi raporlandı."""
 
-    # Sayfayı tekrar kur ve sonucu bas
     tier = USER_SESSION["tier"]
     pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
     pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
