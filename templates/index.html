@@ -2,28 +2,29 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Axero Core - Web Portal</title>
+    <title>Axero Core - OSINT & Analiz</title>
     <style>
-        body { background-color: #0f111a; color: #00ffcc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding-top: 50px; }
-        .container { background-color: #151821; width: 600px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        input[type="text"] { width: 80%; padding: 10px; background-color: #1f2330; border: none; color: white; font-size: 16px; border-radius: 4px; margin-bottom: 15px; }
-        button { background-color: #00ffcc; color: #0f111a; border: none; padding: 12px 25px; font-weight: bold; font-size: 15px; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #00cca3; }
-        pre { background-color: #1f2330; color: #00ffcc; padding: 15px; text-align: left; border-radius: 4px; margin-top: 20px; font-family: Consolas, monospace; }
+        body { font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; text-align: center; padding-top: 50px; }
+        .container { max-width: 600px; margin: auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        input[type="text"] { width: 80%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff; }
+        button { background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #2563eb; }
+        pre { background: #0f172a; padding: 15px; border-radius: 6px; text-align: left; overflow-x: auto; color: #38bdf8; margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚡ AXERO CORE WEB PORTAL</h1>
-        <p style="color: #8f93af;">7/24 OSINT ve Güvenlik Süiti</p>
+        <h1>Axero Core 🚀</h1>
+        <p>Gelişmiş OSINT ve Analiz Paneli</p>
         
-        <form action="/sorgula" method="post">
-            <input type="text" name="target" placeholder="Hedef IP, Domain veya Kullanıcı Adı girin..." required><br>
-            <button type="submit">WEB ÜZERİNDEN SORGULA</button>
+        <form action="/sorgula" method="POST">
+            <input type="text" name="target" placeholder="Hedef (IP, Domain, Kullanıcı Adı)..." required>
+            <br>
+            <button type="submit">Analizi Başlat</button>
         </form>
 
         {% if result %}
-            <h3>Analiz Sonucu:</h3>
+            <h3>Sonuçlar:</h3>
             <pre>{{ result }}</pre>
         {% endif %}
     </div>
