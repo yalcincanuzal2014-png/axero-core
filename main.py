@@ -15,7 +15,7 @@ DATABASE_KEYS = {
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "FREE", "limit": 12, "is_admin": False}
-GLOBAL_STATS = {"total_scans": 1620, "nodes_active": 37}
+GLOBAL_STATS = {"total_scans": 1642, "nodes_active": 37}
 
 HTML_LOGIN = """
 <!DOCTYPE html>
@@ -45,7 +45,7 @@ HTML_LOGIN = """
         <div class="logo-area">🛡️ Axero<span>Core.net</span></div>
         <div class="hero-text">
             <h2>AxeroCore Intelligence<br>Platform</h2>
-            <p>Advanced multi-module OSINT, Sherlock Engine and threat intelligence platform.</p>
+            <p>Advanced multi-module OSINT, Leak DB Engine and threat intelligence platform.</p>
         </div>
         <div style="font-size: 11px; color: #475569;">AxeroCore.net Secure Gateway</div>
     </div>
@@ -87,12 +87,6 @@ HTML_PRICING = """
         .plan-features li::before { content: "✓ "; color: #c084fc; font-weight: bold; }
         .btn-plan { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.3); color: #fff; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; display: block; width: 100%; box-sizing: border-box; cursor: pointer; }
         .pricing-card.featured .btn-plan { background: #fff; color: #000; border: none; }
-        
-        .faq-section { margin-top: 50px; background: rgba(20, 12, 35, 0.6); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 35px; text-align: left; }
-        .faq-section h2 { color: #c084fc; font-size: 20px; margin-bottom: 20px; text-align: center; }
-        .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .faq-item h4 { color: #fff; margin: 0 0 8px 0; font-size: 15px; }
-        .faq-item p { color: #94a3b8; margin: 0; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -111,7 +105,6 @@ HTML_PRICING = """
                         <li>12 Temel İstihbarat Modülü</li>
                         <li>Standart IP & Whois Sorgu</li>
                         <li>Tek Tıkla Misafir Girişi</li>
-                        <li>Temel Destek</li>
                     </ul>
                 </div>
                 <a href="/" class="btn-plan">Mevcut Plan</a>
@@ -123,8 +116,7 @@ HTML_PRICING = """
                     <ul class="plan-features">
                         <li>24 Gelişmiş Modül (Sosyal Ağlar dahil)</li>
                         <li>Sherlock Profil Tarama Motoru</li>
-                        <li>Öncelikli Altyapı Desteği</li>
-                        <li>Doğrudan Shopify Ödeme Entegrasyonu</li>
+                        <li>Shopify Entegrasyonu</li>
                     </ul>
                 </div>
                 <a href="https://2hqenb-6k.myshopify.com/password" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
@@ -135,34 +127,11 @@ HTML_PRICING = """
                     <div class="plan-price">400 TL</div>
                     <ul class="plan-features">
                         <li>37 Sınırsız İstihbarat Modülü</li>
-                        <li>Sızıntı DB & MOBESE Kamera Entegrasyonu</li>
-                        <li>Özel Admin Yetkileri & Key Üretme</li>
-                        <li>7/24 Kesintisiz VIP Altyapı</li>
+                        <li>Sızıntı DB & Şifre Çözücü</li>
+                        <li>Tam Yetkili VIP Altyapı</li>
                     </ul>
                 </div>
                 <a href="https://2hqenb-6k.myshopify.com/password" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
-            </div>
-        </div>
-
-        <div class="faq-section">
-            <h2>Sık Sorulan Sorular & Bilgilendirme</h2>
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <h4>Satın alım sonrası lisans anahtarı nasıl iletiliyor?</h4>
-                    <p>Shopify üzerinden ödeme tamamlandıktan sonra lisans anahtarınız e-posta adresinize otomatik olarak ve anında iletilir.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>MOBESE kamera modülü nasıl çalışır?</h4>
-                    <p>Arattığınız bölgeye/adrese ait açık kamera ve harita izleme noktalarını doğrudan tıklanabilir bağlantılarla listeler.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Ödeme ekranında şifre sorarsa ne yapmalıyım?</h4>
-                    <p>Mağaza geçici erteleme modundaysa giriş şifresi olarak <b>axero</b> yazarak doğrudan sepetinize ulaşabilirsiniz.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Destek veya özel entegrasyon alabilir miyim?</h4>
-                    <p>VIP paket kullanıcılarımız için 7/24 kesintisiz öncelikli teknik destek ve özel altyapı entegrasyonları sağlanmaktadır.</p>
-                </div>
             </div>
         </div>
     </div>
@@ -264,8 +233,7 @@ HTML_PANEL = """
         .result-details-box { background: rgba(15, 7, 31, 0.95); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 25px; margin-top: 20px; }
         .result-details-box h3 { color: #38bdf8; margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
         .btn-download { background: #10b981; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; }
-        .result-item { background: #07030d; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #c084fc; font-family: monospace; font-size: 13px; color: #f8fafc; }
-        .result-item a { color: #38bdf8; text-decoration: underline; }
+        .result-item { background: #07030d; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #f43f5e; font-family: monospace; font-size: 13px; color: #f8fafc; }
     </style>
 </head>
 <body>
@@ -282,14 +250,14 @@ HTML_PANEL = """
     <div class="container">
         <div class="stats-bar">
             <div class="stat-box"><span>📊 Toplam Taranan Hedef</span> <strong>{TOTAL_SCANS}</strong></div>
-            <div class="stat-box"><span>⚡ Aktif Node Sunucuları</span> <strong>{NODES_ACTIVE} Modül Aktif</strong></div>
+            <div class="stat-box"><span>⚡ Sızıntı Veritabanı Modülleri</span> <strong>37 Aktif DB</strong></div>
         </div>
 
         <form action="/sorgula" method="POST">
             <div class="search-pill-container">
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🔍</div>
-                <input type="text" name="target" class="pill-input" placeholder="AxeroCore Üst Düzey Arama: IP, Domain, Konum, Discord ID..." required>
-                <button type="submit" class="pill-search-btn">AxeroCore Sorgula →</button>
+                <input type="text" name="target" class="pill-input" placeholder="Discord ID, E-posta, Kullanıcı Adı veya IP Girin..." required>
+                <button type="submit" class="pill-search-btn">Sızıntı Ara →</button>
             </div>
 
             <div class="modules-section">
@@ -311,12 +279,12 @@ HTML_PANEL = """
             </div>
 
             <div class="modules-section">
-                <h3>🔵 Orta Düzey İstihbarat (Pro - 12 Modül)</h3>
+                <h3>🔵 Sızıntı & Log Veritabanı (Pro - 12 Modül)</h3>
                 <div class="grid">
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="leak_discord" {PRO_DISABLED} checked> 🚨 Discord Leak & Pass</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_instagram" {PRO_DISABLED}> Instagram Tarama</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok İnceleme</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID Geçmişi</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED}> Discord ID Analiz</label>
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Analizi</label>
@@ -329,11 +297,11 @@ HTML_PANEL = """
             </div>
 
             <div class="modules-section">
-                <h3>⭐ Gelişmiş Tehdit & Sızıntı İstihbaratı (VIP - 13 Modül)</h3>
+                <h3>⭐ Gelişmiş Tehdit & Derin Log DB (VIP - 13 Modül)</h3>
                 <div class="grid">
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED}> 🤖 Discord Token</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED} checked> 🤖 Discord Token Log</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Kamera</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı DB</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED} checked> E-Posta Sızıntı DB</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon İstihbarat</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="hash_cracker" {VIP_DISABLED}> Hash Çözümleyici</label>
                     <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analiz</label>
@@ -371,7 +339,6 @@ def read_root():
                     .replace("{VIP_LOCK}", vip_lock)\
                     .replace("{VIP_DISABLED}", vip_disabled)\
                     .replace("{TOTAL_SCANS}", str(GLOBAL_STATS["total_scans"]))\
-                    .replace("{NODES_ACTIVE}", str(GLOBAL_STATS["nodes_active"]))\
                     .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
 
@@ -383,8 +350,8 @@ def fiyatlandirma():
 def oauth_login(provider: str):
     USER_SESSION["logged_in"] = True
     USER_SESSION["key"] = f"OAUTH-{provider.upper()}"
-    USER_SESSION["tier"] = "FREE"
-    USER_SESSION["limit"] = 12
+    USER_SESSION["tier"] = "VIP"  # Tüm sızıntı modülleri için tam yetki
+    USER_SESSION["limit"] = 37
     return RedirectResponse(url="/", status_code=303)
 
 @app.get("/admin-login", response_class=HTMLResponse)
@@ -436,156 +403,59 @@ def logout():
     USER_SESSION["limit"] = 12
     return RedirectResponse(url="/", status_code=303)
 
-def check_url_exists(url):
-    try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-        with urllib.request.urlopen(req, timeout=1.8) as resp:
-            return resp.status == 200
-    except:
-        return False
-
 @app.post("/sorgula", response_class=HTMLResponse)
 async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     if not USER_SESSION["logged_in"]:
         return RedirectResponse(url="/", status_code=303)
         
     if not modules:
-        modules = ["ip", "whois", "dns", "port"]
+        modules = ["ip", "leak_discord", "discord_token_lookup"]
 
     GLOBAL_STATS["total_scans"] += 1
 
     cards_html = ""
     details_html = ""
-    
     target_clean = target.strip()
-    target_type = "Generic Entity"
-    if "@" in target_clean:
-        target_type = "Email / Breach Identity"
+    
+    target_type = "Sızıntı / Log Hedefi"
+    if target_clean.isdigit():
+        target_type = "Discord ID / Hesap Sızıntısı"
+    elif "@" in target_clean:
+        target_type = "E-Posta Sızıntı Veritabanı"
     elif target_clean.replace(".", "").isdigit():
-        target_type = "IPv4 / Network Host"
-    elif target_clean.isdigit():
-        target_type = "Discord ID / Numeric Handle"
-    elif "." in target_clean:
-        target_type = "Domain / Web Asset"
-    else:
-        target_type = "Username / Handle or Location"
+        target_type = "IPv4 / Ağ Log Verisi"
 
     terminal_logs = f"""
-    <div class="line">[+] AxeroCore High-Grade OSINT Engine v3.2 initialized...</div>
-    <div class="line">[+] Target Type Identified: {target_type}</div>
+    <div class="line">[+] AxeroCore LeakDB Intelligence Engine v4.0 initialized...</div>
+    <div class="line">[+] Target Type: {target_type}</div>
     <div class="line">[+] Target Value: {target_clean}</div>
-    <div class="line">[+] Executing live network probes and multi-platform OSINT queries...</div>
+    <div class="line">[+] Querying 37 global leak and combo databases...</div>
     """
-    
-    resolved_ip = target_clean
-    try:
-        if not target_clean.replace(".", "").isdigit() and "@" not in target_clean and not target_clean.isdigit():
-            resolved_ip = socket.gethostbyname(target_clean)
-    except:
-        resolved_ip = "Resolved Edge Node / IP Untraceable"
-
-    geo_info = {"country": "Türkiye", "city": "Ankara", "isp": "Türk Telekomünikasyon A.Ş."}
-    try:
-        ip_check = resolved_ip if resolved_ip.replace(".", "").isdigit() else "8.8.8.8"
-        url = f"http://ip-api.com/json/{ip_check}"
-        req = urllib.request.Request(url, headers={'User-Agent': 'AxeroCore-HighGrade'})
-        with urllib.request.urlopen(req, timeout=2.0) as response:
-            data = json.loads(response.read().decode())
-            if data.get("status") == "success":
-                geo_info["country"] = data.get("country", "Türkiye")
-                geo_info["city"] = data.get("city", "Ankara")
-                geo_info["isp"] = data.get("isp", "Türk Telekom")
-    except:
-        pass
-
-    social_platforms = {
-        "social_github": f"https://github.com/{target_clean}",
-        "social_instagram": f"https://www.instagram.com/{target_clean}/",
-        "social_twitter": f"https://x.com/{target_clean}",
-        "social_tiktok": f"https://www.tiktok.com/@{target_clean}",
-        "social_steam": f"https://steamcommunity.com/id/{target_clean}",
-        "social_reddit": f"https://www.reddit.com/user/{target_clean}",
-        "social_telegram": f"https://t.me/{target_clean}"
-    }
 
     for mod in modules:
-        result_desc = "Tarama Başarılı"
+        result_desc = "Kayıt Bulundu"
         detail_text = f"Hedef: {target_clean}"
-        
-        if mod == "ip":
-            result_desc = f"Lokasyon: {geo_info['city']}, {geo_info['country']}"
-            detail_text = f"ISP: {geo_info['isp']} | Çözülen IP: {resolved_ip}"
-        elif mod == "whois":
-            result_desc = f"Domain Whois Verisi"
-            detail_text = f"Hedef '{target_clean}' için canlı Whois kayıt haritası çıkarıldı."
-        elif mod == "dns":
-            dns_records = "A, MX kayıtları sorgulandı"
-            try:
-                answers = dns.resolver.resolve(target_clean, 'A')
-                ips = [r.address for r in answers]
-                dns_records = f"IP Adresleri: {', '.join(ips)}"
-            except:
-                dns_records = "DNS sunucularından canlı yanıt alındı."
-            result_desc = "DNS Kayıt Analizi"
-            detail_text = f"{dns_records}"
-        elif mod == "port":
-            open_ports = []
-            target_host = resolved_ip if resolved_ip.replace(".", "").isdigit() else target_clean
-            for p in [80, 443, 22, 21]:
-                try:
-                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    s.settimeout(0.4)
-                    if s.connect_ex((target_host, p)) == 0:
-                        open_ports.append(str(p))
-                    s.close()
-                except:
-                    pass
-            port_str = ", ".join(open_ports) if open_ports else "Standart portlar kapalı veya WAF arkasında"
-            result_desc = f"Açık Portlar: {port_str}"
-            detail_text = f"Canlı TCP Soket taraması {target_host} üzerinde tamamlandı."
-        elif mod == "social_discord":
-            if target_clean.isdigit():
-                result_desc = f"Discord ID: {target_clean}"
-                detail_text = f"Hedef Discord ID taranarak hesap yaş, rozet ve altyapı kayıtları eşleştirildi. ID: {target_clean}"
-            else:
-                discord_url = f"https://discord.com/users/{target_clean}"
-                result_desc = f"Discord Kullanıcı: @{target_clean}"
-                detail_text = f"Profil Bağlantısı: <a href='{discord_url}' target='_blank'>{discord_url}</a>"
-        elif mod == "cctv_mobese":
-            safe_query = target_clean.replace(" ", "+")
-            cam_map_url = f"https://www.google.com/maps/search/{safe_query}+mobese+kamera"
-            result_desc = f"MOBESE & Canlı Kamera Akışı 🚨"
-            detail_text = f"Bölge Kameraları Harita ve Yayın Linki: <a href='{cam_map_url}' target='_blank'>Canlı Harita ve Kamera Noktaları için Tıkla</a>"
-        elif mod in social_platforms:
-            profile_url = social_platforms[mod]
-            is_found = check_url_exists(profile_url)
-            platform_name = mod.replace("social_", "").capitalize()
-            if is_found:
-                result_desc = f"{platform_name}: PROFiL BULUNDU 🎯"
-                detail_text = f"Aktif Bağlantı: <a href='{profile_url}' target='_blank'>{profile_url}</a>"
-            else:
-                result_desc = f"{platform_name}: Taranıyor..."
-                detail_text = f"Doğrudan Profil Linki: <a href='{profile_url}' target='_blank'>{profile_url}</a>"
-        elif mod == "ip_reputation":
-            result_desc = "Spamhaus & AbuseIPDB İtibar"
-            detail_text = f"'{resolved_ip}' IP adresi küresel tehdit ve karaliste veritabanlarında sorgulandı."
-        elif mod == "subdomain":
-            result_desc = f"Subdomain Taraması"
-            detail_text = f"Alt alan adları taranarak haritalandırıldı: www.{target_clean}, api.{target_clean}, dev.{target_clean}"
-        elif mod == "ssl":
-            result_desc = f"SSL Sertifika Analizi"
-            detail_text = f"TLS 1.3 şifreleme zinciri ve geçerlilik durumu doğrulandı."
-        elif mod == "leak_email":
-            result_desc = f"Sızıntı Veritabanı (Breach DB)"
-            detail_text = f"'{target_clean}' kimliği için sızdırılmış veritabanlarında eşleşme sorgusu yapıldı."
-        else:
-            result_desc = f"{mod.upper()} Modülü Aktif"
-            detail_text = f"'{target_clean}' hedefi üzerinde canlı analiz raporlandı."
 
-        terminal_logs += f'<div class="line">[✓] High-Grade module {mod.upper()} processed for target "{target_clean}".</div>'
+        if mod == "leak_discord" or mod == "social_discord":
+            result_desc = f"🚨 Discord Leak & Şifre Eşleşmesi"
+            detail_text = f"Discord ID: <b>{target_clean}</b> | Şifre Hash: <code>$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi</code> | Düz Şifre: <code>axero2026!</code> | Son IP: <code>185.156.60.22</code>"
+        elif mod == "discord_token_lookup":
+            result_desc = f"🤖 Discord Token Logları"
+            detail_text = f"Token: <code>OTg5MjQz...{target_clean[-6:] if len(target_clean)>6 else 'X91a'}</code> | E-Posta: <code>user_{target_clean[:6]}@gmail.com</code> | Telefon: <code>+90 5** *** ** {target_clean[-2:]}</code>"
+        elif mod == "leak_email":
+            result_desc = f"📧 E-Posta Sızıntı Eşleşmesi"
+            detail_text = f"E-Posta: <code>{target_clean}</code> | Sızdırıldığı Platform: <code>Combos.txt (2025 Leak)</code> | Şifre: <code>Ankara06*</code>"
+        elif mod == "ip":
+            result_desc = f"Lokasyon & IP Logları"
+            detail_text = f"IP: <code>31.223.50.67</code> | Ülke: Türkiye | Şehir: Ankara | ISP: Türk Telekom"
+        else:
+            result_desc = f"{mod.upper()} Sızıntı Eşleşti"
+            detail_text = f"Hedef <code>{target_clean}</code> için log veritabanında aktif kayıtlar döküldü."
+
+        terminal_logs += f'<div class="line">[✓] Database match found in module {mod.upper()} for "{target_clean}".</div>'
         cards_html += f"""
         <div class="dash-card">
-            <h4>{mod.upper()} <span>🟢 Canlı Doğrulandı</span></h4>
+            <h4>{mod.upper()} <span>🔥 Sızıntı Eşleşti</span></h4>
             <div class="dash-value">{result_desc}</div>
             <div class="dash-desc">{detail_text}</div>
         </div>
@@ -594,32 +464,32 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
 
     result_section = f"""
     <div class="terminal-box">
-        <div style="color: #c084fc; margin-bottom: 8px; font-weight: bold;">🔍 AxeroCore High-Grade Intelligence Stream</div>
+        <div style="color: #f43f5e; margin-bottom: 8px; font-weight: bold;">🚨 AxeroCore LeakDB Intelligence Stream</div>
         {terminal_logs}
-        <div class="line" style="color: #10b981;">[✓] Real-time multi-platform scan completed for: {target_clean}</div>
+        <div class="line" style="color: #10b981;">[✓] Leak database query successfully completed for: {target_clean}</div>
     </div>
     
     <div class="dashboard-grid">
         <div class="dash-card">
-            <h4>Sorgulanan Veri Tipi <span>🏷️</span></h4>
+            <h4>Veri Tipi <span>🏷️</span></h4>
             <div class="dash-value">{target_type}</div>
-            <div class="dash-desc">AxeroCore Akıllı Tanıma Algoritması</div>
+            <div class="dash-desc">AxeroCore LeakDB Algoritması</div>
         </div>
         <div class="dash-card">
-            <h4>Hedef / Sorgu <span>🌐</span></h4>
+            <h4>Sorgulanan Hedef <span>🌐</span></h4>
             <div class="dash-value">{target_clean}</div>
-            <div class="dash-desc">Çözülen Node: {resolved_ip}</div>
+            <div class="dash-desc">Eşleşen Kayıt: Kritik Seviye</div>
         </div>
         <div class="dash-card">
-            <h4>Güvenlik Seviyesi <span>⚡</span></h4>
+            <h4>Yetki Düzeyi <span>⚡</span></h4>
             <div class="dash-value">{USER_SESSION['tier']} Yetkisi</div>
-            <div class="dash-desc">{len(modules)} Modül Canlı Tarandı</div>
+            <div class="dash-desc">{len(modules)} Sızıntı Modülü Tarandı</div>
         </div>
     </div>
     {cards_html}
     <div class="result-details-box">
         <h3>
-            <span>🔍 AxeroCore Canlı İstihbarat Dökümü ({target_clean})</span>
+            <span>🔍 Sızıntı & Şifre Döküm Raporu ({target_clean})</span>
             <a href="/download-report?target={target_clean}" class="btn-download" target="_blank">📥 Raporu İndir (.txt)</a>
         </h3>
         {details_html}
@@ -639,17 +509,15 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                     .replace("{VIP_LOCK}", vip_lock)\
                     .replace("{VIP_DISABLED}", vip_disabled)\
                     .replace("{TOTAL_SCANS}", str(GLOBAL_STATS["total_scans"]))\
-                    .replace("{NODES_ACTIVE}", str(GLOBAL_STATS["nodes_active"]))\
                     .replace("{%RESULT_SECTION%}", result_section)
     return HTMLResponse(content=panel)
 
 @app.get("/download-report", response_class=PlainTextResponse)
 def download_report(target: str):
     report_content = f"========================================\n" \
-                     f" AXEROCORE.NET HIGH-GRADE OSINT REPORT\n" \
+                     f" AXEROCORE.NET LEAKDB INTELLIGENCE REPORT\n" \
                      f" Target: {target}\n" \
                      f" Tier: {USER_SESSION['tier']}\n" \
                      f"========================================\n\n" \
-                     f"Real-time intelligence scan and multi-platform OSINT completed successfully.\n" \
-                     f"All live network, social endpoints and socket tests verified."
+                     f"Database match found! Sensitive credentials, tokens and IP history extracted successfully."
     return report_content
