@@ -157,13 +157,17 @@ HTML_PRICING = """
         </div>
 
         <div class="pricing-grid">
+            <!-- 1. ÖZGÜR (FREE) -->
             <div class="pricing-card">
                 <div>
                     <div class="plan-title">Özgür</div>
                     <div class="plan-desc">Temel arama iş akışını ücretsiz deneyin.</div>
-                    <div class="plan-price" id="priceFree">0 dolar <span>/ay</span></div>
-                    <div class="price-sub" id="subFree">Yıllıkta 0 dolar /yıl</div>
+                    
+                    <div class="plan-price" id="priceFree">0 TL <span>/ay</span></div>
+                    <div class="price-sub" id="subFree">Yıllıkta 0 TL /yıl</div>
+                    
                     <a href="/" class="btn-plan">Mevcut Plan</a>
+                    
                     <ul class="plan-features">
                         <li><span class="check">✓</span> Günde 30 arama - Arama başına 30 sonuç</li>
                         <li><span class="cross">✕</span> Toplu dışa aktarma: Dahil değildir.</li>
@@ -175,15 +179,19 @@ HTML_PRICING = """
                 </div>
             </div>
 
+            <!-- 2. PROFESYONEL (PRO) -->
             <div class="pricing-card featured">
                 <div class="badge-best">⭐ EN İYİ FİYAT</div>
                 <div class="badge-discount">%30 İNDİRİM</div>
                 <div>
                     <div class="plan-title" style="margin-top: 5px;">Profesyonel</div>
                     <div class="plan-desc">Daha geniş ölçekte günlük profesyonel araştırmalar</div>
-                    <div class="plan-price" id="pricePro">14,70 dolar <span>/ay</span></div>
-                    <div class="price-sub" id="subPro"><s>21,00 dolar /ay</s> - % 30<br><b>176,40 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 75,60 $ tasarruf edin</span></div>
+                    
+                    <div class="plan-price" id="pricePro">180 TL <span>/ay</span></div>
+                    <div class="price-sub" id="subPro"><s>250 TL /ay</s> - % 30<br><b>1.512 TL /yıl</b><br><span style="color:#10b981;">Yılda 648 TL tasarruf edin</span></div>
+                    
                     <a href="/" class="btn-plan">Go Pro</a>
+                    
                     <ul class="plan-features">
                         <li><span class="check">✓</span> Günde 500 arama - Arama başına 500 sonuç</li>
                         <li><span class="check">✓</span> Toplu dışa aktarma: Günde 10 işlem - her işlemde en fazla 12.500 sonuç</li>
@@ -195,13 +203,17 @@ HTML_PRICING = """
                 </div>
             </div>
 
+            <!-- 3. BAŞLANGIÇ / VIP -->
             <div class="pricing-card">
                 <div>
-                    <div class="plan-title">Başlangıç</div>
-                    <div class="plan-desc">API ve hafif otomasyon ile düzenli araştırma</div>
-                    <div class="plan-price" id="priceStart">4,90 dolar <span>/ay</span></div>
-                    <div class="price-sub" id="subStart"><s>7,00 ABD doları /ay</s> - % 30<br><b>58,80 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 25,20 $ tasarruf edin</span></div>
+                    <div class="plan-title">Başlangıç (VIP)</div>
+                    <div class="plan-desc">Tüm 37 modül, API ve sınırsız otomasyon</div>
+                    
+                    <div class="plan-price" id="priceStart">400 TL <span>/ay</span></div>
+                    <div class="price-sub" id="subStart"><s>570 TL /ay</s> - % 30<br><b>3.360 TL /yıl</b><br><span style="color:#10b981;">Yılda 1.440 TL tasarruf edin</span></div>
+                    
                     <a href="/" class="btn-plan">Başlayın</a>
+                    
                     <ul class="plan-features">
                         <li><span class="check">✓</span> Günde 100 arama - Arama başına 100 sonuç</li>
                         <li><span class="check">✓</span> Toplu dışa aktarma: Günde 5 iş - her biri 1.000 sonuca kadar</li>
@@ -227,16 +239,16 @@ HTML_PRICING = """
             if (mode === 'yearly') {
                 btnY.classList.add('active');
                 btnM.classList.remove('active');
-                pricePro.innerHTML = '14,70 dolar <span>/ay</span>';
-                subPro.innerHTML = '<s>21,00 dolar /ay</s> - % 30<br><b>176,40 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 75,60 $ tasarruf edin</span>';
-                priceStart.innerHTML = '4,90 dolar <span>/ay</span>';
-                subStart.innerHTML = '<s>7,00 ABD doları /ay</s> - % 30<br><b>58,80 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 25,20 $ tasarruf edin</span>';
+                pricePro.innerHTML = '180 TL <span>/ay</span>';
+                subPro.innerHTML = '<s>250 TL /ay</s> - % 30<br><b>1.512 TL /yıl</b><br><span style="color:#10b981;">Yılda 648 TL tasarruf edin</span>';
+                priceStart.innerHTML = '400 TL <span>/ay</span>';
+                subStart.innerHTML = '<s>570 TL /ay</s> - % 30<br><b>3.360 TL /yıl</b><br><span style="color:#10b981;">Yılda 1.440 TL tasarruf edin</span>';
             } else {
                 btnM.classList.add('active');
                 btnY.classList.remove('active');
-                pricePro.innerHTML = '21,00 dolar <span>/ay</span>';
+                pricePro.innerHTML = '250 TL <span>/ay</span>';
                 subPro.innerHTML = 'Aylık esnek faturalandırma';
-                priceStart.innerHTML = '7,00 dolar <span>/ay</span>';
+                priceStart.innerHTML = '570 TL <span>/ay</span>';
                 subStart.innerHTML = 'Aylık esnek faturalandırma';
             }
         }
@@ -253,66 +265,47 @@ HTML_API = """
     <title>AxeroCore.net - API Dokümantasyonu</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        
-        /* Top Navbar */
         .api-navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: #07030d; height: 60px; box-sizing: border-box; }
         .api-nav-left { display: flex; align-items: center; gap: 40px; }
         .logo { font-size: 18px; font-weight: bold; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
         .logo span { color: #c084fc; }
-        
         .top-tabs { display: flex; gap: 25px; font-size: 14px; }
         .top-tab { color: #94a3b8; text-decoration: none; padding-bottom: 18px; cursor: pointer; border-bottom: 2px solid transparent; transition: 0.2s; }
         .top-tab.active { color: #fff; border-bottom-color: #c084fc; font-weight: 600; }
-        
         .api-nav-right { display: flex; align-items: center; gap: 15px; }
         .home-btn { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; padding: 6px 14px; border-radius: 8px; font-size: 13px; text-decoration: none; font-weight: bold; }
         .home-btn:hover { background: rgba(168, 85, 247, 0.25); }
-
-        /* Main Layout */
         .api-main-layout { display: flex; flex: 1; overflow: hidden; }
-        
-        /* Left Sidebar */
         .api-sidebar { width: 280px; background: #07030d; border-right: 1px solid rgba(168, 85, 247, 0.15); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
         .search-box { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 13px; }
         .search-box input { background: transparent; border: none; color: #fff; outline: none; width: 100%; font-size: 13px; }
-        
         .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
         .menu-category-title { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold; margin-top: 10px; margin-bottom: 6px; letter-spacing: 0.5px; }
         .menu-item { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: block; }
         .menu-item:hover { color: #fff; background: rgba(168, 85, 247, 0.08); }
         .menu-item.active { color: #c084fc; background: rgba(168, 85, 247, 0.15); font-weight: 600; }
-
-        /* Content Area */
         .api-content { flex: 1; padding: 40px 60px; overflow-y: auto; background: #090514; box-sizing: border-box; }
         .content-section { display: none; }
         .content-section.active { display: block; }
-        
         .breadcrumb { font-size: 12px; color: #a855f7; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
         h1 { font-size: 32px; color: #fff; margin-top: 0; margin-bottom: 12px; }
         p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 30px; }
-        
         .api-visual-box { background: rgba(20, 12, 35, 0.8); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 35px; }
-        
         .quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
         .quick-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 25px; cursor: pointer; transition: 0.2s; text-align: left; }
         .quick-card:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); }
         .quick-card h3 { color: #fff; font-size: 16px; margin-top: 10px; margin-bottom: 8px; }
         .quick-card p { font-size: 13px; margin: 0; color: #94a3b8; }
-
-        /* Right Outline Sidebar */
         .api-outline { width: 240px; padding: 20px; border-left: 1px solid rgba(168, 85, 247, 0.15); font-size: 13px; box-sizing: border-box; }
         .outline-title { font-weight: bold; color: #fff; margin-bottom: 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .outline-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
         .outline-list a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
         .outline-list a:hover { color: #c084fc; }
-
         pre { background: #05020a; padding: 18px; border-radius: 10px; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 13px; overflow-x: auto; font-family: monospace; }
         .endpoint-pill { font-family: monospace; background: #0f071f; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; font-size: 13px; display: inline-block; margin-bottom: 15px; }
     </style>
 </head>
 <body>
-
-    <!-- Top Navbar -->
     <div class="api-navbar">
         <div class="api-nav-left">
             <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
@@ -327,22 +320,17 @@ HTML_API = """
         </div>
     </div>
 
-    <!-- Main Layout -->
     <div class="api-main-layout">
-        
-        <!-- Left Sidebar -->
         <div class="api-sidebar">
             <div class="search-box">
                 <span>🔍</span>
                 <input type="text" placeholder="Axero API belgelerinde arayın...">
             </div>
-
             <div class="sidebar-menu">
                 <div class="menu-category-title">Başlarken</div>
                 <a class="menu-item active" onclick="loadDoc('hosgeldin', this)">Ev / Hoş Geldin</a>
                 <a class="menu-item" onclick="loadDoc('hizli_baslangic', this)">Hızlı Başlangıç</a>
                 <a class="menu-item" onclick="loadDoc('kimlik_dogrulama', this)">Kimlik Doğrulama</a>
-
                 <div class="menu-category-title" style="margin-top:15px;">Arama Kılavuzları</div>
                 <a class="menu-item" onclick="loadDoc('arama_oturumları', this)">Arama Oturumları</a>
                 <a class="menu-item" onclick="loadDoc('filtreler', this)">Yapılandırılmış Filtreler</a>
@@ -352,33 +340,25 @@ HTML_API = """
                 <a class="menu-item" onclick="loadDoc('dosya_arama', this)">Dosya Arama</a>
                 <a class="menu-item" onclick="loadDoc('toplu_arama', this)">Toplu Arama</a>
                 <a class="menu-item" onclick="loadDoc('ihracat', this)">İhracat</a>
-
                 <div class="menu-category-title" style="margin-top:15px;">OSINT ve Programlar</div>
                 <a class="menu-item" onclick="loadDoc('osint_sorgulari', this)">OSINT Sorguları</a>
                 <a class="menu-item" onclick="loadDoc('kamu_hizmetleri', this)">Kamu Hizmetleri</a>
-
                 <div class="menu-category-title" style="margin-top:15px;">Entegrasyon</div>
                 <a class="menu-item" onclick="loadDoc('kotalar', this)">Kotalar ve Limitler</a>
             </div>
         </div>
 
-        <!-- Content Area -->
         <div class="api-content" id="docContentArea">
-            
-            <!-- 1. HOŞ GELDİN -->
             <div id="sec-hosgeldin" class="content-section active">
                 <div class="breadcrumb">Başlarken</div>
                 <h1>AxeroCore API Dokümantasyonu</h1>
                 <p>Veri ihlali arama, veri hırsızı analizi, mağdurlar, tarayıcılar ve OSINT sorgulamaları için kapsamlı veri zekası API'si.</p>
-
                 <div class="api-visual-box">
                     <div style="font-weight:bold; color:#c084fc; margin-bottom:10px; font-size:16px;">Axero Data Intelligence API</div>
                     <div style="color:#94a3b8; font-size:13px;">50+ Milyon Kayıt • Gerçek Zamanlı Sorgu • Kurumsal Güvenlik</div>
                 </div>
-
                 <h2>AxeroCore API'ye hoş geldiniz</h2>
                 <p>AxeroCore, tek bir API platformu aracılığıyla ihlal arama, veri hırsızı analizi, mağdur tespiti, tarayıcılar ve OSINT zenginleştirme hizmetleri sunar.</p>
-
                 <div class="quick-grid">
                     <div class="quick-card" onclick="loadDoc('hizli_baslangic', null)">
                         <div style="font-size:20px;">⚡</div>
@@ -393,20 +373,14 @@ HTML_API = """
                 </div>
             </div>
 
-            <!-- 2. HIZLI BAŞLANGIÇ -->
             <div id="sec-hizli_baslangic" class="content-section">
                 <div class="breadcrumb">Başlarken</div>
                 <h1>Hızlı Başlangıç</h1>
                 <p>AxeroCore API ile ilk sorgunuzu hemen çalıştırın.</p>
-                
                 <div class="endpoint-pill">POST /api/v1/query</div>
-                <p>Kimlik doğrulama anahtarınız ile istek atarak sonuçları JSON formatında alabilirsiniz.</p>
-                <pre>curl -X POST "https://axerocore.net/api/v1/query" \\
-     -H "Authorization: Bearer AXERO-KEY-X" \\
-     -d "target=winterfox"</pre>
+                <pre>curl -X POST "https://axerocore.net/api/v1/query" \\\n     -H "Authorization: Bearer AXERO-KEY-X" \\\n     -d "target=winterfox"</pre>
             </div>
 
-            <!-- 3. KİMLİK DOĞRULAMA -->
             <div id="sec-kimlik_dogrulama" class="content-section">
                 <div class="breadcrumb">Başlarken</div>
                 <h1>Kimlik Doğrulama</h1>
@@ -414,40 +388,33 @@ HTML_API = """
                 <pre>Authorization: Bearer AXERO-MASTER-ADMIN-KEY</pre>
             </div>
 
-            <!-- 4. İHLALLER -->
             <div id="sec-ihlaller" class="content-section">
                 <div class="breadcrumb">Arama Kılavuzları</div>
                 <h1>Güvenlik İhlali Araması</h1>
-                <p>Sızıntı veritabanlarında e-posta, kullanıcı adı veya domain bazlı arama yapın.</p>
+                <p>Sızıntı veritabanlarında arama yapın.</p>
                 <div class="endpoint-pill">POST /api/v1/breach-search</div>
-                <pre>curl -X POST "https://axerocore.net/api/v1/breach-search" \\
-     -d "query=user@domain.com"</pre>
+                <pre>curl -X POST "https://axerocore.net/api/v1/breach-search" \\\n     -d "query=user@domain.com"</pre>
             </div>
 
-            <!-- 5. TOPLU ARAMA -->
             <div id="sec-toplu_arama" class="content-section">
                 <div class="breadcrumb">Arama Kılavuzları</div>
                 <h1>Toplu Arama (Bulk Search)</h1>
-                <p>VIP paketlerde toplu dosya yükleyerek binlerce hedefi tek seferde sorgulayın.</p>
+                <p>VIP paketlerde toplu dosya yükleyerek sorgulayın.</p>
             </div>
 
-            <!-- 6. OSINT SORGULARI -->
             <div id="sec-osint_sorgulari" class="content-section">
                 <div class="breadcrumb">OSINT Kılavuzları</div>
                 <h1>OSINT Sorguları</h1>
-                <p>IP, Domain Whois, ASN ve Discord ID zenginleştirme modüllerini tetikleyin.</p>
+                <p>IP, Domain Whois, ASN ve Discord ID zenginleştirme modülleri.</p>
             </div>
 
-            <!-- 7. KOTALAR -->
             <div id="sec-kotalar" class="content-section">
                 <div class="breadcrumb">Entegrasyon</div>
                 <h1>Kotalar ve Limitler</h1>
-                <p>Paketinize göre günlük sorgu limitleriniz (Free: 30, Pro: 500, VIP: Sınırsız) uygulanır.</p>
+                <p>Paketinize göre günlük sorgu limitleriniz uygulanır.</p>
             </div>
-
         </div>
 
-        <!-- Right Outline Sidebar -->
         <div class="api-outline">
             <div class="outline-title">Bu sayfada</div>
             <ul class="outline-list">
@@ -457,7 +424,6 @@ HTML_API = """
                 <li><a href="#yardim">Yardım Almak</a></li>
             </ul>
         </div>
-
     </div>
 
     <script>
@@ -465,24 +431,17 @@ HTML_API = """
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             const target = document.getElementById('sec-' + secName);
             if (target) target.classList.add('active');
-
             if (el) {
                 document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
                 el.classList.add('active');
             }
         }
-
         function switchTopTab(tabName, el) {
             document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
             if (el) el.classList.add('active');
-
-            if (tabName === 'referans') {
-                loadDoc('hizli_baslangic', null);
-            } else if (tabName === 'sdks') {
-                loadDoc('osint_sorgulari', null);
-            } else {
-                loadDoc('hosgeldin', null);
-            }
+            if (tabName === 'referans') { loadDoc('hizli_baslangic', null); }
+            else if (tabName === 'sdks') { loadDoc('osint_sorgulari', null); }
+            else { loadDoc('hosgeldin', null); }
         }
     </script>
 </body>
@@ -582,19 +541,16 @@ HTML_PANEL = """
         .user-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px 14px; border-radius: 20px; color: #c084fc; font-weight: bold; font-size: 13px; }
         .logout-btn { color: #f43f5e !important; font-weight: bold; }
         .container { max-width: 950px; margin: 40px auto; padding: 0 20px; text-align: center; }
-
         .top-stats-area { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px; }
         .users-counter-box { background: rgba(20, 12, 35, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); padding: 10px 20px; border-radius: 14px; text-align: right; }
         .users-counter-box b { color: #fff; font-size: 20px; display: block; font-weight: 700; }
         .users-counter-box span { font-size: 12px; color: #94a3b8; }
-
         .search-pill-container { background: rgba(20, 12, 35, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.35); padding: 10px 14px; border-radius: 40px; display: flex; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 15px; }
         .search-icon-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #c084fc; font-size: 18px; margin-right: 12px; flex-shrink: 0; }
         .pill-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; padding: 0 10px; }
         .pill-input::placeholder { color: #64748b; }
         .pill-search-btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px 28px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; flex-shrink: 0; }
         .pill-search-btn:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
-
         .sub-toolbar-card { background: rgba(20, 12, 35, 0.75); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 12px 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
         .history-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #94a3b8; border-bottom: 1px solid rgba(168, 85, 247, 0.1); padding-bottom: 10px; }
         .history-chips-left { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -603,50 +559,38 @@ HTML_PANEL = """
         .chip .remove-chip { color: #f43f5e; font-weight: bold; margin-left: 4px; cursor: pointer; }
         .clear-all { color: #f43f5e; cursor: pointer; font-weight: 600; text-decoration: none; }
         .clear-all:hover { text-decoration: underline; }
-        
         .toolbar-bottom-row { display: flex; justify-content: space-between; align-items: center; }
         .mode-tabs { display: flex; gap: 8px; }
         .mode-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: 0.2s; }
         .mode-btn.active { background: rgba(168, 85, 247, 0.25); color: #fff; border-color: #c084fc; }
-
         .manual-section { display: none; text-align: left; background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 25px; }
         .manual-categories { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); padding-bottom: 12px; flex-wrap: wrap; }
-        
         .manual-cat-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .manual-cat-btn.active { background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.5); color: #f43f5e; }
         .manual-cat-btn:hover { border-color: #c084fc; color: #fff; }
-        
         .manual-items-grid { display: none; gap: 12px; flex-wrap: wrap; }
         .manual-items-grid.active { display: flex; }
-        
         .manual-item-card { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 12px 18px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; font-size: 13px; font-weight: 500; transition: 0.2s; }
         .manual-item-card:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); }
         .manual-item-card input { accent-color: #a855f7; transform: scale(1.2); }
-
         .action-links-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
         .action-pill { background: rgba(20, 12, 35, 0.8); border: 1px solid rgba(168, 85, 247, 0.2); padding: 8px 16px; border-radius: 16px; color: #cbd5e1; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .action-pill:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); color: #fff; }
-
         .modules-section { text-align: left; margin-bottom: 25px; background: rgba(20, 12, 35, 0.5); border: 1px solid rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 14px; }
         .modules-section h3 { color: #c084fc; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 8px; margin-bottom: 15px; font-size: 15px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        
         .checkbox-label { background: #0f071f; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.15); font-size: 13px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; }
         .checkbox-label:hover { border-color: rgba(168, 85, 247, 0.5); background: rgba(168, 85, 247, 0.05); }
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
-
         .results-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; margin-top: 30px; text-align: left; }
         .left-widgets { display: flex; flex-direction: column; gap: 20px; }
-        
         .widget-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 16px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
         .widget-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 10px; }
         .widget-title { font-weight: bold; color: #fff; font-size: 15px; display: flex; align-items: center; gap: 8px; }
-        
         .ip-sub-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
         .ip-sub-item { background: #0f071f; padding: 12px; border-radius: 10px; border: 1px solid rgba(168, 85, 247, 0.15); font-size: 12px; color: #94a3b8; }
         .ip-sub-item span { color: #fff; font-weight: bold; display: block; margin-top: 4px; font-size: 13px; }
-
         .discord-profile-preview { background: #0f071f; border-radius: 12px; overflow: hidden; border: 1px solid rgba(168, 85, 247, 0.2); margin-top: 10px; }
         .discord-banner { height: 90px; background: linear-gradient(45deg, #3b0764, #7e22ce); }
         .discord-body { padding: 15px; position: relative; }
@@ -654,28 +598,24 @@ HTML_PANEL = """
         .discord-name { font-weight: bold; font-size: 16px; color: #fff; margin-top: 15px; }
         .discord-meta { font-size: 12px; color: #94a3b8; margin-top: 4px; }
         .badge-tag { display: inline-block; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); padding: 4px 10px; border-radius: 6px; font-size: 11px; color: #c084fc; margin-top: 10px; font-weight: bold; }
-
         .right-leaks { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 16px; padding: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
         .right-leaks h3 { color: #f43f5e; margin-top: 0; border-bottom: 1px solid rgba(244, 63, 94, 0.2); padding-bottom: 10px; font-size: 16px; }
-        
         pre { background: #0b0414; padding: 20px; border-radius: 12px; text-align: left; overflow-x: auto; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
 <body>
-
     <div class="navbar">
         <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
         <div class="nav-links">
             <a href="/">Ev</a>
             <a href="/fiyatlandirma">Fiyatlandırma</a>
-            <a href="/api" style="color: #c084fc;">API</a>
+            <a href="/api">API</a>
             <span class="user-badge">Paket: {TIER_NAME} ({LIMIT_TEXT})</span>
             <a href="/logout" class="logout-btn">Çıkış Yap</a>
         </div>
     </div>
 
     <div class="container">
-        
         <div class="top-stats-area">
             <div class="users-counter-box">
                 <b>256,5K</b>
@@ -719,25 +659,21 @@ HTML_PANEL = """
                     <div class="manual-cat-btn" onclick="switchCategory('eposta', this)">✉️ E-posta Zekası</div>
                     <div class="manual-cat-btn" onclick="switchCategory('ag', this)">🌐 Ağ</div>
                 </div>
-
                 <div id="cat-sizintilar" class="manual-items-grid active">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_ihlaller"> 🛡️ İhlaller</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_hirsiz"> 📄 Hırsız</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_telefon"> 📖 Telefon rehberi</label>
                 </div>
-
                 <div id="cat-sosyal" class="manual-items-grid">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_discord"> 💬 Discord Profil & ID</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_steam"> 🎮 Steam Geçmişi</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_instagram"> 📸 Instagram Taraması</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_github"> 💻 GitHub Analizi</label>
                 </div>
-
                 <div id="cat-eposta" class="manual-items-grid">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="mail_server"> 📭 MX & Mail Sunucu</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_email"> 🔍 E-Posta İhlal DB</label>
                 </div>
-
                 <div id="cat-ag" class="manual-items-grid">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="ip"> 🌐 IP & Geo Lokasyon</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="whois"> 🔍 Domain Whois</label>
@@ -819,22 +755,18 @@ HTML_PANEL = """
             const chip = el.closest('.chip');
             if (chip) chip.remove();
         }
-
         function clearAllChips() {
             const chips = document.querySelectorAll('#chipsContainer .chip');
             chips.forEach(c => c.remove());
         }
-
         function fillInput(val) {
             document.getElementById('targetInput').value = val;
         }
-
         function setMode(btn) {
             const group = btn.closest('.mode-tabs');
             group.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
-
         function switchMode(mode) {
             const btnAuto = document.getElementById('btnAuto');
             const btnManual = document.getElementById('btnManual');
@@ -853,11 +785,9 @@ HTML_PANEL = """
                 autoPanel.style.display = 'block';
             }
         }
-
         function switchCategory(catName, btn) {
             document.querySelectorAll('.manual-cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
             document.querySelectorAll('.manual-items-grid').forEach(g => g.classList.remove('active'));
             document.getElementById('cat-' + catName).classList.add('active');
         }
@@ -919,11 +849,9 @@ def admin_auth(admin_pass: str = Form(...)):
 def admin_panel():
     if not USER_SESSION["is_admin"]:
         return RedirectResponse(url="/admin-login", status_code=303)
-    
     rows = ""
     for k, v in DATABASE_KEYS.items():
         rows += f"<tr><td><b>{k}</b></td><td>{v['type']}</td><td>{v['limit']} Modül</td></tr>"
-        
     page = HTML_ADMIN_PANEL.replace("{KEY_LIST_ROWS}", rows)
     return HTMLResponse(content=page)
 
@@ -931,13 +859,10 @@ def admin_panel():
 def admin_create_key(tier_type: str = Form(...)):
     if not USER_SESSION["is_admin"]:
         return RedirectResponse(url="/admin-login", status_code=303)
-        
     random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     new_key = f"AXERO-{tier_type}-{random_code}"
-    
     limit = 12 if tier_type == "FREE" else (24 if tier_type == "PRO" else 37)
     DATABASE_KEYS[new_key] = {"type": tier_type, "limit": limit}
-    
     return RedirectResponse(url="/admin-panel", status_code=303)
 
 @app.post("/login", response_class=HTMLResponse)
@@ -973,7 +898,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     results.append(f"Çalıştırılan Modül: {len(modules)}\n" + "="*50)
 
     clean_target = target.split(":")[0].replace("https://", "").replace("http://", "").strip("/")
-
     ip_info_html = ""
     discord_info_html = ""
 
@@ -990,12 +914,9 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                             c_name = data.get('country')
                             c_code = data.get('countryCode')
                             city = data.get('city')
-                            region = data.get('regionName')
                             isp = data.get('isp')
                             asn = data.get('as')
-                            
                             results.append(f"[🌐 IP İstihbaratı] {ip_addr} -> {c_name} / {city} ({isp})")
-                            
                             ip_info_html = f"""
                             <div class="widget-card">
                                 <div class="widget-header">
@@ -1012,7 +933,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                             """
                 except:
                     pass
-
             elif mod == "discord_token_lookup" or mod == "social_discord":
                 user_id = clean_target.strip()
                 if user_id.isdigit():
@@ -1024,9 +944,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                             uname = data.get('username')
                             gname = data.get('global_name', 'Bilinmiyor')
                             avatar = f"https://cdn.discordapp.com/avatars/{user_id}/{data.get('avatar', '')}.png"
-                            
                             results.append(f"[🤖 Discord Profil] @{uname} ({gname}) ID: {user_id}")
-                            
                             discord_info_html = f"""
                             <div class="widget-card">
                                 <div class="widget-header">
@@ -1052,7 +970,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
             pass
 
     report = "\n".join(results)
-
     tier = USER_SESSION["tier"]
     pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
     pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
