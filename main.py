@@ -211,10 +211,14 @@ HTML_PANEL = """
         /* Manuel Mod Paneli Alanı */
         .manual-section { display: none; text-align: left; background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 25px; }
         .manual-categories { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); padding-bottom: 12px; flex-wrap: wrap; }
-        .manual-cat-btn { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); color: #f43f5e; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-        .manual-cat-btn.dimmed { background: #0f071f; border-color: rgba(168, 85, 247, 0.2); color: #94a3b8; }
         
-        .manual-items-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+        .manual-cat-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .manual-cat-btn.active { background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.5); color: #f43f5e; }
+        .manual-cat-btn:hover { border-color: #c084fc; color: #fff; }
+        
+        .manual-items-grid { display: none; gap: 12px; flex-wrap: wrap; }
+        .manual-items-grid.active { display: flex; }
+        
         .manual-item-card { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 12px 18px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; font-size: 13px; font-weight: 500; transition: 0.2s; }
         .manual-item-card:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); }
         .manual-item-card input { accent-color: #a855f7; transform: scale(1.2); }
@@ -309,18 +313,41 @@ HTML_PANEL = """
                 </div>
             </div>
 
-            <!-- MANUEL MOD ALANI (İstediğin Gibi Hepsi Seçilebilir) -->
+            <!-- MANUEL MOD KATEGORİ VE MODÜLLERİ -->
             <div id="manualPanel" class="manual-section">
                 <div class="manual-categories">
-                    <div class="manual-cat-btn">🗄️ Veri Sızıntıları</div>
-                    <div class="manual-cat-btn dimmed">👤 Sosyal ve Oyun</div>
-                    <div class="manual-cat-btn dimmed">✉️ E-posta Zekası</div>
-                    <div class="manual-cat-btn dimmed">🌐 Ağ</div>
+                    <div class="manual-cat-btn active" onclick="switchCategory('sizintilar', this)">🗄️ Veri Sızıntıları</div>
+                    <div class="manual-cat-btn" onclick="switchCategory('sosyal', this)">👤 Sosyal ve Oyun</div>
+                    <div class="manual-cat-btn" onclick="switchCategory('eposta', this)">✉️ E-posta Zekası</div>
+                    <div class="manual-cat-btn" onclick="switchCategory('ag', this)">🌐 Ağ</div>
                 </div>
-                <div class="manual-items-grid">
-                    <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_ihlaller" checked> 🛡️ İhlaller</label>
+
+                <!-- 1. Veri Sızıntıları -->
+                <div id="cat-sizintilar" class="manual-items-grid active">
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_ihlaller"> 🛡️ İhlaller</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_hirsiz"> 📄 Hırsız</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_telefon"> 📖 Telefon rehberi</label>
+                </div>
+
+                <!-- 2. Sosyal ve Oyun -->
+                <div id="cat-sosyal" class="manual-items-grid">
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="social_discord"> 💬 Discord Profil & ID</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="social_steam"> 🎮 Steam Geçmişi</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="social_instagram"> 📸 Instagram Taraması</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="social_github"> 💻 GitHub Analizi</label>
+                </div>
+
+                <!-- 3. E-posta Zekası -->
+                <div id="cat-eposta" class="manual-items-grid">
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="mail_server"> 📭 MX & Mail Sunucu</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_email"> 🔍 E-Posta İhlal DB</label>
+                </div>
+
+                <!-- 4. Ağ -->
+                <div id="cat-ag" class="manual-items-grid">
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="ip"> 🌐 IP & Geo Lokasyon</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="whois"> 🔍 Domain Whois</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="port"> 🔌 Port Taraması</label>
                 </div>
             </div>
 
@@ -432,6 +459,14 @@ HTML_PANEL = """
                 manualPanel.style.display = 'none';
                 autoPanel.style.display = 'block';
             }
+        }
+
+        function switchCategory(catName, btn) {
+            document.querySelectorAll('.manual-cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.querySelectorAll('.manual-items-grid').forEach(g => g.classList.remove('active'));
+            document.getElementById('cat-' + catName).classList.add('active');
         }
     </script>
 </body>
