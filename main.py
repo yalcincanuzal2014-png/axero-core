@@ -169,12 +169,11 @@ HTML_PRICING = """
                     <a href="/" class="btn-plan">Mevcut Plan</a>
                     
                     <ul class="plan-features">
-                        <li><span class="check">✓</span> Günde 30 arama - Arama başına 30 sonuç</li>
-                        <li><span class="cross">✕</span> Toplu dışa aktarma: Dahil değildir.</li>
-                        <li><span class="cross">✕</span> Tarayıcılar: Dahil değildir</li>
+                        <li><span class="check">✓</span> 12 Temel Modül Açık</li>
+                        <li><span class="cross">✕</span> Pro ve VIP Modüller Kapalı</li>
                         <li><span class="cross">✕</span> API erişimi: Dahil değil</li>
-                        <li><span class="cross">✕</span> Çekim detayları: Dahil değil</li>
-                        <li><span class="check">✓</span> Telefon rehberi: 15 sunucu ve 15 e-posta görünür durumda.</li>
+                        <li><span class="cross">✕</span> Toplu arama: Dahil değil</li>
+                        <li><span class="check">✓</span> Günde 30 sorgu hakkı</li>
                     </ul>
                 </div>
             </div>
@@ -193,12 +192,11 @@ HTML_PRICING = """
                     <a href="/" class="btn-plan">Go Pro</a>
                     
                     <ul class="plan-features">
-                        <li><span class="check">✓</span> Günde 500 arama - Arama başına 500 sonuç</li>
-                        <li><span class="check">✓</span> Toplu dışa aktarma: Günde 10 işlem - her işlemde en fazla 12.500 sonuç</li>
-                        <li><span class="check">✓</span> 20 aktif tarayıcı</li>
+                        <li><span class="check">✓</span> 24 Modül Açık (Temel + Orta Düzey)</li>
+                        <li><span class="check">✓</span> Sosyal Medya ve Oyun Tarama Modülleri</li>
                         <li><span class="check">✓</span> API erişimi: Dahil</li>
-                        <li><span class="check">✓</span> Seans içeriğine dair detaylar: Dahil</li>
-                        <li><span class="check">✓</span> Telefon rehberi: tam sunucu/e-posta görünürlüğü</li>
+                        <li><span class="check">✓</span> Günde 500 sorgu hakkı</li>
+                        <li><span class="check">✓</span> Öncelikli destek kuyruğu</li>
                     </ul>
                 </div>
             </div>
@@ -215,12 +213,11 @@ HTML_PRICING = """
                     <a href="/" class="btn-plan">Başlayın</a>
                     
                     <ul class="plan-features">
-                        <li><span class="check">✓</span> Günde 100 arama - Arama başına 100 sonuç</li>
-                        <li><span class="check">✓</span> Toplu dışa aktarma: Günde 5 iş - her biri 1.000 sonuca kadar</li>
-                        <li><span class="check">✓</span> 10 aktif tarayıcı</li>
-                        <li><span class="check">✓</span> API erişimi: Dahil</li>
-                        <li><span class="cross">✕</span> Çekim detayları: Dahil değil</li>
-                        <li><span class="check">✓</span> Telefon rehberi: 25 sunucu ve 25 e-posta görünür durumda.</li>
+                        <li><span class="check">✓</span> Tüm 37 Gelişmiş Modül Açık (Tümü)</li>
+                        <li><span class="check">✓</span> E-Posta, Telefon ve Sızıntı DB</li>
+                        <li><span class="check">✓</span> Discord Token & Derin Ağ Tarama</li>
+                        <li><span class="check">✓</span> Sınırsız API Erişimi</li>
+                        <li><span class="check">✓</span> 7/24 VIP Destek</li>
                     </ul>
                 </div>
             </div>
