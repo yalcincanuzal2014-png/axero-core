@@ -29,14 +29,10 @@ def init_db():
             isp TEXT
         )
     """)
-    # Test için örnek Discord ID ve IP kayıtları
+    # Örnek test kaydı
     cursor.execute("""
         INSERT OR IGNORE INTO leaks (target, target_type, discord_id, password, password_hash, token, ip_address, email, phone, isp)
         VALUES ('826161709538476094', 'Discord ID', '826161709538476094', 'axero2026!', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'OTg5MjQzODEzNj...X91a', '185.156.60.22', 'yalcin@axerocore.net', '+90 555 444 3322', 'Türk Telekom')
-    """)
-    cursor.execute("""
-        INSERT OR IGNORE INTO leaks (target, target_type, discord_id, password, password_hash, token, ip_address, email, phone, isp)
-        VALUES ('185.156.60.22', 'IPv4 Host', '826161709538476094', 'axero2026!', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'OTg5MjQzODEzNj...X91a', '185.156.60.22', 'yalcin@axerocore.net', '+90 555 444 3322', 'Türk Telekom')
     """)
     conn.commit()
     conn.close()
@@ -49,7 +45,7 @@ DATABASE_KEYS = {
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "FREE", "limit": 12, "is_admin": False}
-GLOBAL_STATS = {"total_scans": 1740, "nodes_active": 37}
+GLOBAL_STATS = {"total_scans": 1755, "nodes_active": 37}
 
 HTML_LOGIN = """
 <!DOCTYPE html>
@@ -79,7 +75,7 @@ HTML_LOGIN = """
         <div class="logo-area">🛡️ Axero<span>Core.net</span></div>
         <div class="hero-text">
             <h2>AxeroCore Intelligence<br>Platform</h2>
-            <p>Advanced multi-module OSINT, SQLite Leak DB Engine and threat intelligence.</p>
+            <p>Advanced OSINT and SQLite LeakDB Intelligence Engine.</p>
         </div>
         <div style="font-size: 11px; color: #475569;">AxeroCore.net Secure Gateway</div>
     </div>
@@ -137,7 +133,7 @@ HTML_PRICING = """
                     <div class="plan-price">0 TL</div>
                     <ul class="plan-features">
                         <li>12 Temel İstihbarat Modülü</li>
-                        <li>Standart IP & Whois Sorgu</li>
+                        <li>Standart IP Sorgu</li>
                         <li>Tek Tıkla Misafir Girişi</li>
                     </ul>
                 </div>
@@ -149,7 +145,7 @@ HTML_PRICING = """
                     <div class="plan-price">180 TL</div>
                     <ul class="plan-features">
                         <li>24 Gelişmiş Modül</li>
-                        <li>Sherlock Profil Tarama Motoru</li>
+                        <li>Sherlock Profil Tarama</li>
                         <li>Shopify Entegrasyonu</li>
                     </ul>
                 </div>
@@ -254,7 +250,6 @@ HTML_PANEL = """
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .checkbox-label { background: #0f071f; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.15); font-size: 13px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; }
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
-        .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
         
         .terminal-box { background: #040208; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 14px; padding: 20px; margin-bottom: 25px; font-family: monospace; font-size: 13px; color: #38bdf8; max-height: 180px; overflow-y: auto; }
         .terminal-box .line { margin-bottom: 5px; }
@@ -284,7 +279,7 @@ HTML_PANEL = """
     <div class="container">
         <div class="stats-bar">
             <div class="stat-box"><span>📊 Toplam Taranan Hedef</span> <strong>{TOTAL_SCANS}</strong></div>
-            <div class="stat-box"><span>⚡ SQLite & Leak Engine</span> <strong>37 Modül Aktif</strong></div>
+            <div class="stat-box"><span>⚡ SQLite & Leak Engine</span> <strong>Aktif</strong></div>
         </div>
 
         <form action="/sorgula" method="POST">
@@ -292,61 +287,6 @@ HTML_PANEL = """
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🔍</div>
                 <input type="text" name="target" class="pill-input" placeholder="Oarthnet Tarzı Arama: Discord ID, E-posta, IP veya Kullanıcı Adı..." required>
                 <button type="submit" class="pill-search-btn">AxeroCore Sorgula →</button>
-            </div>
-
-            <div class="modules-section">
-                <h3>🟢 Temel İstihbarat Modülleri (Free - 12 Modül)</h3>
-                <div class="grid">
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ip" checked> IP & Geo Lokasyon</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="whois" checked> Domain Whois</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="dns" checked> DNS Kayıt Analizi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="subdomain" checked> Alt Alan Adı</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="port" checked> Port Taraması</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ssl"> SSL Sertifika</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_headers"> HTTP Header</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="robots_txt"> Robots.txt</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="mac_lookup"> MAC Adresi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ping_test"> Ping & Latency</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_status"> HTTP Status</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="asn_lookup"> ASN / ISP Bilgi</label>
-                </div>
-            </div>
-
-            <div class="modules-section">
-                <h3>🔵 Orta Düzey İstihbarat (Pro - 12 Modül)</h3>
-                <div class="grid">
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_instagram" {PRO_DISABLED}> Instagram Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok İnceleme</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID Geçmişi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED} checked> Discord ID Analiz</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Analizi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_telegram" {PRO_DISABLED}> Telegram Kontrol</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="domain_history" {PRO_DISABLED}> Domain Yaşı (Age)</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="mail_server" {PRO_DISABLED}> MX & Mail Sunucu</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="security_txt" {PRO_DISABLED}> Security.txt</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="firewall_detect" {PRO_DISABLED}> WAF / Firewall</label>
-                </div>
-            </div>
-
-            <div class="modules-section">
-                <h3>⭐ Gelişmiş Tehdit & Sızıntı İstihbaratı (VIP - 13 Modül)</h3>
-                <div class="grid">
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED} checked> 🤖 Discord Token</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Kamera</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED} checked> E-Posta Sızıntı DB</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon İstihbarat</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="hash_cracker" {VIP_DISABLED}> Hash Çözümleyici</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analiz</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="wayback" {VIP_DISABLED}> Wayback Arşivi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="deep_scan" {VIP_DISABLED}> Derin Ağ Tehdit</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ip_reputation" {VIP_DISABLED}> IP Blacklist DB</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cve_lookup" {VIP_DISABLED}> CVE Güvenlik Açığı</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ssl_cipher" {VIP_DISABLED}> SSL Cipher Suite</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="dns_sec" {VIP_DISABLED}> DNSSEC Doğrulama</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="full_audit" {VIP_DISABLED}> Tam Tehdit Audit</label>
-                </div>
             </div>
         </form>
         {%RESULT_SECTION%}
@@ -361,17 +301,8 @@ def read_root():
         return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", ""))
     
     tier = USER_SESSION["tier"]
-    pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
-    pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
-    vip_lock = "" if tier == "VIP" else "locked"
-    vip_disabled = "" if tier == "VIP" else "disabled"
-    
     panel = HTML_PANEL.replace("{TIER_NAME}", tier)\
                     .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
-                    .replace("{PRO_LOCK}", pro_lock)\
-                    .replace("{PRO_DISABLED}", pro_disabled)\
-                    .replace("{VIP_LOCK}", vip_lock)\
-                    .replace("{VIP_DISABLED}", vip_disabled)\
                     .replace("{TOTAL_SCANS}", str(GLOBAL_STATS["total_scans"]))\
                     .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
@@ -383,7 +314,6 @@ def fiyatlandirma():
 @app.get("/oauth-login", response_class=HTMLResponse)
 def oauth_login(provider: str):
     USER_SESSION["logged_in"] = True
-    USER_SESSION["key"] = f"OAUTH-{provider.upper()}"
     USER_SESSION["tier"] = "VIP"
     USER_SESSION["limit"] = 37
     return RedirectResponse(url="/", status_code=303)
@@ -438,7 +368,7 @@ def logout():
     return RedirectResponse(url="/", status_code=303)
 
 @app.post("/sorgula", response_class=HTMLResponse)
-async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
+async def run_osint(target: str = Form(...)):
     if not USER_SESSION["logged_in"]:
         return RedirectResponse(url="/", status_code=303)
         
@@ -455,14 +385,14 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     cards_html = ""
     details_html = ""
     terminal_logs = f"""
-    <div class="line">[+] AxeroCore LeakDB Intelligence Engine v5.0 initialized...</div>
+    <div class="line">[+] AxeroCore LeakDB Intelligence Engine initialized...</div>
     <div class="line">[+] Target Value: {target_clean}</div>
     <div class="line">[+] Querying SQLite Leak Database (axero_leak.db)...</div>
     """
 
     if db_row:
         d_id, pwd, pwd_hash, token, ip, email, phone, isp = db_row
-        terminal_logs += f'<div class="line" style="color: #10b981;">[✓] CRITICAL LEAK MATCH FOUND IN DATABASE!</div>'
+        terminal_logs += f'<div class="line" style="color: #10b981;">[✓] LEAK MATCH FOUND IN DATABASE!</div>'
         
         cards_html = f"""
         <div class="dash-card">
@@ -478,14 +408,14 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         <div class="dash-card">
             <h4>IP & Token Logları <span>🌐</span></h4>
             <div class="dash-value">{ip}</div>
-            <div class="dash-desc">Token: {token[:15]}... | ISP: {isp}</div>
+            <div class="dash-desc">Token: {token} | ISP: {isp}</div>
         </div>
         """
         details_html = f"""
-        <div class="result-item"><b>[LEAK_DB_MATCH]</b> Discord ID: {d_id} | Düz Şifre: {pwd} | Şifre Hash: {pwd_hash} | Token: {token} | E-Posta: {email} | Telefon: {phone} | Son IP: {ip} | ISS: {isp}</div>
+        <div class="result-item"><b>[LEAK_DB_MATCH]</b> Discord ID: {d_id} | Şifre: {pwd} | Hash: {pwd_hash} | Token: {token} | E-Posta: {email} | Telefon: {phone} | Son IP: {ip} | ISS: {isp}</div>
         """
     else:
-        terminal_logs += f'<div class="line" style="color: #f43f5e;">[!] No combo match found in SQLite database for: {target_clean}</div>'
+        terminal_logs += f'<div class="line" style="color: #f43f5e;">[!] No record found in SQLite database for: {target_clean}</div>'
         cards_html = """
         <div class="dash-card">
             <h4>Sorgu Sonucu <span>⚠️</span></h4>
@@ -529,18 +459,8 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     </div>
     """
 
-    tier = USER_SESSION["tier"]
-    pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
-    pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
-    vip_lock = "" if tier == "VIP" else "locked"
-    vip_disabled = "" if tier == "VIP" else "disabled"
-
-    panel = HTML_PANEL.replace("{TIER_NAME}", tier)\
+    panel = HTML_PANEL.replace("{TIER_NAME}", USER_SESSION["tier"])\
                     .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
-                    .replace("{PRO_LOCK}", pro_lock)\
-                    .replace("{PRO_DISABLED}", pro_disabled)\
-                    .replace("{VIP_LOCK}", vip_lock)\
-                    .replace("{VIP_DISABLED}", vip_disabled)\
                     .replace("{TOTAL_SCANS}", str(GLOBAL_STATS["total_scans"]))\
                     .replace("{%RESULT_SECTION%}", result_section)
     return HTMLResponse(content=panel)
