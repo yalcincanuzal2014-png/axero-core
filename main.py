@@ -86,6 +86,12 @@ HTML_PRICING = """
         .plan-features li::before { content: "✓ "; color: #c084fc; font-weight: bold; }
         .btn-plan { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.3); color: #fff; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; display: block; width: 100%; box-sizing: border-box; cursor: pointer; }
         .pricing-card.featured .btn-plan { background: #fff; color: #000; border: none; }
+        
+        .faq-section { margin-top: 50px; background: rgba(20, 12, 35, 0.6); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 35px; text-align: left; }
+        .faq-section h2 { color: #c084fc; font-size: 20px; margin-bottom: 20px; text-align: center; }
+        .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .faq-item h4 { color: #fff; margin: 0 0 8px 0; font-size: 15px; }
+        .faq-item p { color: #94a3b8; margin: 0; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -134,6 +140,28 @@ HTML_PRICING = """
                     </ul>
                 </div>
                 <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992919486487&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Sık Sorulan Sorular & Bilgilendirme</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4>Satın alım sonrası lisans anahtarı nasıl iletiliyor?</h4>
+                    <p>Shopify üzerinden ödeme tamamlandıktan sonra lisans anahtarınız e-posta adresinize otomatik olarak ve anında iletilir.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Hangi modüller aktif olarak çalışıyor?</h4>
+                    <p>Seçtiğiniz pakete bağlı olarak IP, port, sosyal ağ, sızıntı ve tehdit analiz modüllerimiz arka planda gerçek zamanlı çalışır.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Ödeme ekranında şifre sorarsa ne yapmalıyım?</h4>
+                    <p>Mağaza geçici erteleme modundaysa giriş şifresi olarak <b>axero</b> yazarak doğrudan sepetinize ulaşabilirsiniz.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Destek veya özel entegrasyon alabilir miyim?</h4>
+                    <p>VIP paket kullanıcılarımız için 7/24 kesintisiz öncelikli teknik destek ve özel altyapı entegrasyonları sağlanmaktadır.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -258,8 +286,8 @@ HTML_PANEL = """
         <form action="/sorgula" method="POST">
             <div class="search-pill-container">
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🔍</div>
-                <input type="text" name="target" class="pill-input" placeholder="OathNet Tarzı Akıllı Arama: E-posta, IP, Domain veya Kullanıcı Adı..." required>
-                <button type="submit" class="pill-search-btn">OathNet Sorgula →</button>
+                <input type="text" name="target" class="pill-input" placeholder="AxeroCore Akıllı Arama: E-posta, IP, Domain veya Kullanıcı Adı..." required>
+                <button type="submit" class="pill-search-btn">AxeroCore Sorgula →</button>
             </div>
 
             <div class="modules-section">
@@ -419,7 +447,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     cards_html = ""
     details_html = ""
     
-    # OathNet tarzı hedef türü algılama
     target_type = "Generic Entity"
     if "@" in target:
         target_type = "Email / Breach Identity"
@@ -431,7 +458,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         target_type = "Username / Handle"
 
     terminal_logs = f"""
-    <div class="line">[+] OathNet Engine v2.0 - Unified Intelligence Query initialized...</div>
+    <div class="line">[+] AxeroCore Engine v2.0 - Unified Intelligence Query initialized...</div>
     <div class="line">[+] Target Type Identified: {target_type}</div>
     <div class="line">[+] Target value: {target}</div>
     <div class="line">[+] Cross-referencing {len(modules)} active OSINT and breach databases...</div>
@@ -589,7 +616,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
 
     result_section = f"""
     <div class="terminal-box">
-        <div style="color: #c084fc; margin-bottom: 8px; font-weight: bold;">🔍 OathNet Intelligence Stream & Unified Engine</div>
+        <div style="color: #c084fc; margin-bottom: 8px; font-weight: bold;">🔍 AxeroCore Intelligence Stream & Unified Engine</div>
         {terminal_logs}
         <div class="line" style="color: #10b981;">[✓] Search successfully indexed across all selected nodes.</div>
     </div>
@@ -598,7 +625,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         <div class="dash-card">
             <h4>Sorgulanan Veri Tipi <span>🏷️</span></h4>
             <div class="dash-value">{target_type}</div>
-            <div class="dash-desc">OathNet Akıllı Tanıma Algoritması</div>
+            <div class="dash-desc">AxeroCore Akıllı Tanıma Algoritması</div>
         </div>
         <div class="dash-card">
             <h4>Hedef / Sorgu <span>🌐</span></h4>
@@ -614,7 +641,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     {cards_html}
     <div class="result-details-box">
         <h3>
-            <span>🔍 OathNet & AxeroCore İstihbarat Dökümü ({target})</span>
+            <span>🔍 AxeroCore İstihbarat Dökümü ({target})</span>
             <a href="/download-report?target={target}" class="btn-download" target="_blank">📥 Raporu İndir (.txt)</a>
         </h3>
         {details_html}
@@ -641,7 +668,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
 @app.get("/download-report", response_class=PlainTextResponse)
 def download_report(target: str):
     report_content = f"========================================\n" \
-                     f" OATHNET x AXEROCORE.NET INTELLIGENCE\n" \
+                     f" AXEROCORE.NET INTELLIGENCE REPORT\n" \
                      f" Target: {target}\n" \
                      f" Tier: {USER_SESSION['tier']}\n" \
                      f"========================================\n\n" \
