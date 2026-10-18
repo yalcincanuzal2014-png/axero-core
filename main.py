@@ -2,9 +2,6 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 import random
 import string
-import socket
-import urllib.request
-import json
 
 app = FastAPI()
 
@@ -96,34 +93,20 @@ HTML_PRICING = """
                 <div><div class="plan-title">Özgür (Free)</div><div class="plan-price">0 TL</div><a href="/" class="btn-plan">Mevcut Plan</a></div>
             </div>
             <div class="pricing-card featured">
-                <div><div class="plan-title">Profesyonel (Pro)</div><div class="plan-price">180 TL</div><form action="/shopier-odeme-baslat" method="POST"><input type="hidden" name="tier" value="PRO"><button type="submit" class="btn-plan">Shopier ile Satın Al</button></form></div>
+                <div>
+                    <div class="plan-title">Profesyonel (Pro)</div>
+                    <div class="plan-price">180 TL</div>
+                    <a href="https://2hqenb-6k.myshopify.com/cart/8992911196183:1" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+                </div>
             </div>
             <div class="pricing-card">
-                <div><div class="plan-title">Başlangıç (VIP)</div><div class="plan-price">400 TL</div><form action="/shopier-odeme-baslat" method="POST"><input type="hidden" name="tier" value="VIP"><button type="submit" class="btn-plan">Shopier ile Satın Al</button></form></div>
+                <div>
+                    <div class="plan-title">Başlangıç (VIP)</div>
+                    <div class="plan-price">400 TL</div>
+                    <a href="https://2hqenb-6k.myshopify.com/cart/8992919486487:1" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+                </div>
             </div>
         </div>
-    </div>
-</body>
-</html>
-"""
-
-HTML_SUCCESS_PURCHASE = """
-<!DOCTYPE html>
-<html lang="tr">
-<head><meta charset="UTF-8"><title>Ödeme Başarılı</title>
-<style>
-    body { font-family: sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    .card { background: rgba(30, 20, 50, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); padding: 40px; border-radius: 16px; width: 450px; text-align: center; }
-    .key-box { background: #0f071f; border: 1px solid #c084fc; padding: 15px; border-radius: 8px; font-size: 18px; color: #38bdf8; font-family: monospace; font-weight: bold; margin: 20px 0; }
-    .btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; box-sizing: border-box; }
-</style>
-</head>
-<body>
-    <div class="card">
-        <h1 style="color: #10b981;">🎉 Ödeme Başarılı!</h1>
-        <p><b>{TIER}</b> paketiniz aktif edildi.</p>
-        <div class="key-box">{GENERATED_KEY}</div>
-        <a href="/" class="btn">Panele Giriş Yap →</a>
     </div>
 </body>
 </html>
@@ -205,7 +188,6 @@ HTML_PANEL = """
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
         
-        /* İstediğin Kartlı Dashboard Tasarımı */
         .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
         .dash-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 20px; }
         .dash-card h4 { color: #c084fc; margin: 0 0 10px 0; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -308,36 +290,24 @@ def read_root():
     vip_disabled = "" if tier == "VIP" else "disabled"
     
     panel = HTML_PANEL.replace("{TIER_NAME}", tier)\
-                      .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
-                      .replace("{PRO_LOCK}", pro_lock)\
-                      .replace("{PRO_DISABLED}", pro_disabled)\
-                      .replace("{VIP_LOCK}", vip_lock)\
-                      .replace("{VIP_DISABLED}", vip_disabled)\
-                      .replace("{%RESULT_SECTION%}", "")
+                    .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
+                    .replace("{PRO_LOCK}", pro_lock)\
+                    .replace("{PRO_DISABLED}", pro_disabled)\
+                    .replace("{VIP_LOCK}", vip_lock)\
+                    .replace("{VIP_DISABLED}", vip_disabled)\
+                    .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
 
 @app.get("/fiyatlandirma", response_class=HTMLResponse)
 def fiyatlandirma():
     return HTMLResponse(content=HTML_PRICING)
 
-@app.post("/shopier-odeme-baslat", response_class=HTMLResponse)
-def shopier_odeme_baslat(tier: str = Form(...)):
-    random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    new_key = f"AXERO-SHOPIER-{tier}-{random_code}"
-    limit = 24 if tier == "PRO" else 37
-    DATABASE_KEYS[new_key] = {"type": tier, "limit": limit}
-    USER_SESSION["logged_in"] = True
-    USER_SESSION["key"] = new_key
-    USER_SESSION["tier"] = tier
-    USER_SESSION["limit"] = limit
-    return HTMLResponse(content=HTML_SUCCESS_PURCHASE.replace("{TIER}", tier).replace("{GENERATED_KEY}", new_key))
-
 @app.get("/oauth-login", response_class=HTMLResponse)
 def oauth_login(provider: str):
     USER_SESSION["logged_in"] = True
     USER_SESSION["key"] = f"OAUTH-{provider.upper()}"
-    USER_SESSION["tier"] = "VIP"
-    USER_SESSION["limit"] = 37
+    USER_SESSION["tier"] = "FREE"
+    USER_SESSION["limit"] = 12
     return RedirectResponse(url="/", status_code=303)
 
 @app.get("/admin-login", response_class=HTMLResponse)
@@ -439,10 +409,10 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     vip_disabled = "" if tier == "VIP" else "disabled"
 
     panel = HTML_PANEL.replace("{TIER_NAME}", tier)\
-                      .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
-                      .replace("{PRO_LOCK}", pro_lock)\
-                      .replace("{PRO_DISABLED}", pro_disabled)\
-                      .replace("{VIP_LOCK}", vip_lock)\
-                      .replace("{VIP_DISABLED}", vip_disabled)\
-                      .replace("{%RESULT_SECTION%}", result_section)
+                    .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
+                    .replace("{PRO_LOCK}", pro_lock)\
+                    .replace("{PRO_DISABLED}", pro_disabled)\
+                    .replace("{VIP_LOCK}", vip_lock)\
+                    .replace("{VIP_DISABLED}", vip_disabled)\
+                    .replace("{%RESULT_SECTION%}", result_section)
     return HTMLResponse(content=panel)
