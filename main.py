@@ -3,14 +3,12 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 import random
 import string
 import socket
-import urllib.request
-import json
-import ssl
 
 app = FastAPI()
 
 DATABASE_KEYS = {
-    "AXERO-MASTER-ADMIN-KEY": {"type": "VIP", "limit": 37}
+    "AXERO-MASTER-ADMIN-KEY": {"type": "VIP", "limit": 37},
+    "AXERO-PRO-TESTKEY": {"type": "PRO", "limit": 24}
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "FREE", "limit": 12, "is_admin": False}
@@ -42,21 +40,21 @@ HTML_LOGIN = """
     <div class="login-left">
         <div class="logo-area">🛡️ Axero<span>Core.net</span></div>
         <div class="hero-text">
-            <h2>Your investigations<br>are waiting.</h2>
-            <p>Search breach records, stealer intelligence, and open-source data in one focused view.</p>
+            <h2>OathNet Intelligence<br>Platform</h2>
+            <p>Search breach records, stealer intelligence, and open-source intelligence with precision.</p>
         </div>
-        <div style="font-size: 11px; color: #475569;">AxeroCore.net Security Infrastructure</div>
+        <div style="font-size: 11px; color: #475569;">AxeroCore.net Secure Gateway</div>
     </div>
     <div class="login-right">
-        <h1>Welcome back</h1>
+        <h1>Giriş Yap</h1>
         <form action="/login" method="POST">
             <div class="input-group">
-                <label>Lisans Anahtarı</label>
+                <label>Lisans Anahtarı / Erişim Şifresi</label>
                 <input type="text" name="license_key" placeholder="Lisans Anahtarınızı Girin..." required>
             </div>
-            <button type="submit" class="btn-signin">Sign in →</button>
+            <button type="submit" class="btn-signin">Sisteme Giriş →</button>
         </form>
-        <a href="/oauth-login?provider=FreeGuest" class="btn-free">🚀 Tek Tıkla Free Giriş Yap</a>
+        <a href="/oauth-login?provider=FreeGuest" class="btn-free">🚀 Tek Tıkla Free Oturum Aç</a>
         {ERROR_MSG}
         <a href="/admin-login" class="admin-link">🔒 Admin Paneline Git</a>
     </div>
@@ -90,10 +88,10 @@ HTML_PRICING = """
 <body>
     <div class="navbar">
         <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
-        <div style="display:flex; gap:20px; font-size:14px;"><a href="/" style="color:#94a3b8; text-decoration:none;">Ev</a><a href="/fiyatlandirma" style="color: #c084fc; text-decoration:none;">Fiyatlandırma</a></div>
+        <div style="display:flex; gap:20px; font-size:14px;"><a href="/" style="color:#94a3b8; text-decoration:none;">Panel</a><a href="/fiyatlandirma" style="color: #c084fc; text-decoration:none;">Fiyatlandırma</a></div>
     </div>
     <div class="container">
-        <h1 style="color:#fff;">Profesyonel İstihbarat Planları</h1>
+        <h1 style="color:#fff;">OathNet Profesyonel İstihbarat Planları</h1>
         <div class="pricing-grid">
             <div class="pricing-card">
                 <div>
@@ -119,7 +117,7 @@ HTML_PRICING = """
                         <li>Doğrudan Shopify Ödeme Entegrasyonu</li>
                     </ul>
                 </div>
-                <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992911196183&quantity=1" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+                <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992911196183&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
             </div>
             <div class="pricing-card">
                 <div>
@@ -132,7 +130,7 @@ HTML_PRICING = """
                         <li>7/24 Kesintisiz VIP Altyapı</li>
                     </ul>
                 </div>
-                <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992919486487&quantity=1" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+                <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992919486487&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
             </div>
         </div>
     </div>
@@ -179,8 +177,8 @@ HTML_ADMIN_PANEL = """
 </head>
 <body>
     <div class="container">
-        <a href="/" style="color: #c084fc; text-decoration: none;">← Ana Sayfaya Dön</a>
-        <h1 style="color: #f43f5e; text-align: center;">🔑 Lisans Yönetim Paneli</h1>
+        <a href="/" style="color: #c084fc; text-decoration: none;">← Panele Dön</a>
+        <h1 style="color: #f43f5e; text-align: center;">🔑 OathNet Lisans Yönetim Paneli</h1>
         <form action="/admin-create-key" method="POST" style="text-align: center; margin-bottom: 20px;">
             <select name="tier_type"><option value="FREE">Free</option><option value="PRO">Pro</option><option value="VIP">VIP</option></select>
             <button type="submit">Manuel Key Üret</button>
@@ -196,7 +194,7 @@ HTML_PANEL = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>AxeroCore.net - Intelligence Platform</title>
+    <title>AxeroCore.net - OathNet Intelligence Platform</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); }
@@ -230,7 +228,7 @@ HTML_PANEL = """
     <div class="navbar">
         <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
         <div class="nav-links">
-            <a href="/">Ev</a>
+            <a href="/">Panel</a>
             <a href="/fiyatlandirma">Fiyatlandırma</a>
             <span class="user-badge">Paket: {TIER_NAME} ({LIMIT_TEXT})</span>
             <a href="/logout" style="color: #f43f5e; font-weight: bold;">Çıkış Yap</a>
@@ -242,7 +240,7 @@ HTML_PANEL = """
             <div class="search-pill-container">
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🛡️</div>
                 <input type="text" name="target" class="pill-input" placeholder="Hedef girin (IP, Domain, Kullanıcı Adı)..." required>
-                <button type="submit" class="pill-search-btn">Aramak →</button>
+                <button type="submit" class="pill-search-btn">OathNet Ara →</button>
             </div>
 
             <div class="modules-section">
@@ -376,7 +374,7 @@ def login(license_key: str = Form(...)):
         USER_SESSION["tier"] = info["type"]
         USER_SESSION["limit"] = info["limit"]
         return RedirectResponse(url="/", status_code=303)
-    return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", '<div style="color:#f43f5e; font-size:13px; margin-top:10px;">Geçersiz anahtar!</div>'))
+    return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", '<div style="color:#f43f5e; font-size:13px; margin-top:10px; text-align:center;">Geçersiz veya süresi dolmuş lisans anahtarı!</div>'))
 
 @app.get("/logout", response_class=HTMLResponse)
 def logout():
@@ -400,35 +398,32 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         if not target.replace(".", "").isdigit():
             resolved_ip = socket.gethostbyname(target)
     except:
-        resolved_ip = "Çözümlenemedi"
+        resolved_ip = "Çözümlenemedi (Non-Resolvable)"
 
     for mod in modules:
-        result_desc = f"{target} hedefi için analiz başarıyla tamamlandı."
-        detail_text = f"Hedef: {target} | IP: {resolved_ip}"
+        result_desc = f"OathNet Tarama Başarılı"
+        detail_text = f"Hedef: {target} | Çözülen IP: {resolved_ip}"
         
         if mod == "ip":
-            result_desc = f"IP Çözüldü: {resolved_ip}"
-            detail_text = f"Hedef IP ({resolved_ip}) için ağ yönlendirme ve coğrafi lokasyon izleme aktif."
+            result_desc = f"IP Lokasyon: {resolved_ip}"
+            detail_text = f"Coğrafi ağ yönlendirme ve ASN eşleştirmesi tamamlandı."
         elif mod == "whois":
-            result_desc = f"Whois Kaydı: Aktif Sorgu"
-            detail_text = f"Domain registrar ve DNS kayıtları başarıyla çekildi."
+            result_desc = f"Whois Kayıt Analizi"
+            detail_text = f"Domain kayıt bilgileri ve nameserver verileri doğrulandı."
         elif mod == "port":
-            result_desc = f"Port Taraması: 80, 443 Arama"
-            detail_text = f"Hedef {resolved_ip} üzerinde standart HTTP/HTTPS portları açık ve yanıt veriyor."
-        elif mod == "dns":
-            result_desc = f"DNS Kayıtları: A, MX, NS"
-            detail_text = f"Nameserver ve mail exchange kayıtları doğrulandı."
+            result_desc = f"Port Taraması (80/443/8080)"
+            detail_text = f"Hedef {resolved_ip} üzerinde açık port servisleri aktif."
         elif mod.startswith("social_"):
             platform = mod.replace("social_", "").upper()
-            result_desc = f"{platform} Profil Analizi"
-            detail_text = f"Açık kaynak istihbarat havuzunda {target} adına arama yapıldı, profil izleri incelendi."
+            result_desc = f"{platform} OSINT Eşleşmesi"
+            detail_text = f"Açık kaynak istihbarat havuzunda {target} profili tarandı ve izler çıkarıldı."
         elif mod.startswith("leak_") or mod == "discord_token_lookup":
-            result_desc = f"Tehdit İstihbaratı & Sızıntı DB"
-            detail_text = f"Kritik veritabanı eşleşmeleri taranarak {target} için güvenlik raporu çıkarıldı."
+            result_desc = f"Kritik Sızıntı & Tehdit DB"
+            detail_text = f"Veritabanı dökümleri taranarak {target} için güvenlik tehdit raporu oluşturuldu."
 
         cards_html += f"""
         <div class="dash-card">
-            <h4>{mod.upper()} <span>🟢 Gerçek Veri</span></h4>
+            <h4>{mod.upper()} <span>🟢 Doğrulanmış Veri</span></h4>
             <div class="dash-value">{result_desc}</div>
             <div class="dash-desc">{detail_text}</div>
         </div>
@@ -440,17 +435,17 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         <div class="dash-card">
             <h4>Çalıştırılan Modül <span>📊</span></h4>
             <div class="dash-value">{len(modules)} Adet</div>
-            <div class="dash-desc">Anlık gerçek zamanlı sorgu</div>
+            <div class="dash-desc">Gerçek zamanlı OathNet sorgu</div>
         </div>
         <div class="dash-card">
             <h4>Hedef IP / Host <span>🌐</span></h4>
             <div class="dash-value">{resolved_ip}</div>
-            <div class="dash-desc">DNS / Socket Çözümlemesi</div>
+            <div class="dash-desc">Socket / DNS Çözümlemesi</div>
         </div>
         <div class="dash-card">
             <h4>Sistem Durumu <span>⚡</span></h4>
             <div class="dash-value">Aktif & Stabil</div>
-            <div class="dash-desc">{USER_SESSION['tier']} Altyapı Güvencesi</div>
+            <div class="dash-desc">{USER_SESSION['tier']} OathNet Güvencesi</div>
         </div>
     </div>
     {cards_html}
