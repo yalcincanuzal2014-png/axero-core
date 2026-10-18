@@ -88,6 +88,407 @@ HTML_LOGIN = """
 </html>
 """
 
+HTML_PRICING = """
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>AxeroCore.net - Fiyatlandırma</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
+        .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .logo span { color: #c084fc; }
+        .nav-links { display: flex; gap: 20px; font-size: 14px; color: #94a3b8; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
+        .nav-links a:hover { color: #c084fc; }
+        
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; text-align: center; }
+        p.subtitle { color: #94a3b8; font-size: 14px; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.5; }
+
+        .billing-toggle-box { display: inline-flex; background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 4px; border-radius: 30px; margin-bottom: 40px; }
+        .toggle-btn { background: transparent; border: none; color: #94a3b8; padding: 8px 24px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .toggle-btn.active { background: linear-gradient(135deg, #9333ea, #7e22ce); color: #fff; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
+        .discount-badge { background: #10b981; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 6px; font-weight: bold; }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; }
+        .pricing-card { background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .pricing-card.featured { border-color: #c084fc; box-shadow: 0 0 35px rgba(168, 85, 247, 0.25); background: rgba(25, 14, 45, 0.95); }
+        
+        .badge-best { position: absolute; top: -12px; left: 30px; background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.4); color: #c084fc; font-size: 11px; font-weight: bold; padding: 4px 12px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
+        .badge-discount { position: absolute; top: -12px; right: 25px; background: #10b981; color: #fff; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
+
+        .plan-title { font-size: 22px; font-weight: bold; color: #fff; margin-bottom: 8px; }
+        .plan-desc { font-size: 13px; color: #94a3b8; margin-bottom: 20px; min-height: 40px; }
+        
+        .plan-price { font-size: 34px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        .plan-price span { font-size: 14px; color: #94a3b8; font-weight: normal; }
+        .price-sub { font-size: 12px; color: #64748b; margin-bottom: 25px; }
+        .price-sub b { color: #10b981; }
+
+        .btn-plan { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.3); color: #fff; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; display: block; margin-bottom: 25px; }
+        .btn-plan:hover { background: rgba(168, 85, 247, 0.2); border-color: #c084fc; }
+        .pricing-card.featured .btn-plan { background: #fff; color: #000; border: none; }
+        .pricing-card.featured .btn-plan:hover { background: #f1f5f9; box-shadow: 0 0 15px rgba(255,255,255,0.4); }
+
+        .plan-features { list-style: none; padding: 0; margin: 0; color: #cbd5e1; font-size: 13px; display: flex; flex-direction: column; gap: 14px; }
+        .plan-features li { display: flex; align-items: flex-start; gap: 10px; line-height: 1.4; }
+        .plan-features li span.check { color: #10b981; font-weight: bold; }
+        .plan-features li span.cross { color: #f43f5e; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
+        <div class="nav-links">
+            <a href="/">Ev</a>
+            <a href="/fiyatlandirma" style="color: #c084fc;">Fiyatlandırma</a>
+            <a href="/api">API</a>
+            <a href="/logout" style="color: #f43f5e; font-weight: bold;">Çıkış Yap</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <p class="subtitle">Öncelikle temel unsurlarla başlayın, ardından işiniz gerektirdikçe arama kapasitenizi, otomasyonunuzu ve API erişiminizi genişletin.</p>
+
+        <div class="billing-toggle-box">
+            <button type="button" class="toggle-btn active" id="btnYearly" onclick="setBilling('yearly')">Yıllık <span class="discount-badge">%30 tasarruf edin</span></button>
+            <button type="button" class="toggle-btn" id="btnMonthly" onclick="setBilling('monthly')">Aylık</button>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div>
+                    <div class="plan-title">Özgür</div>
+                    <div class="plan-desc">Temel arama iş akışını ücretsiz deneyin.</div>
+                    <div class="plan-price" id="priceFree">0 dolar <span>/ay</span></div>
+                    <div class="price-sub" id="subFree">Yıllıkta 0 dolar /yıl</div>
+                    <a href="/" class="btn-plan">Mevcut Plan</a>
+                    <ul class="plan-features">
+                        <li><span class="check">✓</span> Günde 30 arama - Arama başına 30 sonuç</li>
+                        <li><span class="cross">✕</span> Toplu dışa aktarma: Dahil değildir.</li>
+                        <li><span class="cross">✕</span> Tarayıcılar: Dahil değildir</li>
+                        <li><span class="cross">✕</span> API erişimi: Dahil değil</li>
+                        <li><span class="cross">✕</span> Çekim detayları: Dahil değil</li>
+                        <li><span class="check">✓</span> Telefon rehberi: 15 sunucu ve 15 e-posta görünür durumda.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="badge-best">⭐ EN İYİ FİYAT</div>
+                <div class="badge-discount">%30 İNDİRİM</div>
+                <div>
+                    <div class="plan-title" style="margin-top: 5px;">Profesyonel</div>
+                    <div class="plan-desc">Daha geniş ölçekte günlük profesyonel araştırmalar</div>
+                    <div class="plan-price" id="pricePro">14,70 dolar <span>/ay</span></div>
+                    <div class="price-sub" id="subPro"><s>21,00 dolar /ay</s> - % 30<br><b>176,40 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 75,60 $ tasarruf edin</span></div>
+                    <a href="/" class="btn-plan">Go Pro</a>
+                    <ul class="plan-features">
+                        <li><span class="check">✓</span> Günde 500 arama - Arama başına 500 sonuç</li>
+                        <li><span class="check">✓</span> Toplu dışa aktarma: Günde 10 işlem - her işlemde en fazla 12.500 sonuç</li>
+                        <li><span class="check">✓</span> 20 aktif tarayıcı</li>
+                        <li><span class="check">✓</span> API erişimi: Dahil</li>
+                        <li><span class="check">✓</span> Seans içeriğine dair detaylar: Dahil</li>
+                        <li><span class="check">✓</span> Telefon rehberi: tam sunucu/e-posta görünürlüğü</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pricing-card">
+                <div>
+                    <div class="plan-title">Başlangıç</div>
+                    <div class="plan-desc">API ve hafif otomasyon ile düzenli araştırma</div>
+                    <div class="plan-price" id="priceStart">4,90 dolar <span>/ay</span></div>
+                    <div class="price-sub" id="subStart"><s>7,00 ABD doları /ay</s> - % 30<br><b>58,80 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 25,20 $ tasarruf edin</span></div>
+                    <a href="/" class="btn-plan">Başlayın</a>
+                    <ul class="plan-features">
+                        <li><span class="check">✓</span> Günde 100 arama - Arama başına 100 sonuç</li>
+                        <li><span class="check">✓</span> Toplu dışa aktarma: Günde 5 iş - her biri 1.000 sonuca kadar</li>
+                        <li><span class="check">✓</span> 10 aktif tarayıcı</li>
+                        <li><span class="check">✓</span> API erişimi: Dahil</li>
+                        <li><span class="cross">✕</span> Çekim detayları: Dahil değil</li>
+                        <li><span class="check">✓</span> Telefon rehberi: 25 sunucu ve 25 e-posta görünür durumda.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setBilling(mode) {
+            const btnY = document.getElementById('btnYearly');
+            const btnM = document.getElementById('btnMonthly');
+            const pricePro = document.getElementById('pricePro');
+            const subPro = document.getElementById('subPro');
+            const priceStart = document.getElementById('priceStart');
+            const subStart = document.getElementById('subStart');
+
+            if (mode === 'yearly') {
+                btnY.classList.add('active');
+                btnM.classList.remove('active');
+                pricePro.innerHTML = '14,70 dolar <span>/ay</span>';
+                subPro.innerHTML = '<s>21,00 dolar /ay</s> - % 30<br><b>176,40 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 75,60 $ tasarruf edin</span>';
+                priceStart.innerHTML = '4,90 dolar <span>/ay</span>';
+                subStart.innerHTML = '<s>7,00 ABD doları /ay</s> - % 30<br><b>58,80 ABD doları /yıl</b><br><span style="color:#10b981;">Yılda 25,20 $ tasarruf edin</span>';
+            } else {
+                btnM.classList.add('active');
+                btnY.classList.remove('active');
+                pricePro.innerHTML = '21,00 dolar <span>/ay</span>';
+                subPro.innerHTML = 'Aylık esnek faturalandırma';
+                priceStart.innerHTML = '7,00 dolar <span>/ay</span>';
+                subStart.innerHTML = 'Aylık esnek faturalandırma';
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
+HTML_API = """
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>AxeroCore.net - API Dokümantasyonu</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        /* Top Navbar */
+        .api-navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: #07030d; height: 60px; box-sizing: border-box; }
+        .api-nav-left { display: flex; align-items: center; gap: 40px; }
+        .logo { font-size: 18px; font-weight: bold; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: #c084fc; }
+        
+        .top-tabs { display: flex; gap: 25px; font-size: 14px; }
+        .top-tab { color: #94a3b8; text-decoration: none; padding-bottom: 18px; cursor: pointer; border-bottom: 2px solid transparent; transition: 0.2s; }
+        .top-tab.active { color: #fff; border-bottom-color: #c084fc; font-weight: 600; }
+        
+        .api-nav-right { display: flex; align-items: center; gap: 15px; }
+        .home-btn { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; padding: 6px 14px; border-radius: 8px; font-size: 13px; text-decoration: none; font-weight: bold; }
+        .home-btn:hover { background: rgba(168, 85, 247, 0.25); }
+
+        /* Main Layout */
+        .api-main-layout { display: flex; flex: 1; overflow: hidden; }
+        
+        /* Left Sidebar */
+        .api-sidebar { width: 280px; background: #07030d; border-right: 1px solid rgba(168, 85, 247, 0.15); padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
+        .search-box { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 13px; }
+        .search-box input { background: transparent; border: none; color: #fff; outline: none; width: 100%; font-size: 13px; }
+        
+        .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
+        .menu-category-title { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold; margin-top: 10px; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .menu-item { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s; display: block; }
+        .menu-item:hover { color: #fff; background: rgba(168, 85, 247, 0.08); }
+        .menu-item.active { color: #c084fc; background: rgba(168, 85, 247, 0.15); font-weight: 600; }
+
+        /* Content Area */
+        .api-content { flex: 1; padding: 40px 60px; overflow-y: auto; background: #090514; box-sizing: border-box; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        
+        .breadcrumb { font-size: 12px; color: #a855f7; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        h1 { font-size: 32px; color: #fff; margin-top: 0; margin-bottom: 12px; }
+        p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 30px; }
+        
+        .api-visual-box { background: rgba(20, 12, 35, 0.8); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 35px; }
+        
+        .quick-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px; }
+        .quick-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 12px; padding: 25px; cursor: pointer; transition: 0.2s; text-align: left; }
+        .quick-card:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); }
+        .quick-card h3 { color: #fff; font-size: 16px; margin-top: 10px; margin-bottom: 8px; }
+        .quick-card p { font-size: 13px; margin: 0; color: #94a3b8; }
+
+        /* Right Outline Sidebar */
+        .api-outline { width: 240px; padding: 20px; border-left: 1px solid rgba(168, 85, 247, 0.15); font-size: 13px; box-sizing: border-box; }
+        .outline-title { font-weight: bold; color: #fff; margin-bottom: 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .outline-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+        .outline-list a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
+        .outline-list a:hover { color: #c084fc; }
+
+        pre { background: #05020a; padding: 18px; border-radius: 10px; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 13px; overflow-x: auto; font-family: monospace; }
+        .endpoint-pill { font-family: monospace; background: #0f071f; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(168, 85, 247, 0.3); color: #c084fc; font-size: 13px; display: inline-block; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <div class="api-navbar">
+        <div class="api-nav-left">
+            <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
+            <div class="top-tabs">
+                <a class="top-tab active" onclick="switchTopTab('dokumantasyon', this)">Dokümantasyon</a>
+                <a class="top-tab" onclick="switchTopTab('referans', this)">API Referansı</a>
+                <a class="top-tab" onclick="switchTopTab('sdks', this)">SDK'lar</a>
+            </div>
+        </div>
+        <div class="api-nav-right">
+            <a href="/" class="home-btn">← Panele Dön</a>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="api-main-layout">
+        
+        <!-- Left Sidebar -->
+        <div class="api-sidebar">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Axero API belgelerinde arayın...">
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-category-title">Başlarken</div>
+                <a class="menu-item active" onclick="loadDoc('hosgeldin', this)">Ev / Hoş Geldin</a>
+                <a class="menu-item" onclick="loadDoc('hizli_baslangic', this)">Hızlı Başlangıç</a>
+                <a class="menu-item" onclick="loadDoc('kimlik_dogrulama', this)">Kimlik Doğrulama</a>
+
+                <div class="menu-category-title" style="margin-top:15px;">Arama Kılavuzları</div>
+                <a class="menu-item" onclick="loadDoc('arama_oturumları', this)">Arama Oturumları</a>
+                <a class="menu-item" onclick="loadDoc('filtreler', this)">Yapılandırılmış Filtreler</a>
+                <a class="menu-item" onclick="loadDoc('ihlaller', this)">Güvenlik İhlali Araması</a>
+                <a class="menu-item" onclick="loadDoc('hirsiz', this)">Hırsız Arama</a>
+                <a class="menu-item" onclick="loadDoc('kurbanlar', this)">Kurbanlar</a>
+                <a class="menu-item" onclick="loadDoc('dosya_arama', this)">Dosya Arama</a>
+                <a class="menu-item" onclick="loadDoc('toplu_arama', this)">Toplu Arama</a>
+                <a class="menu-item" onclick="loadDoc('ihracat', this)">İhracat</a>
+
+                <div class="menu-category-title" style="margin-top:15px;">OSINT ve Programlar</div>
+                <a class="menu-item" onclick="loadDoc('osint_sorgulari', this)">OSINT Sorguları</a>
+                <a class="menu-item" onclick="loadDoc('kamu_hizmetleri', this)">Kamu Hizmetleri</a>
+
+                <div class="menu-category-title" style="margin-top:15px;">Entegrasyon</div>
+                <a class="menu-item" onclick="loadDoc('kotalar', this)">Kotalar ve Limitler</a>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="api-content" id="docContentArea">
+            
+            <!-- 1. HOŞ GELDİN -->
+            <div id="sec-hosgeldin" class="content-section active">
+                <div class="breadcrumb">Başlarken</div>
+                <h1>AxeroCore API Dokümantasyonu</h1>
+                <p>Veri ihlali arama, veri hırsızı analizi, mağdurlar, tarayıcılar ve OSINT sorgulamaları için kapsamlı veri zekası API'si.</p>
+
+                <div class="api-visual-box">
+                    <div style="font-weight:bold; color:#c084fc; margin-bottom:10px; font-size:16px;">Axero Data Intelligence API</div>
+                    <div style="color:#94a3b8; font-size:13px;">50+ Milyon Kayıt • Gerçek Zamanlı Sorgu • Kurumsal Güvenlik</div>
+                </div>
+
+                <h2>AxeroCore API'ye hoş geldiniz</h2>
+                <p>AxeroCore, tek bir API platformu aracılığıyla ihlal arama, veri hırsızı analizi, mağdur tespiti, tarayıcılar ve OSINT zenginleştirme hizmetleri sunar.</p>
+
+                <div class="quick-grid">
+                    <div class="quick-card" onclick="loadDoc('hizli_baslangic', null)">
+                        <div style="font-size:20px;">⚡</div>
+                        <h3>Hızlı Başlangıç</h3>
+                        <p>İlk API çağrınızı 5 dakikadan kısa sürede gerçekleştirin.</p>
+                    </div>
+                    <div class="quick-card" onclick="switchTopTab('referans', null)">
+                        <div style="font-size:20px;">📄</div>
+                        <h3>API Referansı</h3>
+                        <p>Oluşturulan OpenAPI referansını kullanarak uç nokta detaylarına ulaşabilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. HIZLI BAŞLANGIÇ -->
+            <div id="sec-hizli_baslangic" class="content-section">
+                <div class="breadcrumb">Başlarken</div>
+                <h1>Hızlı Başlangıç</h1>
+                <p>AxeroCore API ile ilk sorgunuzu hemen çalıştırın.</p>
+                
+                <div class="endpoint-pill">POST /api/v1/query</div>
+                <p>Kimlik doğrulama anahtarınız ile istek atarak sonuçları JSON formatında alabilirsiniz.</p>
+                <pre>curl -X POST "https://axerocore.net/api/v1/query" \\
+     -H "Authorization: Bearer AXERO-KEY-X" \\
+     -d "target=winterfox"</pre>
+            </div>
+
+            <!-- 3. KİMLİK DOĞRULAMA -->
+            <div id="sec-kimlik_dogrulama" class="content-section">
+                <div class="breadcrumb">Başlarken</div>
+                <h1>Kimlik Doğrulama</h1>
+                <p>API isteklerinizde Header içine Bearer token eklemeniz gerekmektedir.</p>
+                <pre>Authorization: Bearer AXERO-MASTER-ADMIN-KEY</pre>
+            </div>
+
+            <!-- 4. İHLALLER -->
+            <div id="sec-ihlaller" class="content-section">
+                <div class="breadcrumb">Arama Kılavuzları</div>
+                <h1>Güvenlik İhlali Araması</h1>
+                <p>Sızıntı veritabanlarında e-posta, kullanıcı adı veya domain bazlı arama yapın.</p>
+                <div class="endpoint-pill">POST /api/v1/breach-search</div>
+                <pre>curl -X POST "https://axerocore.net/api/v1/breach-search" \\
+     -d "query=user@domain.com"</pre>
+            </div>
+
+            <!-- 5. TOPLU ARAMA -->
+            <div id="sec-toplu_arama" class="content-section">
+                <div class="breadcrumb">Arama Kılavuzları</div>
+                <h1>Toplu Arama (Bulk Search)</h1>
+                <p>VIP paketlerde toplu dosya yükleyerek binlerce hedefi tek seferde sorgulayın.</p>
+            </div>
+
+            <!-- 6. OSINT SORGULARI -->
+            <div id="sec-osint_sorgulari" class="content-section">
+                <div class="breadcrumb">OSINT Kılavuzları</div>
+                <h1>OSINT Sorguları</h1>
+                <p>IP, Domain Whois, ASN ve Discord ID zenginleştirme modüllerini tetikleyin.</p>
+            </div>
+
+            <!-- 7. KOTALAR -->
+            <div id="sec-kotalar" class="content-section">
+                <div class="breadcrumb">Entegrasyon</div>
+                <h1>Kotalar ve Limitler</h1>
+                <p>Paketinize göre günlük sorgu limitleriniz (Free: 30, Pro: 500, VIP: Sınırsız) uygulanır.</p>
+            </div>
+
+        </div>
+
+        <!-- Right Outline Sidebar -->
+        <div class="api-outline">
+            <div class="outline-title">Bu sayfada</div>
+            <ul class="outline-list">
+                <li><a href="#hosgeldin">AxeroCore API'ye hoş geldiniz</a></li>
+                <li><a href="#hizli">Temel Yetenekler</a></li>
+                <li><a href="#ornek">Hızlı Örnek</a></li>
+                <li><a href="#yardim">Yardım Almak</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        function loadDoc(secName, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('sec-' + secName);
+            if (target) target.classList.add('active');
+
+            if (el) {
+                document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                el.classList.add('active');
+            }
+        }
+
+        function switchTopTab(tabName, el) {
+            document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+            if (el) el.classList.add('active');
+
+            if (tabName === 'referans') {
+                loadDoc('hizli_baslangic', null);
+            } else if (tabName === 'sdks') {
+                loadDoc('osint_sorgulari', null);
+            } else {
+                loadDoc('hosgeldin', null);
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
 HTML_ADMIN_LOGIN = """
 <!DOCTYPE html>
 <html lang="tr">
@@ -173,7 +574,7 @@ HTML_PANEL = """
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
-        .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .logo span { color: #c084fc; }
         .nav-links { display: flex; gap: 20px; font-size: 14px; color: #94a3b8; align-items: center; }
         .nav-links a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
@@ -208,7 +609,6 @@ HTML_PANEL = """
         .mode-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: 0.2s; }
         .mode-btn.active { background: rgba(168, 85, 247, 0.25); color: #fff; border-color: #c084fc; }
 
-        /* Manuel Mod Paneli Alanı */
         .manual-section { display: none; text-align: left; background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 25px; }
         .manual-categories { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); padding-bottom: 12px; flex-wrap: wrap; }
         
@@ -264,11 +664,11 @@ HTML_PANEL = """
 <body>
 
     <div class="navbar">
-        <div class="logo">🛡️ Axero<span>Core.net</span></div>
+        <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
         <div class="nav-links">
             <a href="/">Ev</a>
-            <a href="#">Fiyatlandırma</a>
-            <a href="#">API</a>
+            <a href="/fiyatlandirma">Fiyatlandırma</a>
+            <a href="/api" style="color: #c084fc;">API</a>
             <span class="user-badge">Paket: {TIER_NAME} ({LIMIT_TEXT})</span>
             <a href="/logout" class="logout-btn">Çıkış Yap</a>
         </div>
@@ -290,7 +690,6 @@ HTML_PANEL = """
                 <button type="submit" class="pill-search-btn">Aramak →</button>
             </div>
 
-            <!-- Tarih ve Mod Sekmeleri Toolbar Kartı -->
             <div class="sub-toolbar-card">
                 <div class="history-row">
                     <div class="history-chips-left" id="chipsContainer">
@@ -313,7 +712,6 @@ HTML_PANEL = """
                 </div>
             </div>
 
-            <!-- MANUEL MOD KATEGORİ VE MODÜLLERİ -->
             <div id="manualPanel" class="manual-section">
                 <div class="manual-categories">
                     <div class="manual-cat-btn active" onclick="switchCategory('sizintilar', this)">🗄️ Veri Sızıntıları</div>
@@ -322,14 +720,12 @@ HTML_PANEL = """
                     <div class="manual-cat-btn" onclick="switchCategory('ag', this)">🌐 Ağ</div>
                 </div>
 
-                <!-- 1. Veri Sızıntıları -->
                 <div id="cat-sizintilar" class="manual-items-grid active">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_ihlaller"> 🛡️ İhlaller</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_hirsiz"> 📄 Hırsız</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_telefon"> 📖 Telefon rehberi</label>
                 </div>
 
-                <!-- 2. Sosyal ve Oyun -->
                 <div id="cat-sosyal" class="manual-items-grid">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_discord"> 💬 Discord Profil & ID</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_steam"> 🎮 Steam Geçmişi</label>
@@ -337,13 +733,11 @@ HTML_PANEL = """
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="social_github"> 💻 GitHub Analizi</label>
                 </div>
 
-                <!-- 3. E-posta Zekası -->
                 <div id="cat-eposta" class="manual-items-grid">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="mail_server"> 📭 MX & Mail Sunucu</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_email"> 🔍 E-Posta İhlal DB</label>
                 </div>
 
-                <!-- 4. Ağ -->
                 <div id="cat-ag" class="manual-items-grid">
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="ip"> 🌐 IP & Geo Lokasyon</label>
                     <label class="manual-item-card"><input type="checkbox" name="modules" value="whois"> 🔍 Domain Whois</label>
@@ -351,7 +745,6 @@ HTML_PANEL = """
                 </div>
             </div>
 
-            <!-- OTOMATİK MOD MODÜL LİSTESİ -->
             <div id="autoPanel">
                 <div class="modules-section">
                     <h3>🟢 Temel İstihbarat Modülleri (Free - 12 Modül)</h3>
@@ -413,8 +806,8 @@ HTML_PANEL = """
                 <a href="#" class="action-pill">🛡️ Maruz kalma kontrolleri</a>
                 <a href="#" class="action-pill">🔍 Güvenlik araştırması</a>
                 <a href="#" class="action-pill">🔔 İzleme</a>
-                <a href="#" class="action-pill">🔌 API erişimi</a>
-                <a href="#" class="action-pill" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.4);">✨ Yükseltme planı</a>
+                <a href="/api" class="action-pill">🔌 API erişimi</a>
+                <a href="/fiyatlandirma" class="action-pill" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.4);">✨ Yükseltme planı</a>
             </div>
         </form>
 
@@ -492,6 +885,14 @@ def read_root():
                       .replace("{VIP_DISABLED}", vip_disabled)\
                       .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
+
+@app.get("/fiyatlandirma", response_class=HTMLResponse)
+def fiyatlandirma():
+    return HTMLResponse(content=HTML_PRICING)
+
+@app.get("/api", response_class=HTMLResponse)
+def api_docs():
+    return HTMLResponse(content=HTML_API)
 
 @app.get("/oauth-login", response_class=HTMLResponse)
 def oauth_login(provider: str):
