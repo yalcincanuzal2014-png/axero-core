@@ -29,10 +29,14 @@ def init_db():
             isp TEXT
         )
     """)
-    # Test için örnek Discord ID kaydı
+    # Test için örnek Discord ID ve IP kayıtları
     cursor.execute("""
         INSERT OR IGNORE INTO leaks (target, target_type, discord_id, password, password_hash, token, ip_address, email, phone, isp)
         VALUES ('826161709538476094', 'Discord ID', '826161709538476094', 'axero2026!', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'OTg5MjQzODEzNj...X91a', '185.156.60.22', 'yalcin@axerocore.net', '+90 555 444 3322', 'Türk Telekom')
+    """)
+    cursor.execute("""
+        INSERT OR IGNORE INTO leaks (target, target_type, discord_id, password, password_hash, token, ip_address, email, phone, isp)
+        VALUES ('185.156.60.22', 'IPv4 Host', '826161709538476094', 'axero2026!', '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'OTg5MjQzODEzNj...X91a', '185.156.60.22', 'yalcin@axerocore.net', '+90 555 444 3322', 'Türk Telekom')
     """)
     conn.commit()
     conn.close()
@@ -45,7 +49,7 @@ DATABASE_KEYS = {
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "FREE", "limit": 12, "is_admin": False}
-GLOBAL_STATS = {"total_scans": 1710, "nodes_active": 37}
+GLOBAL_STATS = {"total_scans": 1740, "nodes_active": 37}
 
 HTML_LOGIN = """
 <!DOCTYPE html>
@@ -280,13 +284,13 @@ HTML_PANEL = """
     <div class="container">
         <div class="stats-bar">
             <div class="stat-box"><span>📊 Toplam Taranan Hedef</span> <strong>{TOTAL_SCANS}</strong></div>
-            <div class="stat-box"><span>⚡ SQLite & Node Sunucuları</span> <strong>37 Modül Aktif</strong></div>
+            <div class="stat-box"><span>⚡ SQLite & Leak Engine</span> <strong>37 Modül Aktif</strong></div>
         </div>
 
         <form action="/sorgula" method="POST">
             <div class="search-pill-container">
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🔍</div>
-                <input type="text" name="target" class="pill-input" placeholder="AxeroCore Arama: Discord ID, IP, Domain veya Kullanıcı Adı..." required>
+                <input type="text" name="target" class="pill-input" placeholder="Oarthnet Tarzı Arama: Discord ID, E-posta, IP veya Kullanıcı Adı..." required>
                 <button type="submit" class="pill-search-btn">AxeroCore Sorgula →</button>
             </div>
 
@@ -438,100 +442,87 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     if not USER_SESSION["logged_in"]:
         return RedirectResponse(url="/", status_code=303)
         
-    if not modules:
-        modules = ["ip", "whois", "dns", "port"]
-
     GLOBAL_STATS["total_scans"] += 1
     target_clean = target.strip()
 
-    # SQLite Veritabanından Sorgu Yapma
+    # SQLite Veritabanından Doğrudan Eşleşme Arama
     conn = sqlite3.connect("axero_leak.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT target_type, discord_id, password, password_hash, token, ip_address, email, phone, isp FROM leaks WHERE target = ?", (target_clean,))
+    cursor.execute("SELECT discord_id, password, password_hash, token, ip_address, email, phone, isp FROM leaks WHERE target = ? OR discord_id = ? OR ip_address = ?", (target_clean, target_clean, target_clean))
     db_row = cursor.fetchone()
     conn.close()
 
     cards_html = ""
     details_html = ""
     terminal_logs = f"""
-    <div class="line">[+] AxeroCore High-Grade OSINT & SQLite DB Engine v4.5 initialized...</div>
+    <div class="line">[+] AxeroCore LeakDB Intelligence Engine v5.0 initialized...</div>
     <div class="line">[+] Target Value: {target_clean}</div>
-    <div class="line">[+] Executing live network probes and SQLite LeakDB queries...</div>
+    <div class="line">[+] Querying SQLite Leak Database (axero_leak.db)...</div>
     """
 
-    for mod in modules:
-        result_desc = "Tarama Başarılı"
-        detail_text = f"Hedef: {target_clean}"
-
-        if db_row and (mod in ["social_discord", "discord_token_lookup", "leak_email", "ip"]):
-            target_type, d_id, pwd, pwd_hash, token, ip, email, phone, isp = db_row
-            if mod == "social_discord":
-                result_desc = f"🚨 Discord Leak & Şifre Eşleşmesi"
-                detail_text = f"ID: {d_id} | Şifre: <code>{pwd}</code> | Hash: <code>{pwd_hash[:15]}...</code>"
-            elif mod == "discord_token_lookup":
-                result_desc = f"🤖 Discord Token Logları"
-                detail_text = f"Token: <code>{token}</code> | E-Posta: {email}"
-            elif mod == "leak_email":
-                result_desc = f"📧 Sızıntı Veritabanı Kaydı"
-                detail_text = f"E-Posta: {email} | Tel: {phone} | IP: {ip}"
-            elif mod == "ip":
-                result_desc = f"Lokasyon & IP Logları"
-                detail_text = f"IP: {ip} | ISP: {isp}"
-        else:
-            if mod == "ip":
-                result_desc = "Lokasyon: Ankara, Türkiye"
-                detail_text = "ISP: Türk Telekomünikasyon A.Ş."
-            elif mod == "whois":
-                result_desc = "Domain Whois Kaydı"
-                detail_text = f"Hedef '{target_clean}' için Whois verileri tarandı."
-            elif mod == "dns":
-                result_desc = "DNS Kayıt Analizi"
-                detail_text = "A ve MX kayıtları başarıyla sorgulandı."
-            elif mod == "port":
-                result_desc = "Açık Portlar: 80, 443"
-                detail_text = f"Canlı TCP soket taraması {target_clean} üzerinde tamamlandı."
-            else:
-                result_desc = f"{mod.upper()} Modülü Aktif"
-                detail_text = f"'{target_clean}' hedefi üzerinde analiz raporlandı."
-
-        terminal_logs += f'<div class="line">[✓] Module {mod.upper()} processed for target "{target_clean}".</div>'
-        cards_html += f"""
+    if db_row:
+        d_id, pwd, pwd_hash, token, ip, email, phone, isp = db_row
+        terminal_logs += f'<div class="line" style="color: #10b981;">[✓] CRITICAL LEAK MATCH FOUND IN DATABASE!</div>'
+        
+        cards_html = f"""
         <div class="dash-card">
-            <h4>{mod.upper()} <span>🟢 Canlı Doğrulandı</span></h4>
-            <div class="dash-value">{result_desc}</div>
-            <div class="dash-desc">{detail_text}</div>
+            <h4>Discord ID & Kimlik <span>🔥 Eşleşti</span></h4>
+            <div class="dash-value">{d_id}</div>
+            <div class="dash-desc">E-Posta: {email}</div>
+        </div>
+        <div class="dash-card">
+            <h4>Şifre & Hash Verisi <span>🔑</span></h4>
+            <div class="dash-value">{pwd}</div>
+            <div class="dash-desc">Hash: {pwd_hash}</div>
+        </div>
+        <div class="dash-card">
+            <h4>IP & Token Logları <span>🌐</span></h4>
+            <div class="dash-value">{ip}</div>
+            <div class="dash-desc">Token: {token[:15]}... | ISP: {isp}</div>
         </div>
         """
-        details_html += f"""<div class="result-item"><b>[{mod.upper()}]</b> {detail_text}</div>"""
+        details_html = f"""
+        <div class="result-item"><b>[LEAK_DB_MATCH]</b> Discord ID: {d_id} | Düz Şifre: {pwd} | Şifre Hash: {pwd_hash} | Token: {token} | E-Posta: {email} | Telefon: {phone} | Son IP: {ip} | ISS: {isp}</div>
+        """
+    else:
+        terminal_logs += f'<div class="line" style="color: #f43f5e;">[!] No combo match found in SQLite database for: {target_clean}</div>'
+        cards_html = """
+        <div class="dash-card">
+            <h4>Sorgu Sonucu <span>⚠️</span></h4>
+            <div class="dash-value">Kayıt Bulunamadı</div>
+            <div class="dash-desc">Bu hedef veritabanında mevcut değil.</div>
+        </div>
+        """
+        details_html = f"""<div class="result-item"><b>[NOT_FOUND]</b> '{target_clean}' için sızıntı veritabanında eşleşen kayıt bulunamadı.</div>"""
 
     result_section = f"""
     <div class="terminal-box">
-        <div style="color: #c084fc; margin-bottom: 8px; font-weight: bold;">🔍 AxeroCore Intelligence & Leak Stream</div>
+        <div style="color: #c084fc; margin-bottom: 8px; font-weight: bold;">🚨 AxeroCore LeakDB Intelligence Stream</div>
         {terminal_logs}
-        <div class="line" style="color: #10b981;">[✓] Scan completed successfully for: {target_clean}</div>
+        <div class="line" style="color: #10b981;">[✓] Database query completed for: {target_clean}</div>
     </div>
     
     <div class="dashboard-grid">
         <div class="dash-card">
             <h4>Sorgulanan Hedef <span>🌐</span></h4>
             <div class="dash-value">{target_clean}</div>
-            <div class="dash-desc">SQLite LeakDB Durumu: {"Eşleşme Bulundu 🔥" if db_row else "Temiz / Kayıt Yok"}</div>
+            <div class="dash-desc">SQLite Durumu: {"Eşleşme Bulundu 🔥" if db_row else "Kayıt Yok"}</div>
         </div>
         <div class="dash-card">
             <h4>Güvenlik Seviyesi <span>⚡</span></h4>
             <div class="dash-value">{USER_SESSION['tier']} Yetkisi</div>
-            <div class="dash-desc">{len(modules)} Modül Taraması</div>
+            <div class="dash-desc">LeakDB Motoru Aktif</div>
         </div>
         <div class="dash-card">
             <h4>Toplam Tarama <span>📊</span></h4>
             <div class="dash-value">{GLOBAL_STATS['total_scans']}</div>
-            <div class="dash-desc">Aktif Düğüm: 37 Modül</div>
+            <div class="dash-desc">Aktif Sızıntı Tablosu</div>
         </div>
     </div>
     {cards_html}
     <div class="result-details-box">
         <h3>
-            <span>🔍 AxeroCore İstihbarat & Sızıntı Dökümü ({target_clean})</span>
+            <span>🔍 AxeroCore Sızıntı & Şifre Dökümü ({target_clean})</span>
             <a href="/download-report?target={target_clean}" class="btn-download" target="_blank">📥 Raporu İndir (.txt)</a>
         </h3>
         {details_html}
@@ -558,10 +549,10 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
 def download_report(target: str):
     conn = sqlite3.connect("axero_leak.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM leaks WHERE target = ?", (target,))
+    cursor.execute("SELECT * FROM leaks WHERE target = ? OR discord_id = ? OR ip_address = ?", (target, target, target))
     row = cursor.fetchone()
     conn.close()
     
     if row:
-        return f"AXEROCORE LEAK REPORT\nTarget: {target}\nDB Match: {row}"
-    return f"AXEROCORE OSINT REPORT\nTarget: {target}\nStandard scan completed."
+        return f"AXEROCORE LEAKDB REPORT\nTarget: {target}\nMatch Found: {row}"
+    return f"AXEROCORE REPORT\nTarget: {target}\nNo leak record found."
