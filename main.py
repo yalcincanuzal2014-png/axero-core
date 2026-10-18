@@ -23,51 +23,40 @@ HTML_LOGIN = """
     <title>AxeroCore.net - Welcome Back</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; margin: 0; padding: 0; height: 100vh; display: flex; overflow: hidden; }
-        
-        /* Sol Taraf: Gradyan ve Tanıtım Alanı */
         .login-left { flex: 1.2; background: radial-gradient(circle at 20% 40%, #3b0764 0%, #07030d 70%); display: flex; flex-direction: column; justify-content: space-between; padding: 60px; position: relative; }
         .logo-area { font-size: 22px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
         .logo-area span { color: #c084fc; }
         .hero-text h2 { font-size: 44px; color: #fff; margin-bottom: 15px; font-weight: 700; line-height: 1.2; }
         .hero-text p { color: #94a3b8; font-size: 15px; max-width: 420px; line-height: 1.5; }
-        
         .steps-box { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; max-width: 400px; }
         .step-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 18px; border-radius: 12px; font-size: 14px; color: #cbd5e1; display: flex; align-items: center; gap: 12px; }
         .step-item.active { background: #fff; color: #000; font-weight: 600; }
-
-        /* Sağ Taraf: Giriş Formu Alanı */
-        .login-right { flex: 1; background: #07030d; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px; }
+        .login-right { flex: 1; background: #07030d; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px; overflow-y: auto; }
         .login-right h1 { font-size: 32px; color: #fff; margin-bottom: 25px; font-weight: 600; }
-        
         .social-logins { display: flex; gap: 12px; margin-bottom: 20px; }
-        .social-btn { flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; }
-        .social-btn:hover { background: rgba(255, 255, 255, 0.08); }
-
+        .social-btn { flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; transition: 0.2s; display: inline-block; }
+        .social-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(168, 85, 247, 0.4); }
         .divider { text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); line-height: 0.1rem; margin: 25px 0; }
         .divider span { background: #07030d; padding: 0 15px; color: #64748b; font-size: 12px; }
-
         .input-group { margin-bottom: 18px; }
         .input-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
         .input-group input { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); background: #0f0a1a; color: #fff; font-size: 14px; outline: none; box-sizing: border-box; transition: 0.2s; }
         .input-group input:focus { border-color: #a855f7; box-shadow: 0 0 10px rgba(168, 85, 247, 0.3); }
-
         .btn-signin { width: 100%; background: #f1f5f9; color: #0f172a; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; margin-top: 10px; }
         .btn-signin:hover { background: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
-
-        .error { color: #f43f5e; font-size: 13px; margin-top: 10px; text-align: center; }
+        .btn-free { width: 100%; background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; margin-top: 10px; text-decoration: none; display: block; text-align: center; }
+        .btn-free:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
         .admin-link { display: block; margin-top: 20px; color: #94a3b8; font-size: 12px; text-align: center; text-decoration: none; }
         .admin-link:hover { color: #c084fc; text-decoration: underline; }
     </style>
 </head>
 <body>
-
     <div class="login-left">
         <div class="logo-area">🛡️ Axero<span>Core.net</span></div>
         <div class="hero-text">
             <p style="color: #a78bfa; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Threat Intelligence, made useful</p>
             <h2>Your investigations<br>are waiting.</h2>
             <p>Search breach records, stealer intelligence, and open-source data in one focused view.</p>
-            
             <div class="steps-box">
                 <div class="step-item active">✓ Secure sign in</div>
                 <div class="step-item">🔒 Resume your investigations</div>
@@ -76,29 +65,25 @@ HTML_LOGIN = """
         </div>
         <div style="font-size: 11px; color: #475569;">AxeroCore.net Security Infrastructure</div>
     </div>
-
     <div class="login-right">
         <h1>Welcome back</h1>
-        
         <div class="social-logins">
-            <div class="social-btn">Google</div>
-            <div class="social-btn">GitHub</div>
-            <div class="social-btn">Discord</div>
+            <a href="/oauth-login?provider=Google" class="social-btn">Google</a>
+            <a href="/oauth-login?provider=GitHub" class="social-btn">GitHub</a>
+            <a href="/oauth-login?provider=Discord" class="social-btn">Discord</a>
         </div>
-
         <div class="divider"><span>OR</span></div>
-
         <form action="/login" method="POST">
             <div class="input-group">
-                <label>Lisans Anahtarı veya Kullanıcı Adı</label>
+                <label>Lisans Anahtarı</label>
                 <input type="text" name="license_key" placeholder="Lisans Anahtarınızı Girin..." required>
             </div>
             <button type="submit" class="btn-signin">Sign in →</button>
         </form>
+        <a href="/oauth-login?provider=FreeGuest" class="btn-free">🚀 Tek Tıkla Free Giriş Yap</a>
         {ERROR_MSG}
         <a href="/admin-login" class="admin-link">🔒 Admin Paneline Git</a>
     </div>
-
 </body>
 </html>
 """
@@ -157,7 +142,6 @@ HTML_ADMIN_PANEL = """
     <div class="container">
         <a href="/" class="back-link">← Ana Sayfaya Dön</a>
         <h1>🔑 Admin Lisans Üretim Paneli</h1>
-        
         <form action="/admin-create-key" method="POST" class="form-group">
             <select name="tier_type">
                 <option value="FREE">Free (12 Modül)</option>
@@ -166,7 +150,6 @@ HTML_ADMIN_PANEL = """
             </select>
             <button type="submit">Yeni Lisans Key Üret</button>
         </form>
-
         <h3>Aktif Lisans Anahtarları</h3>
         <table>
             <tr>
@@ -189,7 +172,6 @@ HTML_PANEL = """
     <title>AxeroCore.net - Intelligence Platform</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
-        
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
         .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
         .logo span { color: #c084fc; }
@@ -198,22 +180,39 @@ HTML_PANEL = """
         .nav-links a:hover { color: #c084fc; }
         .user-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px 14px; border-radius: 20px; color: #c084fc; font-weight: bold; font-size: 13px; }
         .logout-btn { color: #f43f5e !important; font-weight: bold; }
+        .container { max-width: 950px; margin: 40px auto; padding: 0 20px; text-align: center; }
 
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+        /* Üst Sağ Güvenilir Kullanıcılar Sayaç Alanı */
+        .top-stats-area { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px; }
+        .users-counter-box { background: rgba(20, 12, 35, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); padding: 10px 20px; border-radius: 14px; text-align: right; }
+        .users-counter-box b { color: #fff; font-size: 20px; display: block; font-weight: 700; }
+        .users-counter-box span { font-size: 12px; color: #94a3b8; }
+
+        /* Birebir OathNet Kapsül (Pill) Arama Kutusu */
+        .search-pill-container { background: rgba(20, 12, 35, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.35); padding: 10px 14px; border-radius: 40px; display: flex; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 15px; }
+        .search-icon-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #c084fc; font-size: 18px; margin-right: 12px; flex-shrink: 0; }
+        .pill-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; padding: 0 10px; }
+        .pill-input::placeholder { color: #64748b; }
+        .pill-search-btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px 28px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; flex-shrink: 0; }
+        .pill-search-btn:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
+
+        /* Tarih ve Sekme Çubuğu (Kapsül Altı Kart) */
+        .sub-toolbar-card { background: rgba(20, 12, 35, 0.75); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 12px 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
+        .history-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #94a3b8; border-bottom: 1px solid rgba(168, 85, 247, 0.1); padding-bottom: 10px; }
+        .history-chips-left { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .chip { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 5px 12px; border-radius: 20px; color: #cbd5e1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+        .clear-all { color: #f43f5e; cursor: pointer; font-weight: 600; text-decoration: none; }
         
-        .hero { text-align: center; margin-bottom: 30px; }
-        .hero h1 { font-size: 38px; color: #fff; margin-bottom: 8px; font-weight: 700; }
-        .hero h1 span { color: #c084fc; }
-        .hero p { color: #94a3b8; font-size: 14px; }
+        .toolbar-bottom-row { display: flex; justify-content: space-between; align-items: center; }
+        .mode-tabs { display: flex; gap: 8px; }
+        .mode-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; }
+        .mode-btn.active { background: rgba(168, 85, 247, 0.25); color: #fff; border-color: #c084fc; }
 
-        .search-card { background: rgba(25, 15, 45, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.3); padding: 25px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 30px; }
-        .search-box { display: flex; gap: 15px; }
-        input[type="text"] { flex: 1; padding: 14px 20px; border-radius: 10px; border: 1px solid rgba(168, 85, 247, 0.3); background: #0f071f; color: #fff; font-size: 15px; outline: none; }
-        input[type="text"]:focus { border-color: #c084fc; box-shadow: 0 0 12px rgba(192, 132, 252, 0.4); }
-        .btn-search { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 0 30px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
-        .btn-search:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
+        .action-links-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
+        .action-pill { background: rgba(20, 12, 35, 0.8); border: 1px solid rgba(168, 85, 247, 0.2); padding: 8px 16px; border-radius: 16px; color: #cbd5e1; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .action-pill:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); color: #fff; }
 
-        .modules-section { margin-bottom: 25px; background: rgba(20, 12, 35, 0.5); border: 1px solid rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 14px; }
+        .modules-section { text-align: left; margin-bottom: 25px; background: rgba(20, 12, 35, 0.5); border: 1px solid rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 14px; }
         .modules-section h3 { color: #c084fc; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 8px; margin-bottom: 15px; font-size: 15px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         
@@ -222,7 +221,7 @@ HTML_PANEL = """
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
 
-        .results-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; margin-top: 30px; }
+        .results-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; margin-top: 30px; text-align: left; }
         .left-widgets { display: flex; flex-direction: column; gap: 20px; }
         
         .widget-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 16px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
@@ -262,17 +261,52 @@ HTML_PANEL = """
 
     <div class="container">
         
-        <div class="hero">
-            <h1>Review your exposure <br><span>AxeroCore.net</span> ile</h1>
-            <p>Veri sızıntısı olup olmadığını kontrol etmek için e-posta adreslerini, kullanıcı adlarını ve IP adreslerini inceleyin.</p>
+        <!-- Sağ Üst Güvenilir Kullanıcılar Sayaç Alanı -->
+        <div class="top-stats-area">
+            <div class="users-counter-box">
+                <b>256,5K</b>
+                <span>güvenilir kullanıcılar</span>
+            </div>
         </div>
 
         <form action="/sorgula" method="POST">
-            <div class="search-card">
-                <div class="search-box">
-                    <input type="text" name="target" placeholder="e.g. 185.146.115.107 veya kullanıcı adı / Discord ID..." required>
-                    <button type="submit" class="btn-search">Aramak →</button>
+            <!-- Birebir OathNet Kapsül Arama Kutusu -->
+            <div class="search-pill-container">
+                <div class="search-icon-badge">🛡️</div>
+                <input type="text" name="target" class="pill-input" placeholder="e.g. username: winterfox veya 185.146.115.107..." required>
+                <button type="submit" class="pill-search-btn">Aramak →</button>
+            </div>
+
+            <!-- Tarih ve Mod Sekmeleri Toolbar Kartı -->
+            <div class="sub-toolbar-card">
+                <div class="history-row">
+                    <div class="history-chips-left">
+                        <span>🕒 TARİH</span>
+                        <div class="chip">185.146.115.107 ✕</div>
+                        <div class="chip">1556198663930519627 ✕</div>
+                        <div class="chip">1484580282179246163 ✕</div>
+                    </div>
+                    <a href="#" class="clear-all">🗑️ TÜMÜNÜ TEMİZLE</a>
                 </div>
+                <div class="toolbar-bottom-row">
+                    <div class="mode-tabs">
+                        <button type="button" class="mode-btn active">Otelleştirilmiş</button>
+                        <button type="button" class="mode-btn">Manuel</button>
+                    </div>
+                    <div class="mode-tabs">
+                        <button type="button" class="mode-btn">🔲 Toplu Arama</button>
+                        <button type="button" class="mode-btn">🌐 Tarayıcı</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alt Ek Özellik Pilleri -->
+            <div class="action-links-row">
+                <a href="#" class="action-pill">🛡️ Maruz kalma kontrolleri</a>
+                <a href="#" class="action-pill">🔍 Güvenlik araştırması</a>
+                <a href="#" class="action-pill">🔔 İzleme</a>
+                <a href="#" class="action-pill">🔌 API erişimi</a>
+                <a href="#" class="action-pill" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.4);">✨ Yükseltme planı</a>
             </div>
 
             <div class="modules-section">
@@ -356,6 +390,14 @@ def read_root():
                       .replace("{VIP_DISABLED}", vip_disabled)\
                       .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
+
+@app.get("/oauth-login", response_class=HTMLResponse)
+def oauth_login(provider: str):
+    USER_SESSION["logged_in"] = True
+    USER_SESSION["key"] = f"OAUTH-{provider.upper()}-SESSION"
+    USER_SESSION["tier"] = "FREE"
+    USER_SESSION["limit"] = 12
+    return RedirectResponse(url="/", status_code=303)
 
 @app.get("/admin-login", response_class=HTMLResponse)
 def admin_login_page():
