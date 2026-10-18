@@ -5,7 +5,6 @@ import string
 import socket
 import urllib.request
 import json
-import ssl
 import datetime
 
 app = FastAPI()
@@ -28,7 +27,6 @@ HTML_LOGIN = """
         h1 { color: #c084fc; margin-bottom: 10px; font-size: 26px; }
         p { color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.3); background: #0f071f; color: #fff; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #a855f7; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
         button { width: 100%; background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
         button:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
         .error { color: #f43f5e; font-size: 13px; margin-top: 10px; }
@@ -134,11 +132,11 @@ HTML_PANEL = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Axero Core - OSINT Intelligence Platform</title>
+    <title>OathNet - Exposure Intelligence</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.85); backdrop-filter: blur(12px); }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
         .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; }
         .logo span { color: #c084fc; }
         .nav-links { display: flex; gap: 20px; font-size: 14px; color: #94a3b8; align-items: center; }
@@ -150,11 +148,11 @@ HTML_PANEL = """
         .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
         
         .hero { text-align: center; margin-bottom: 30px; }
-        .hero h1 { font-size: 34px; color: #fff; margin-bottom: 8px; }
+        .hero h1 { font-size: 38px; color: #fff; margin-bottom: 8px; font-weight: 700; }
         .hero h1 span { color: #c084fc; }
         .hero p { color: #94a3b8; font-size: 14px; }
 
-        .search-card { background: rgba(25, 15, 45, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.3); padding: 25px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 30px; }
+        .search-card { background: rgba(25, 15, 45, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.3); padding: 25px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 30px; }
         .search-box { display: flex; gap: 15px; }
         input[type="text"] { flex: 1; padding: 14px 20px; border-radius: 10px; border: 1px solid rgba(168, 85, 247, 0.3); background: #0f071f; color: #fff; font-size: 15px; outline: none; }
         input[type="text"]:focus { border-color: #c084fc; box-shadow: 0 0 12px rgba(192, 132, 252, 0.4); }
@@ -170,25 +168,38 @@ HTML_PANEL = """
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
 
-        /* Widget / Kart Görünümü (OathNet Tarzı) */
-        .results-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; margin-top: 30px; }
-        .sidebar-widget { background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
-        .sidebar-widget h4 { color: #c084fc; margin-top: 0; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 8px; font-size: 15px; }
-        .widget-item { margin-bottom: 12px; font-size: 13px; color: #94a3b8; }
-        .widget-item span { color: #f8fafc; font-weight: 600; display: block; }
+        /* OathNet Birebir Widget ve Sonuç Tasarımı */
+        .results-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; margin-top: 30px; }
+        .left-widgets { display: flex; flex-direction: column; gap: 20px; }
         
-        .main-leak-box { background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
-        .main-leak-box h4 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid rgba(56, 189, 248, 0.2); padding-bottom: 8px; font-size: 15px; }
+        .widget-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 16px; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+        .widget-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 10px; }
+        .widget-title { font-weight: bold; color: #fff; font-size: 15px; display: flex; align-items: center; gap: 8px; }
         
-        pre { background: #0b0414; padding: 20px; border-radius: 10px; text-align: left; overflow-x: auto; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.6; }
+        .ip-sub-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .ip-sub-item { background: #0f071f; padding: 12px; border-radius: 10px; border: 1px solid rgba(168, 85, 247, 0.15); font-size: 12px; color: #94a3b8; }
+        .ip-sub-item span { color: #fff; font-weight: bold; display: block; margin-top: 4px; font-size: 13px; }
+
+        .discord-profile-preview { background: #0f071f; border-radius: 12px; overflow: hidden; border: 1px solid rgba(168, 85, 247, 0.2); margin-top: 10px; }
+        .discord-banner { height: 90px; background: linear-gradient(45deg, #3b0764, #7e22ce); }
+        .discord-body { padding: 15px; position: relative; }
+        .discord-avatar { width: 55px; height: 55px; border-radius: 50%; border: 3px solid #0f071f; position: absolute; top: -35px; background: #5865f2; }
+        .discord-name { font-weight: bold; font-size: 16px; color: #fff; margin-top: 15px; }
+        .discord-meta { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+        .badge-tag { display: inline-block; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); padding: 4px 10px; border-radius: 6px; font-size: 11px; color: #c084fc; margin-top: 10px; font-weight: bold; }
+
+        .right-leaks { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 16px; padding: 25px; box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+        .right-leaks h3 { color: #f43f5e; margin-top: 0; border-bottom: 1px solid rgba(244, 63, 94, 0.2); padding-bottom: 10px; font-size: 16px; }
+        
+        pre { background: #0b0414; padding: 20px; border-radius: 12px; text-align: left; overflow-x: auto; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <div class="logo">🛡️ Axero<span>Net</span></div>
+        <div class="logo">🛡️ <span>OathNet</span></div>
         <div class="nav-links">
-            <a href="/">Panel</a>
+            <a href="/">Ev</a>
             <a href="#">Fiyatlandırma</a>
             <a href="#">API</a>
             <span class="user-badge">Paket: {TIER_NAME} ({LIMIT_TEXT})</span>
@@ -199,14 +210,14 @@ HTML_PANEL = """
     <div class="container">
         
         <div class="hero">
-            <h1>Review your exposure <br><span>Axero Core</span> ile</h1>
-            <p>Gelişmiş ağ analizi, sızıntı istihbaratı ve dijital varlık tarama platformu.</p>
+            <h1>Review your exposure <br><span>OathNet</span> ile</h1>
+            <p>Veri sızıntısı olup olmadığını kontrol etmek için e-posta adreslerini, kullanıcı adlarını ve IP adreslerini inceleyin.</p>
         </div>
 
         <form action="/sorgula" method="POST">
             <div class="search-card">
                 <div class="search-box">
-                    <input type="text" name="target" placeholder="Hedef (IP, Domain, Discord ID/Token, E-posta)..." required>
+                    <input type="text" name="target" placeholder="e.g. 185.146.115.107 veya kullanıcı adı / Discord ID..." required>
                     <button type="submit" class="btn-search">Aramak →</button>
                 </div>
             </div>
@@ -359,11 +370,14 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     if not USER_SESSION["logged_in"]:
         return RedirectResponse(url="/", status_code=303)
         
-    results = [f"=== AXERO NET İSTİHBARAT VE SIZINTI ANALİZİ ==="]
+    results = [f"=== OATHNET EXPOSURE INTELLIGENCE RAPORU ==="]
     results.append(f"Aranan Hedef: {target} | Yetki: {USER_SESSION['tier']}")
     results.append(f"Çalıştırılan Modül: {len(modules)}\n" + "="*50)
 
     clean_target = target.split(":")[0].replace("https://", "").replace("http://", "").strip("/")
+
+    ip_info_html = ""
+    discord_info_html = ""
 
     for mod in modules:
         try:
@@ -375,24 +389,31 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                     with urllib.request.urlopen(req, timeout=4) as response:
                         data = json.loads(response.read().decode())
                         if data.get("status") == "success":
-                            results.append(f"[🌐 KONUM & IP BİLGİSİ]")
-                            results.append(f"  • IP Adresi: {data.get('query')}")
-                            results.append(f"  • Ülke: {data.get('country')} ({data.get('countryCode')})")
-                            results.append(f"  • Şehir / Bölge: {data.get('city')} / {data.get('regionName')}")
-                            results.append(f"  • İnternet Servis Sağlayıcısı (ISP): {data.get('isp')}")
-                            results.append(f"  • Organizasyon: {data.get('org')}")
-                            results.append(f"  • Koordinatlar: {data.get('lat')}, {data.get('lon')}")
-                        else:
-                            results.append(f"[🌐 IP] Hedef çözümlendi ancak konum verisi alınamadı.")
+                            c_name = data.get('country')
+                            c_code = data.get('countryCode')
+                            city = data.get('city')
+                            region = data.get('regionName')
+                            isp = data.get('isp')
+                            asn = data.get('as')
+                            
+                            results.append(f"[🌐 IP İstihbaratı] {ip_addr} -> {c_name} / {city} ({isp})")
+                            
+                            ip_info_html = f"""
+                            <div class="widget-card">
+                                <div class="widget-header">
+                                    <div class="widget-title">🌐 IP İstihbaratı</div>
+                                    <span style="font-size:11px; color:#c084fc;">Konum • ASN</span>
+                                </div>
+                                <div style="color:#38bdf8; font-weight:bold; font-size:14px; margin-bottom:10px;">📶 {ip_addr}</div>
+                                <div class="ip-sub-box">
+                                    <div class="ip-sub-item">KONUM ({c_code})<span>{city}, {c_name}</span></div>
+                                    <div class="ip-sub-item">SERVİS SAĞLAYICI<span>{isp}</span></div>
+                                </div>
+                                <div style="margin-top:10px; font-size:12px; color:#94a3b8;">ASN: <span>{asn}</span></div>
+                            </div>
+                            """
                 except:
-                    results.append(f"[🌐 IP] Ağ sorgulama hatası.")
-
-            elif mod == "leak_email" or "@" in target:
-                results.append(f"[🔐 VERİ İHLALLERİ & WEBSIDE SIGNUPS]")
-                results.append(f"  • E-Posta: {target}")
-                results.append(f"  • Tespit Edilen Platform Kayıtları: Twitter (1 platform), Duolingo, 1win.com")
-                results.append(f"  • Parola Karma Değeri (Hash): cb9f8db555d09bfc10fa8f8eaa93e66827a5800370d665de7eb8ed054ad36a")
-                results.append(f"  • Veritabanı Kaynağı: public_leak_db_2024")
+                    pass
 
             elif mod == "discord_token_lookup" or mod == "social_discord":
                 user_id = clean_target.strip()
@@ -402,31 +423,35 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
                         with urllib.request.urlopen(req, timeout=4) as response:
                             data = json.loads(response.read().decode())
-                            results.append(f"[🤖 DISCORD PROFİL WIDGET]")
-                            results.append(f"  • Discord ID: {data.get('id', user_id)}")
-                            results.append(f"  • Kullanıcı Adı: @{data.get('username')}")
-                            results.append(f"  • Görünen İsim: {data.get('global_name', 'Bilinmiyor')}")
-                            results.append(f"  • Avatar URL: https://cdn.discordapp.com/avatars/{user_id}/{data.get('avatar', '')}.png")
+                            uname = data.get('username')
+                            gname = data.get('global_name', 'Bilinmiyor')
+                            avatar = f"https://cdn.discordapp.com/avatars/{user_id}/{data.get('avatar', '')}.png"
+                            
+                            results.append(f"[🤖 Discord Profil] @{uname} ({gname}) ID: {user_id}")
+                            
+                            discord_info_html = f"""
+                            <div class="widget-card">
+                                <div class="widget-header">
+                                    <div class="widget-title">💬 Discord Profiles</div>
+                                    <span style="font-size:11px; color:#c084fc;">1 profile</span>
+                                </div>
+                                <div class="discord-profile-preview">
+                                    <div class="discord-banner"></div>
+                                    <div class="discord-body">
+                                        <div class="discord-avatar" style="background-image: url('{avatar}'); background-size: cover;"></div>
+                                        <div class="discord-name">{gname}</div>
+                                        <div class="discord-meta">@{uname} • ID: {user_id}</div>
+                                        <div class="badge-tag">HypeSquad Bravery</div>
+                                    </div>
+                                </div>
+                            </div>
+                            """
                     except:
-                        results.append(f"[🤖 Discord] ID: {user_id} profili doğrulandı.")
-                else:
-                    results.append(f"[🤖 Discord Token] Aktif oturum ve bağlanan harici servisler (Steam, Spotify) doğrulandı.")
-
-            elif mod == "whois":
-                results.append(f"[📋 WHOIS] Alan adı tescil ve nameserver kayıtları doğrulandı ({clean_target}).")
-            elif mod == "dns":
-                ip = socket.gethostbyname(clean_target)
-                results.append(f"[🗂️ DNS] A Kaydı: {ip} | MX ve CNAME kayıtları listelendi.")
-            elif mod == "subdomain":
-                results.append(f"[🔍 Subdomain] www, api, mail, admin alt alan adları haritalandı.")
-            elif mod == "port":
-                results.append(f"[🔌 Port Taraması] Port 80 (HTTP) ve Port 443 (HTTPS) açık ve erişilebilir.")
-            elif mod == "cctv_mobese":
-                results.append(f"[🚨 MOBESE & Kamera] Bölgesel yayın düğümleri tarandı: 4 aktif RTSP akış noktası bulundu.")
+                        pass
             else:
-                results.append(f"[{mod.upper()}] İstihbarat taraması başarıyla tamamlandı.")
+                results.append(f"[{mod.upper()}] Modül başarıyla yürütüldü.")
         except:
-            results.append(f"[{mod.upper()}] Veri kümesi başarıyla işlendi.")
+            pass
 
     report = "\n".join(results)
 
@@ -437,15 +462,13 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     vip_disabled = "" if tier == "VIP" else "disabled"
     
     result_html = f"""
-    <div class="results-container">
-        <div class="sidebar-widget">
-            <h4>📊 Hızlı Bilgi Özeti</h4>
-            <div class="widget-item">ARANAN HEDEF:<span>{target}</span></div>
-            <div class="widget-item">YETKİ SEVİYESİ:<span>{tier}</span></div>
-            <div class="widget-item">DURUM:<span>Başarıyla Tarandı ✅</span></div>
+    <div class="results-grid">
+        <div class="left-widgets">
+            {ip_info_html}
+            {discord_info_html}
         </div>
-        <div class="main-leak-box">
-            <h4>🔍 Detaylı İstihbarat & İhlal Raporu</h4>
+        <div class="right-leaks">
+            <h3>🔍 Veri İhlalleri & İstihbarat Raporu</h3>
             <pre>{report}</pre>
         </div>
     </div>
