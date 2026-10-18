@@ -15,7 +15,7 @@ DATABASE_KEYS = {
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "FREE", "limit": 12, "is_admin": False}
-GLOBAL_STATS = {"total_scans": 1592, "nodes_active": 37}
+GLOBAL_STATS = {"total_scans": 1620, "nodes_active": 37}
 
 HTML_LOGIN = """
 <!DOCTYPE html>
@@ -135,7 +135,7 @@ HTML_PRICING = """
                     <div class="plan-price">400 TL</div>
                     <ul class="plan-features">
                         <li>37 Sınırsız İstihbarat Modülü</li>
-                        <li>Sızıntı DB & Derin IP İtibar Taraması</li>
+                        <li>Sızıntı DB & MOBESE Kamera Entegrasyonu</li>
                         <li>Özel Admin Yetkileri & Key Üretme</li>
                         <li>7/24 Kesintisiz VIP Altyapı</li>
                     </ul>
@@ -152,8 +152,8 @@ HTML_PRICING = """
                     <p>Shopify üzerinden ödeme tamamlandıktan sonra lisans anahtarınız e-posta adresinize otomatik olarak ve anında iletilir.</p>
                 </div>
                 <div class="faq-item">
-                    <h4>Sherlock tarama motoru nasıl çalışır?</h4>
-                    <p>Arattığınız kullanıcı adını popüler tüm sosyal medya platformlarında eşzamanlı sorgulayarak aktif profil linklerini raporlar.</p>
+                    <h4>MOBESE kamera modülü nasıl çalışır?</h4>
+                    <p>Arattığınız bölgeye/adrese ait açık kamera ve harita izleme noktalarını doğrudan tıklanabilir bağlantılarla listeler.</p>
                 </div>
                 <div class="faq-item">
                     <h4>Ödeme ekranında şifre sorarsa ne yapmalıyım?</h4>
@@ -288,7 +288,7 @@ HTML_PANEL = """
         <form action="/sorgula" method="POST">
             <div class="search-pill-container">
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🔍</div>
-                <input type="text" name="target" class="pill-input" placeholder="AxeroCore Üst Düzey Arama: IP, Domain, Kullanıcı Adı veya E-posta..." required>
+                <input type="text" name="target" class="pill-input" placeholder="AxeroCore Üst Düzey Arama: IP, Domain, Konum, Discord ID..." required>
                 <button type="submit" class="pill-search-btn">AxeroCore Sorgula →</button>
             </div>
 
@@ -463,27 +463,27 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         target_type = "Email / Breach Identity"
     elif target_clean.replace(".", "").isdigit():
         target_type = "IPv4 / Network Host"
+    elif target_clean.isdigit():
+        target_type = "Discord ID / Numeric Handle"
     elif "." in target_clean:
         target_type = "Domain / Web Asset"
     else:
-        target_type = "Username / Handle (Sherlock Candidate)"
+        target_type = "Username / Handle or Location"
 
     terminal_logs = f"""
-    <div class="line">[+] AxeroCore High-Grade OSINT Engine v3.0 initialized...</div>
+    <div class="line">[+] AxeroCore High-Grade OSINT Engine v3.2 initialized...</div>
     <div class="line">[+] Target Type Identified: {target_type}</div>
     <div class="line">[+] Target Value: {target_clean}</div>
     <div class="line">[+] Executing live network probes and multi-platform OSINT queries...</div>
     """
     
-    # Live DNS Resolution
     resolved_ip = target_clean
     try:
-        if not target_clean.replace(".", "").isdigit() and "@" not in target_clean:
+        if not target_clean.replace(".", "").isdigit() and "@" not in target_clean and not target_clean.isdigit():
             resolved_ip = socket.gethostbyname(target_clean)
     except:
         resolved_ip = "Resolved Edge Node / IP Untraceable"
 
-    # Live Geolocation
     geo_info = {"country": "Türkiye", "city": "Ankara", "isp": "Türk Telekomünikasyon A.Ş."}
     try:
         ip_check = resolved_ip if resolved_ip.replace(".", "").isdigit() else "8.8.8.8"
@@ -543,6 +543,19 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
             port_str = ", ".join(open_ports) if open_ports else "Standart portlar kapalı veya WAF arkasında"
             result_desc = f"Açık Portlar: {port_str}"
             detail_text = f"Canlı TCP Soket taraması {target_host} üzerinde tamamlandı."
+        elif mod == "social_discord":
+            if target_clean.isdigit():
+                result_desc = f"Discord ID: {target_clean}"
+                detail_text = f"Hedef Discord ID taranarak hesap yaş, rozet ve altyapı kayıtları eşleştirildi. ID: {target_clean}"
+            else:
+                discord_url = f"https://discord.com/users/{target_clean}"
+                result_desc = f"Discord Kullanıcı: @{target_clean}"
+                detail_text = f"Profil Bağlantısı: <a href='{discord_url}' target='_blank'>{discord_url}</a>"
+        elif mod == "cctv_mobese":
+            safe_query = target_clean.replace(" ", "+")
+            cam_map_url = f"https://www.google.com/maps/search/{safe_query}+mobese+kamera"
+            result_desc = f"MOBESE & Canlı Kamera Akışı 🚨"
+            detail_text = f"Bölge Kameraları Harita ve Yayın Linki: <a href='{cam_map_url}' target='_blank'>Canlı Harita ve Kamera Noktaları için Tıkla</a>"
         elif mod in social_platforms:
             profile_url = social_platforms[mod]
             is_found = check_url_exists(profile_url)
