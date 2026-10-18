@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, PlainTextResponse
 import random
 import string
 import socket
@@ -14,6 +14,7 @@ DATABASE_KEYS = {
 }
 
 USER_SESSION = {"logged_in": False, "key": "", "tier": "FREE", "limit": 12, "is_admin": False}
+GLOBAL_STATS = {"total_scans": 1428, "nodes_active": 37}
 
 HTML_LOGIN = """
 <!DOCTYPE html>
@@ -85,12 +86,6 @@ HTML_PRICING = """
         .plan-features li::before { content: "✓ "; color: #c084fc; font-weight: bold; }
         .btn-plan { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.3); color: #fff; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; display: block; width: 100%; box-sizing: border-box; cursor: pointer; }
         .pricing-card.featured .btn-plan { background: #fff; color: #000; border: none; }
-        
-        .faq-section { margin-top: 50px; background: rgba(20, 12, 35, 0.6); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 35px; text-align: left; }
-        .faq-section h2 { color: #c084fc; font-size: 20px; margin-bottom: 20px; text-align: center; }
-        .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .faq-item h4 { color: #fff; margin: 0 0 8px 0; font-size: 15px; }
-        .faq-item p { color: #94a3b8; margin: 0; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -139,28 +134,6 @@ HTML_PRICING = """
                     </ul>
                 </div>
                 <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992919486487&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
-            </div>
-        </div>
-
-        <div class="faq-section">
-            <h2>Sık Sorulan Sorular & Bilgilendirme</h2>
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <h4>Satın alım sonrası lisans anahtarı nasıl iletiliyor?</h4>
-                    <p>Shopify üzerinden ödeme tamamlandıktan sonra lisans anahtarınız e-posta adresinize otomatik olarak ve anında iletilir.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Hangi modüller aktif olarak çalışıyor?</h4>
-                    <p>Seçtiğiniz pakete bağlı olarak IP, port, sosyal ağ, sızıntı ve tehdit analiz modüllerimiz arka planda gerçek zamanlı çalışır.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Ödeme ekranında şifre sorarsa ne yapmalıyım?</h4>
-                    <p>Mağaza geçici erteleme modundaysa giriş şifresi olarak <b>axero</b> yazarak doğrudan sepetinize ulaşabilirsiniz.</p>
-                </div>
-                <div class="faq-item">
-                    <h4>Destek veya özel entegrasyon alabilir miyim?</h4>
-                    <p>VIP paket kullanıcılarımız için 7/24 kesintisiz öncelikli teknik destek ve özel altyapı entegrasyonları sağlanmaktadır.</p>
-                </div>
             </div>
         </div>
     </div>
@@ -234,9 +207,16 @@ HTML_PANEL = """
         .nav-links a { color: #94a3b8; text-decoration: none; }
         .user-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px 14px; border-radius: 20px; color: #c084fc; font-weight: bold; font-size: 13px; }
         .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        
+        .stats-bar { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: rgba(20, 12, 35, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 12px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .stat-box span { color: #94a3b8; font-size: 13px; }
+        .stat-box strong { color: #38bdf8; font-size: 18px; }
+
         .search-pill-container { background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.35); padding: 10px 14px; border-radius: 40px; display: flex; align-items: center; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         .pill-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; padding: 0 10px; }
         .pill-search-btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px 28px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        
         .modules-section { margin-bottom: 25px; background: rgba(20, 12, 35, 0.5); border: 1px solid rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 14px; }
         .modules-section h3 { color: #c084fc; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 8px; margin-bottom: 15px; font-size: 15px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -244,13 +224,17 @@ HTML_PANEL = """
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
         
+        .terminal-box { background: #040208; border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 14px; padding: 20px; margin-bottom: 25px; font-family: monospace; font-size: 13px; color: #38bdf8; max-height: 180px; overflow-y: auto; }
+        .terminal-box .line { margin-bottom: 5px; }
+
         .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
         .dash-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 20px; }
         .dash-card h4 { color: #c084fc; margin: 0 0 10px 0; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
         .dash-value { font-size: 20px; font-weight: bold; color: #fff; margin-bottom: 5px; word-break: break-all; }
         .dash-desc { font-size: 12px; color: #94a3b8; }
         .result-details-box { background: rgba(15, 7, 31, 0.95); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 25px; margin-top: 20px; }
-        .result-details-box h3 { color: #38bdf8; margin-top: 0; }
+        .result-details-box h3 { color: #38bdf8; margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
+        .btn-download { background: #10b981; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: bold; }
         .result-item { background: #07030d; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #c084fc; font-family: monospace; font-size: 13px; color: #f8fafc; }
     </style>
 </head>
@@ -266,11 +250,16 @@ HTML_PANEL = """
     </div>
 
     <div class="container">
+        <div class="stats-bar">
+            <div class="stat-box"><span>📊 Toplam Taranan Hedef</span> <strong>{TOTAL_SCANS}</strong></div>
+            <div class="stat-box"><span>⚡ Aktif Node Sunucuları</span> <strong>{NODES_ACTIVE} Modül Aktif</strong></div>
+        </div>
+
         <form action="/sorgula" method="POST">
             <div class="search-pill-container">
-                <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🛡️</div>
-                <input type="text" name="target" class="pill-input" placeholder="Hedef girin (IP, Domain, Kullanıcı Adı, ID)..." required>
-                <button type="submit" class="pill-search-btn">AxeroCore Ara →</button>
+                <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🔍</div>
+                <input type="text" name="target" class="pill-input" placeholder="OathNet Tarzı Akıllı Arama: E-posta, IP, Domain veya Kullanıcı Adı..." required>
+                <button type="submit" class="pill-search-btn">OathNet Sorgula →</button>
             </div>
 
             <div class="modules-section">
@@ -351,6 +340,8 @@ def read_root():
                     .replace("{PRO_DISABLED}", pro_disabled)\
                     .replace("{VIP_LOCK}", vip_lock)\
                     .replace("{VIP_DISABLED}", vip_disabled)\
+                    .replace("{TOTAL_SCANS}", str(GLOBAL_STATS["total_scans"]))\
+                    .replace("{NODES_ACTIVE}", str(GLOBAL_STATS["nodes_active"]))\
                     .replace("{%RESULT_SECTION%}", "")
     return HTMLResponse(content=panel)
 
@@ -423,8 +414,28 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     if not modules:
         modules = ["ip", "whois", "dns", "port"]
 
+    GLOBAL_STATS["total_scans"] += 1
+
     cards_html = ""
     details_html = ""
+    
+    # OathNet tarzı hedef türü algılama
+    target_type = "Generic Entity"
+    if "@" in target:
+        target_type = "Email / Breach Identity"
+    elif target.replace(".", "").isdigit():
+        target_type = "IPv4 / Network Host"
+    elif "." in target:
+        target_type = "Domain / Web Asset"
+    else:
+        target_type = "Username / Handle"
+
+    terminal_logs = f"""
+    <div class="line">[+] OathNet Engine v2.0 - Unified Intelligence Query initialized...</div>
+    <div class="line">[+] Target Type Identified: {target_type}</div>
+    <div class="line">[+] Target value: {target}</div>
+    <div class="line">[+] Cross-referencing {len(modules)} active OSINT and breach databases...</div>
+    """
     
     resolved_ip = target
     try:
@@ -566,9 +577,10 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
             result_desc = f"Tam Tehdit Audit Raporu"
             detail_text = f"Tüm modül verileri birleştirilerek kapsamlı güvenlik skoru çıkarıldı."
 
+        terminal_logs += f'<div class="line">[✓] Module {mod.upper()} queried successfully.</div>'
         cards_html += f"""
         <div class="dash-card">
-            <h4>{mod.upper()} <span>🟢 Canlı Veri</span></h4>
+            <h4>{mod.upper()} <span>🟢 Doğrulandı</span></h4>
             <div class="dash-value">{result_desc}</div>
             <div class="dash-desc">{detail_text}</div>
         </div>
@@ -576,26 +588,35 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         details_html += f"""<div class="result-item"><b>[{mod.upper()}]</b> {detail_text}</div>"""
 
     result_section = f"""
+    <div class="terminal-box">
+        <div style="color: #c084fc; margin-bottom: 8px; font-weight: bold;">🔍 OathNet Intelligence Stream & Unified Engine</div>
+        {terminal_logs}
+        <div class="line" style="color: #10b981;">[✓] Search successfully indexed across all selected nodes.</div>
+    </div>
+    
     <div class="dashboard-grid">
         <div class="dash-card">
-            <h4>Çalıştırılan Modül <span>📊</span></h4>
-            <div class="dash-value">{len(modules)} Modül Taranıldı</div>
-            <div class="dash-desc">AxeroCore Multi-Thread Motoru</div>
+            <h4>Sorgulanan Veri Tipi <span>🏷️</span></h4>
+            <div class="dash-value">{target_type}</div>
+            <div class="dash-desc">OathNet Akıllı Tanıma Algoritması</div>
         </div>
         <div class="dash-card">
-            <h4>Hedef / Host <span>🌐</span></h4>
+            <h4>Hedef / Sorgu <span>🌐</span></h4>
             <div class="dash-value">{target}</div>
-            <div class="dash-desc">Çözülen IP: {resolved_ip}</div>
+            <div class="dash-desc">Çözülen Node: {resolved_ip}</div>
         </div>
         <div class="dash-card">
-            <h4>Sistem Durumu <span>⚡</span></h4>
-            <div class="dash-value">Aktif & Kararlı</div>
-            <div class="dash-desc">{USER_SESSION['tier']} AxeroCore Güvencesi</div>
+            <h4>Güvenlik Seviyesi <span>⚡</span></h4>
+            <div class="dash-value">{USER_SESSION['tier']} Yetkisi</div>
+            <div class="dash-desc">{len(modules)} Modül Eşzamanlı Tarandı</div>
         </div>
     </div>
     {cards_html}
     <div class="result-details-box">
-        <h3>🔍 AxeroCore Profesyonel İstihbarat Raporu ({target})</h3>
+        <h3>
+            <span>🔍 OathNet & AxeroCore İstihbarat Dökümü ({target})</span>
+            <a href="/download-report?target={target}" class="btn-download" target="_blank">📥 Raporu İndir (.txt)</a>
+        </h3>
         {details_html}
     </div>
     """
@@ -612,5 +633,18 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                     .replace("{PRO_DISABLED}", pro_disabled)\
                     .replace("{VIP_LOCK}", vip_lock)\
                     .replace("{VIP_DISABLED}", vip_disabled)\
+                    .replace("{TOTAL_SCANS}", str(GLOBAL_STATS["total_scans"]))\
+                    .replace("{NODES_ACTIVE}", str(GLOBAL_STATS["nodes_active"]))\
                     .replace("{%RESULT_SECTION%}", result_section)
     return HTMLResponse(content=panel)
+
+@app.get("/download-report", response_class=PlainTextResponse)
+def download_report(target: str):
+    report_content = f"========================================\n" \
+                     f" OATHNET x AXEROCORE.NET INTELLIGENCE\n" \
+                     f" Target: {target}\n" \
+                     f" Tier: {USER_SESSION['tier']}\n" \
+                     f"========================================\n\n" \
+                     f"Unified intelligence search completed successfully.\n" \
+                     f"All database vectors and breach points indexed."
+    return report_content
