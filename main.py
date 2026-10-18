@@ -126,7 +126,7 @@ HTML_PRICING = """
                         <li>Doğrudan Shopify Ödeme Entegrasyonu</li>
                     </ul>
                 </div>
-                <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992911196183&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+                <a href="https://2hqenb-6k.myshopify.com/password" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
             </div>
             <div class="pricing-card">
                 <div>
@@ -139,7 +139,7 @@ HTML_PRICING = """
                         <li>7/24 Kesintisiz VIP Altyapı</li>
                     </ul>
                 </div>
-                <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992919486487&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+                <a href="https://2hqenb-6k.myshopify.com/password" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
             </div>
         </div>
 
