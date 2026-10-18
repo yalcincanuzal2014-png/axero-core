@@ -182,13 +182,11 @@ HTML_PANEL = """
         .logout-btn { color: #f43f5e !important; font-weight: bold; }
         .container { max-width: 950px; margin: 40px auto; padding: 0 20px; text-align: center; }
 
-        /* Üst Sağ Güvenilir Kullanıcılar Sayaç Alanı */
         .top-stats-area { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px; }
         .users-counter-box { background: rgba(20, 12, 35, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); padding: 10px 20px; border-radius: 14px; text-align: right; }
         .users-counter-box b { color: #fff; font-size: 20px; display: block; font-weight: 700; }
         .users-counter-box span { font-size: 12px; color: #94a3b8; }
 
-        /* Birebir OathNet Kapsül (Pill) Arama Kutusu */
         .search-pill-container { background: rgba(20, 12, 35, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.35); padding: 10px 14px; border-radius: 40px; display: flex; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.6); margin-bottom: 15px; }
         .search-icon-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #c084fc; font-size: 18px; margin-right: 12px; flex-shrink: 0; }
         .pill-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; padding: 0 10px; }
@@ -196,17 +194,30 @@ HTML_PANEL = """
         .pill-search-btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px 28px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; flex-shrink: 0; }
         .pill-search-btn:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
 
-        /* Tarih ve Sekme Çubuğu (Kapsül Altı Kart) */
         .sub-toolbar-card { background: rgba(20, 12, 35, 0.75); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 12px 20px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.5); }
         .history-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #94a3b8; border-bottom: 1px solid rgba(168, 85, 247, 0.1); padding-bottom: 10px; }
         .history-chips-left { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .chip { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 5px 12px; border-radius: 20px; color: #cbd5e1; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+        .chip { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 5px 12px; border-radius: 20px; color: #cbd5e1; font-size: 12px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; }
+        .chip:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.15); }
+        .chip .remove-chip { color: #f43f5e; font-weight: bold; margin-left: 4px; cursor: pointer; }
         .clear-all { color: #f43f5e; cursor: pointer; font-weight: 600; text-decoration: none; }
+        .clear-all:hover { text-decoration: underline; }
         
         .toolbar-bottom-row { display: flex; justify-content: space-between; align-items: center; }
         .mode-tabs { display: flex; gap: 8px; }
-        .mode-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; }
+        .mode-btn { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.2); color: #94a3b8; padding: 8px 16px; border-radius: 12px; cursor: pointer; font-size: 12px; font-weight: 500; transition: 0.2s; }
         .mode-btn.active { background: rgba(168, 85, 247, 0.25); color: #fff; border-color: #c084fc; }
+
+        /* Manuel Mod Paneli Alanı */
+        .manual-section { display: none; text-align: left; background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; padding: 20px; margin-bottom: 25px; }
+        .manual-categories { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); padding-bottom: 12px; flex-wrap: wrap; }
+        .manual-cat-btn { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); color: #f43f5e; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .manual-cat-btn.dimmed { background: #0f071f; border-color: rgba(168, 85, 247, 0.2); color: #94a3b8; }
+        
+        .manual-items-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+        .manual-item-card { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.25); padding: 12px 18px; border-radius: 12px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; font-size: 13px; font-weight: 500; transition: 0.2s; }
+        .manual-item-card:hover { border-color: #c084fc; background: rgba(168, 85, 247, 0.1); }
+        .manual-item-card input { accent-color: #a855f7; transform: scale(1.2); }
 
         .action-links-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
         .action-pill { background: rgba(20, 12, 35, 0.8); border: 1px solid rgba(168, 85, 247, 0.2); padding: 8px 16px; border-radius: 16px; color: #cbd5e1; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
@@ -261,7 +272,6 @@ HTML_PANEL = """
 
     <div class="container">
         
-        <!-- Sağ Üst Güvenilir Kullanıcılar Sayaç Alanı -->
         <div class="top-stats-area">
             <div class="users-counter-box">
                 <b>256,5K</b>
@@ -270,37 +280,108 @@ HTML_PANEL = """
         </div>
 
         <form action="/sorgula" method="POST">
-            <!-- Birebir OathNet Kapsül Arama Kutusu -->
             <div class="search-pill-container">
                 <div class="search-icon-badge">🛡️</div>
-                <input type="text" name="target" class="pill-input" placeholder="e.g. username: winterfox veya 185.146.115.107..." required>
+                <input type="text" id="targetInput" name="target" class="pill-input" placeholder="e.g. username: winterfox veya 185.146.115.107..." required>
                 <button type="submit" class="pill-search-btn">Aramak →</button>
             </div>
 
             <!-- Tarih ve Mod Sekmeleri Toolbar Kartı -->
             <div class="sub-toolbar-card">
                 <div class="history-row">
-                    <div class="history-chips-left">
+                    <div class="history-chips-left" id="chipsContainer">
                         <span>🕒 TARİH</span>
-                        <div class="chip">185.146.115.107 ✕</div>
-                        <div class="chip">1556198663930519627 ✕</div>
-                        <div class="chip">1484580282179246163 ✕</div>
+                        <div class="chip" onclick="fillInput('185.146.115.107')">185.146.115.107 <span class="remove-chip" onclick="event.stopPropagation(); removeChip(this)">✕</span></div>
+                        <div class="chip" onclick="fillInput('1556198663930519627')">1556198663930519627 <span class="remove-chip" onclick="event.stopPropagation(); removeChip(this)">✕</span></div>
+                        <div class="chip" onclick="fillInput('1484580282179246163')">1484580282179246163 <span class="remove-chip" onclick="event.stopPropagation(); removeChip(this)">✕</span></div>
                     </div>
-                    <a href="#" class="clear-all">🗑️ TÜMÜNÜ TEMİZLE</a>
+                    <span class="clear-all" onclick="clearAllChips()">🗑️ TÜMÜNÜ TEMİZLE</span>
                 </div>
                 <div class="toolbar-bottom-row">
                     <div class="mode-tabs">
-                        <button type="button" class="mode-btn active">Otelleştirilmiş</button>
-                        <button type="button" class="mode-btn">Manuel</button>
+                        <button type="button" class="mode-btn active" id="btnAuto" onclick="switchMode('auto')">Otomatikleştirilmiş</button>
+                        <button type="button" class="mode-btn" id="btnManual" onclick="switchMode('manual')">Manuel</button>
                     </div>
                     <div class="mode-tabs">
-                        <button type="button" class="mode-btn">🔲 Toplu Arama</button>
-                        <button type="button" class="mode-btn">🌐 Tarayıcı</button>
+                        <button type="button" class="mode-btn" onclick="setMode(this)">🔲 Toplu Arama</button>
+                        <button type="button" class="mode-btn" onclick="setMode(this)">🌐 Tarayıcı</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Alt Ek Özellik Pilleri -->
+            <!-- MANUEL MOD ALANI (İstediğin Gibi Hepsi Seçilebilir) -->
+            <div id="manualPanel" class="manual-section">
+                <div class="manual-categories">
+                    <div class="manual-cat-btn">🗄️ Veri Sızıntıları</div>
+                    <div class="manual-cat-btn dimmed">👤 Sosyal ve Oyun</div>
+                    <div class="manual-cat-btn dimmed">✉️ E-posta Zekası</div>
+                    <div class="manual-cat-btn dimmed">🌐 Ağ</div>
+                </div>
+                <div class="manual-items-grid">
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_ihlaller" checked> 🛡️ İhlaller</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_hirsiz"> 📄 Hırsız</label>
+                    <label class="manual-item-card"><input type="checkbox" name="modules" value="leak_telefon"> 📖 Telefon rehberi</label>
+                </div>
+            </div>
+
+            <!-- OTOMATİK MOD MODÜL LİSTESİ -->
+            <div id="autoPanel">
+                <div class="modules-section">
+                    <h3>🟢 Temel İstihbarat Modülleri (Free - 12 Modül)</h3>
+                    <div class="grid">
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="ip" checked> IP & Geo Lokasyon</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="whois" checked> Domain Whois Sorgusu</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="dns"> DNS Kayıt Analizi</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="subdomain"> Alt Alan Adı (Subdomain)</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="port"> Port Taraması (Temel)</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="ssl"> SSL Sertifika Kontrolü</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="http_headers"> HTTP Header Analizi</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="robots_txt"> Robots.txt & Sitemap</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="mac_lookup"> MAC Adresi Vendor</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="ping_test"> Ping & Latency Testi</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="http_status"> HTTP Status Checker</label>
+                        <label class="checkbox-label"><input type="checkbox" name="modules" value="asn_lookup"> ASN / ISP Bilgi Sorgu</label>
+                    </div>
+                </div>
+
+                <div class="modules-section">
+                    <h3>🔵 Orta Düzey İstihbarat (Pro - 12 Modül)</h3>
+                    <div class="grid">
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_instagram" {PRO_DISABLED}> Instagram Tarama</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil Analizi</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Hesap Tarama</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok Profil İnceleme</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID & Oyun Geçmişi</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED}> Discord ID & Sunucu</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Hesap Analizi</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_telegram" {PRO_DISABLED}> Telegram Kullanıcı Kontrolü</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="domain_history" {PRO_DISABLED}> Domain Geçmişi (Age)</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="mail_server" {PRO_DISABLED}> MX & Mail Sunucu Testi</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="security_txt" {PRO_DISABLED}> Security.txt Tarama</label>
+                        <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="firewall_detect" {PRO_DISABLED}> WAF / Güvenlik Duvarı</label>
+                    </div>
+                </div>
+
+                <div class="modules-section">
+                    <h3>⭐ Gelişmiş Tehdit & Sızıntı İstihbaratı (VIP - 13 Modül)</h3>
+                    <div class="grid">
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED}> 🤖 Discord Token & Profil</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Canlı Kamera</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı (Leak) DB</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon Numarası İstihbaratı</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="hash_cracker" {VIP_DISABLED}> Hash Çözümleyici (MD5/SHA)</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analizi</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="wayback" {VIP_DISABLED}> Wayback Machine Arşivi</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="deep_scan" {VIP_DISABLED}> Derin Ağ Tehdit Taraması</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ip_reputation" {VIP_DISABLED}> IP Blacklist & Spam DB</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cve_lookup" {VIP_DISABLED}> CVE Güvenlik Açığı Veri</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ssl_cipher" {VIP_DISABLED}> SSL Cipher Suite Testi</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="dns_sec" {VIP_DISABLED}> DNSSEC Doğrulama Testi</label>
+                        <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="full_audit" {VIP_DISABLED}> Tam Otomatik Tehdit Audit</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="action-links-row">
                 <a href="#" class="action-pill">🛡️ Maruz kalma kontrolleri</a>
                 <a href="#" class="action-pill">🔍 Güvenlik araştırması</a>
@@ -308,65 +389,51 @@ HTML_PANEL = """
                 <a href="#" class="action-pill">🔌 API erişimi</a>
                 <a href="#" class="action-pill" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.4);">✨ Yükseltme planı</a>
             </div>
-
-            <div class="modules-section">
-                <h3>🟢 Temel İstihbarat Modülleri (Free - 12 Modül)</h3>
-                <div class="grid">
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ip" checked> IP & Geo Lokasyon</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="whois" checked> Domain Whois Sorgusu</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="dns"> DNS Kayıt Analizi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="subdomain"> Alt Alan Adı (Subdomain)</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="port"> Port Taraması (Temel)</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ssl"> SSL Sertifika Kontrolü</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_headers"> HTTP Header Analizi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="robots_txt"> Robots.txt & Sitemap</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="mac_lookup"> MAC Adresi Vendor</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ping_test"> Ping & Latency Testi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_status"> HTTP Status Checker</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="asn_lookup"> ASN / ISP Bilgi Sorgu</label>
-                </div>
-            </div>
-
-            <div class="modules-section">
-                <h3>🔵 Orta Düzey İstihbarat (Pro - 12 Modül)</h3>
-                <div class="grid">
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_instagram" {PRO_DISABLED}> Instagram Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil Analizi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Hesap Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok Profil İnceleme</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID & Oyun Geçmişi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED}> Discord ID & Sunucu</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Hesap Analizi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_telegram" {PRO_DISABLED}> Telegram Kullanıcı Kontrolü</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="domain_history" {PRO_DISABLED}> Domain Geçmişi (Age)</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="mail_server" {PRO_DISABLED}> MX & Mail Sunucu Testi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="security_txt" {PRO_DISABLED}> Security.txt Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="firewall_detect" {PRO_DISABLED}> WAF / Güvenlik Duvarı</label>
-                </div>
-            </div>
-
-            <div class="modules-section">
-                <h3>⭐ Gelişmiş Tehdit & Sızıntı İstihbaratı (VIP - 13 Modül)</h3>
-                <div class="grid">
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED}> 🤖 Discord Token & Profil</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Canlı Kamera</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı (Leak) DB</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon Numarası İstihbaratı</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="hash_cracker" {VIP_DISABLED}> Hash Çözümleyici (MD5/SHA)</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analizi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="wayback" {VIP_DISABLED}> Wayback Machine Arşivi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="deep_scan" {VIP_DISABLED}> Derin Ağ Tehdit Taraması</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ip_reputation" {VIP_DISABLED}> IP Blacklist & Spam DB</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cve_lookup" {VIP_DISABLED}> CVE Güvenlik Açığı Veri</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ssl_cipher" {VIP_DISABLED}> SSL Cipher Suite Testi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="dns_sec" {VIP_DISABLED}> DNSSEC Doğrulama Testi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="full_audit" {VIP_DISABLED}> Tam Otomatik Tehdit Audit</label>
-                </div>
-            </div>
         </form>
 
         {%RESULT_SECTION%}
     </div>
+
+    <script>
+        function removeChip(el) {
+            const chip = el.closest('.chip');
+            if (chip) chip.remove();
+        }
+
+        function clearAllChips() {
+            const chips = document.querySelectorAll('#chipsContainer .chip');
+            chips.forEach(c => c.remove());
+        }
+
+        function fillInput(val) {
+            document.getElementById('targetInput').value = val;
+        }
+
+        function setMode(btn) {
+            const group = btn.closest('.mode-tabs');
+            group.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function switchMode(mode) {
+            const btnAuto = document.getElementById('btnAuto');
+            const btnManual = document.getElementById('btnManual');
+            const autoPanel = document.getElementById('autoPanel');
+            const manualPanel = document.getElementById('manualPanel');
+
+            if (mode === 'manual') {
+                btnManual.classList.add('active');
+                btnAuto.classList.remove('active');
+                manualPanel.style.display = 'block';
+                autoPanel.style.display = 'none';
+            } else {
+                btnAuto.classList.add('active');
+                btnManual.classList.remove('active');
+                manualPanel.style.display = 'none';
+                autoPanel.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>
 """
