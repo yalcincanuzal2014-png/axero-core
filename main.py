@@ -20,7 +20,10 @@ HTML_LOGIN = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>AxeroCore.net - Welcome Back</title>
+    <title>AxeroCore.net - Threat Intelligence Platform</title>
+    <meta name="description" content="AxeroCore.net - Veri ihlali arama, veri hırsızı analizi, mağdur tespiti ve OSINT sorgulama platformu.">
+    <meta name="keywords" content="axero core, axerocore, axerocore.net, osint, breach search, threat intelligence">
+    <meta name="robots" content="index, follow">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; margin: 0; padding: 0; height: 100vh; display: flex; overflow: hidden; }
         .login-left { flex: 1.2; background: radial-gradient(circle at 20% 40%, #3b0764 0%, #07030d 70%); display: flex; flex-direction: column; justify-content: space-between; padding: 60px; position: relative; }
@@ -93,7 +96,10 @@ HTML_PRICING = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>AxeroCore.net - Fiyatlandırma</title>
+    <title>AxeroCore.net - Fiyatlandırma Planları</title>
+    <meta name="description" content="AxeroCore.net fiyatlandırma seçenekleri: Özgür, Profesyonel ve Başlangıç (VIP) paketleri.">
+    <meta name="keywords" content="axerocore fiyat, axero fiyatlandırma, osint paketleri">
+    <meta name="robots" content="index, follow">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
@@ -157,17 +163,13 @@ HTML_PRICING = """
         </div>
 
         <div class="pricing-grid">
-            <!-- 1. ÖZGÜR (FREE) -->
             <div class="pricing-card">
                 <div>
                     <div class="plan-title">Özgür</div>
                     <div class="plan-desc">Temel arama iş akışını ücretsiz deneyin.</div>
-                    
                     <div class="plan-price" id="priceFree">0 TL <span>/ay</span></div>
                     <div class="price-sub" id="subFree">Yıllıkta 0 TL /yıl</div>
-                    
                     <a href="/" class="btn-plan">Mevcut Plan</a>
-                    
                     <ul class="plan-features">
                         <li><span class="check">✓</span> 12 Temel Modül Açık</li>
                         <li><span class="cross">✕</span> Pro ve VIP Modüller Kapalı</li>
@@ -178,19 +180,15 @@ HTML_PRICING = """
                 </div>
             </div>
 
-            <!-- 2. PROFESYONEL (PRO) -->
             <div class="pricing-card featured">
                 <div class="badge-best">⭐ EN İYİ FİYAT</div>
                 <div class="badge-discount">%30 İNDİRİM</div>
                 <div>
                     <div class="plan-title" style="margin-top: 5px;">Profesyonel</div>
                     <div class="plan-desc">Daha geniş ölçekte günlük profesyonel araştırmalar</div>
-                    
                     <div class="plan-price" id="pricePro">180 TL <span>/ay</span></div>
                     <div class="price-sub" id="subPro"><s>250 TL /ay</s> - % 30<br><b>1.512 TL /yıl</b><br><span style="color:#10b981;">Yılda 648 TL tasarruf edin</span></div>
-                    
                     <a href="/" class="btn-plan">Go Pro</a>
-                    
                     <ul class="plan-features">
                         <li><span class="check">✓</span> 24 Modül Açık (Temel + Orta Düzey)</li>
                         <li><span class="check">✓</span> Sosyal Medya ve Oyun Tarama Modülleri</li>
@@ -201,17 +199,13 @@ HTML_PRICING = """
                 </div>
             </div>
 
-            <!-- 3. BAŞLANGIÇ / VIP -->
             <div class="pricing-card">
                 <div>
                     <div class="plan-title">Başlangıç (VIP)</div>
                     <div class="plan-desc">Tüm 37 modül, API ve sınırsız otomasyon</div>
-                    
                     <div class="plan-price" id="priceStart">400 TL <span>/ay</span></div>
                     <div class="price-sub" id="subStart"><s>570 TL /ay</s> - % 30<br><b>3.360 TL /yıl</b><br><span style="color:#10b981;">Yılda 1.440 TL tasarruf edin</span></div>
-                    
                     <a href="/" class="btn-plan">Başlayın</a>
-                    
                     <ul class="plan-features">
                         <li><span class="check">✓</span> Tüm 37 Gelişmiş Modül Açık (Tümü)</li>
                         <li><span class="check">✓</span> E-Posta, Telefon ve Sızıntı DB</li>
@@ -259,7 +253,10 @@ HTML_API = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>AxeroCore.net - API Dokümantasyonu</title>
+    <title>AxeroCore.net - API Dokümantasyonu ve Geliştirici Kılavuzu</title>
+    <meta name="description" content="AxeroCore.net API dokümantasyonu, uç nokta referansları ve entegrasyon kılavuzları.">
+    <meta name="keywords" content="axerocore api, osint api, breach search api">
+    <meta name="robots" content="index, follow">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .api-navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 30px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: #07030d; height: 60px; box-sizing: border-box; }
@@ -451,6 +448,7 @@ HTML_ADMIN_LOGIN = """
 <head>
     <meta charset="UTF-8">
     <title>AxeroCore.net - Admin Girişi</title>
+    <meta name="robots" content="noindex, nofollow">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .login-card { background: rgba(30, 20, 50, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(244, 63, 94, 0.2); padding: 40px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); width: 380px; text-align: center; }
@@ -481,6 +479,7 @@ HTML_ADMIN_PANEL = """
 <head>
     <meta charset="UTF-8">
     <title>AxeroCore.net - Key Yönetim Paneli</title>
+    <meta name="robots" content="noindex, nofollow">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #090514; color: #f8fafc; margin: 0; padding: 30px; }
         .container { max-width: 800px; margin: auto; background: rgba(30, 20, 50, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.2); padding: 30px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); }
@@ -527,6 +526,9 @@ HTML_PANEL = """
 <head>
     <meta charset="UTF-8">
     <title>AxeroCore.net - Intelligence Platform</title>
+    <meta name="description" content="AxeroCore.net İstihbarat ve Güvenlik Platformu paneli.">
+    <meta name="keywords" content="axerocore, osint panel, breach intelligence">
+    <meta name="robots" content="index, follow">
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
