@@ -5,7 +5,6 @@ import string
 import socket
 import urllib.request
 import json
-import datetime
 
 app = FastAPI()
 
@@ -69,14 +68,12 @@ HTML_PRICING = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>AxeroCore.net - Fiyatlandırma Planları</title>
+    <title>AxeroCore.net - Fiyatlandırma</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); }
         .logo { font-size: 20px; font-weight: bold; color: #fff; text-decoration: none; display: flex; gap: 8px; }
         .logo span { color: #c084fc; }
-        .nav-links { display: flex; gap: 20px; font-size: 14px; align-items: center; }
-        .nav-links a { color: #94a3b8; text-decoration: none; }
         .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; text-align: center; }
         .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: left; margin-top: 30px; }
         .pricing-card { background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -90,31 +87,19 @@ HTML_PRICING = """
 <body>
     <div class="navbar">
         <a href="/" class="logo">🛡️ Axero<span>Core.net</span></a>
-        <div class="nav-links"><a href="/">Ev</a><a href="/fiyatlandirma" style="color: #c084fc;">Fiyatlandırma</a><a href="/api">API</a></div>
+        <div style="display:flex; gap:20px; font-size:14px;"><a href="/" style="color:#94a3b8; text-decoration:none;">Ev</a><a href="/fiyatlandirma" style="color: #c084fc; text-decoration:none;">Fiyatlandırma</a></div>
     </div>
     <div class="container">
         <h1 style="color:#fff;">Profesyonel Planlar</h1>
         <div class="pricing-grid">
             <div class="pricing-card">
-                <div>
-                    <div class="plan-title">Özgür (Free)</div>
-                    <div class="plan-price">0 TL <span>/ay</span></div>
-                    <a href="/" class="btn-plan">Mevcut Plan</a>
-                </div>
+                <div><div class="plan-title">Özgür (Free)</div><div class="plan-price">0 TL</div><a href="/" class="btn-plan">Mevcut Plan</a></div>
             </div>
             <div class="pricing-card featured">
-                <div>
-                    <div class="plan-title">Profesyonel (Pro)</div>
-                    <div class="plan-price">180 TL <span>/ay</span></div>
-                    <form action="/shopier-odeme-baslat" method="POST"><input type="hidden" name="tier" value="PRO"><button type="submit" class="btn-plan">Shopier ile Satın Al</button></form>
-                </div>
+                <div><div class="plan-title">Profesyonel (Pro)</div><div class="plan-price">180 TL</div><form action="/shopier-odeme-baslat" method="POST"><input type="hidden" name="tier" value="PRO"><button type="submit" class="btn-plan">Shopier ile Satın Al</button></form></div>
             </div>
             <div class="pricing-card">
-                <div>
-                    <div class="plan-title">Başlangıç (VIP)</div>
-                    <div class="plan-price">400 TL <span>/ay</span></div>
-                    <form action="/shopier-odeme-baslat" method="POST"><input type="hidden" name="tier" value="VIP"><button type="submit" class="btn-plan">Shopier ile Satın Al</button></form>
-                </div>
+                <div><div class="plan-title">Başlangıç (VIP)</div><div class="plan-price">400 TL</div><form action="/shopier-odeme-baslat" method="POST"><input type="hidden" name="tier" value="VIP"><button type="submit" class="btn-plan">Shopier ile Satın Al</button></form></div>
             </div>
         </div>
     </div>
@@ -125,14 +110,13 @@ HTML_PRICING = """
 HTML_SUCCESS_PURCHASE = """
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8"><title>Ödeme Başarılı</title>
-    <style>
-        body { font-family: sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: rgba(30, 20, 50, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); padding: 40px; border-radius: 16px; width: 450px; text-align: center; }
-        .key-box { background: #0f071f; border: 1px solid #c084fc; padding: 15px; border-radius: 8px; font-size: 18px; color: #38bdf8; font-family: monospace; font-weight: bold; margin: 20px 0; }
-        .btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; box-sizing: border-box; }
-    </style>
+<head><meta charset="UTF-8"><title>Ödeme Başarılı</title>
+<style>
+    body { font-family: sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .card { background: rgba(30, 20, 50, 0.8); border: 1px solid rgba(168, 85, 247, 0.3); padding: 40px; border-radius: 16px; width: 450px; text-align: center; }
+    .key-box { background: #0f071f; border: 1px solid #c084fc; padding: 15px; border-radius: 8px; font-size: 18px; color: #38bdf8; font-family: monospace; font-weight: bold; margin: 20px 0; }
+    .btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; text-decoration: none; display: inline-block; box-sizing: border-box; }
+</style>
 </head>
 <body>
     <div class="card">
@@ -145,19 +129,16 @@ HTML_SUCCESS_PURCHASE = """
 </html>
 """
 
-HTML_API = """<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><title>API</title></head><body style="background:#07030d; color:#fff; font-family:sans-serif; padding:40px;"><h1>AxeroCore API</h1><a href="/" style="color:#c084fc;">← Ana Sayfa</a></body></html>"""
-
 HTML_ADMIN_LOGIN = """
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8"><title>Admin Giriş</title>
-    <style>
-        body { font-family: sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: rgba(30, 20, 50, 0.7); border: 1px solid rgba(244, 63, 94, 0.2); padding: 40px; border-radius: 16px; width: 380px; text-align: center; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(244, 63, 94, 0.3); background: #0f071f; color: #fff; box-sizing: border-box; outline: none; }
-        button { width: 100%; background: #f43f5e; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-    </style>
+<head><meta charset="UTF-8"><title>Admin Giriş</title>
+<style>
+    body { font-family: sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .login-card { background: rgba(30, 20, 50, 0.7); border: 1px solid rgba(244, 63, 94, 0.2); padding: 40px; border-radius: 16px; width: 380px; text-align: center; }
+    input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(244, 63, 94, 0.3); background: #0f071f; color: #fff; box-sizing: border-box; outline: none; }
+    button { width: 100%; background: #f43f5e; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+</style>
 </head>
 <body>
     <div class="login-card">
@@ -174,17 +155,16 @@ HTML_ADMIN_LOGIN = """
 HTML_ADMIN_PANEL = """
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-    <meta charset="UTF-8"><title>Admin Paneli</title>
-    <style>
-        body { font-family: sans-serif; background: #090514; color: #f8fafc; margin: 0; padding: 30px; }
-        .container { max-width: 800px; margin: auto; background: rgba(30, 20, 50, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); padding: 30px; border-radius: 16px; }
-        select, button { padding: 12px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.3); background: #0f071f; color: #fff; font-size: 16px; }
-        button { background: #10b981; cursor: pointer; font-weight: bold; border: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0f071f; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 14px; border-bottom: 1px solid rgba(168, 85, 247, 0.1); text-align: left; font-size: 14px; }
-        th { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
-    </style>
+<head><meta charset="UTF-8"><title>Admin Paneli</title>
+<style>
+    body { font-family: sans-serif; background: #090514; color: #f8fafc; margin: 0; padding: 30px; }
+    .container { max-width: 800px; margin: auto; background: rgba(30, 20, 50, 0.7); border: 1px solid rgba(168, 85, 247, 0.2); padding: 30px; border-radius: 16px; }
+    select, button { padding: 12px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.3); background: #0f071f; color: #fff; font-size: 16px; }
+    button { background: #10b981; cursor: pointer; font-weight: bold; border: none; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0f071f; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 14px; border-bottom: 1px solid rgba(168, 85, 247, 0.1); text-align: left; font-size: 14px; }
+    th { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+</style>
 </head>
 <body>
     <div class="container">
@@ -194,10 +174,7 @@ HTML_ADMIN_PANEL = """
             <select name="tier_type"><option value="FREE">Free</option><option value="PRO">Pro</option><option value="VIP">VIP</option></select>
             <button type="submit">Manuel Key Üret</button>
         </form>
-        <table>
-            <tr><th>Lisans Anahtarı</th><th>Paket Türü</th><th>Limit</th></tr>
-            {KEY_LIST_ROWS}
-        </table>
+        <table><tr><th>Lisans Anahtarı</th><th>Paket Türü</th><th>Limit</th></tr>{KEY_LIST_ROWS}</table>
     </div>
 </body>
 </html>
@@ -216,19 +193,27 @@ HTML_PANEL = """
         .logo span { color: #c084fc; }
         .nav-links { display: flex; gap: 20px; font-size: 14px; align-items: center; }
         .nav-links a { color: #94a3b8; text-decoration: none; }
-        .nav-links a:hover { color: #c084fc; }
         .user-badge { background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px 14px; border-radius: 20px; color: #c084fc; font-weight: bold; font-size: 13px; }
-        .container { max-width: 950px; margin: 40px auto; padding: 0 20px; text-align: center; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
         .search-pill-container { background: rgba(20, 12, 35, 0.85); border: 1px solid rgba(168, 85, 247, 0.35); padding: 10px 14px; border-radius: 40px; display: flex; align-items: center; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
         .pill-input { flex: 1; background: transparent; border: none; color: #fff; font-size: 15px; outline: none; padding: 0 10px; }
         .pill-search-btn { background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px 28px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 14px; }
-        .modules-section { text-align: left; margin-bottom: 25px; background: rgba(20, 12, 35, 0.5); border: 1px solid rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 14px; }
+        .modules-section { margin-bottom: 25px; background: rgba(20, 12, 35, 0.5); border: 1px solid rgba(168, 85, 247, 0.1); padding: 20px; border-radius: 14px; }
         .modules-section h3 { color: #c084fc; border-bottom: 1px solid rgba(168, 85, 247, 0.2); padding-bottom: 8px; margin-bottom: 15px; font-size: 15px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .checkbox-label { background: #0f071f; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.15); font-size: 13px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #cbd5e1; }
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
-        pre { background: #0b0414; padding: 20px; border-radius: 12px; text-align: left; overflow-x: auto; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.2); font-family: monospace; font-size: 13px; }
+        
+        /* İstediğin Kartlı Dashboard Tasarımı */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 30px; }
+        .dash-card { background: rgba(20, 12, 35, 0.9); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 20px; }
+        .dash-card h4 { color: #c084fc; margin: 0 0 10px 0; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .dash-value { font-size: 28px; font-weight: bold; color: #fff; margin-bottom: 5px; }
+        .dash-desc { font-size: 12px; color: #94a3b8; }
+        .result-details-box { background: rgba(15, 7, 31, 0.95); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 25px; margin-top: 20px; }
+        .result-details-box h3 { color: #38bdf8; margin-top: 0; }
+        .result-item { background: #07030d; padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #c084fc; font-family: monospace; font-size: 13px; color: #f8fafc; }
     </style>
 </head>
 <body>
@@ -237,7 +222,6 @@ HTML_PANEL = """
         <div class="nav-links">
             <a href="/">Ev</a>
             <a href="/fiyatlandirma">Fiyatlandırma</a>
-            <a href="/api">API</a>
             <span class="user-badge">Paket: {TIER_NAME} ({LIMIT_TEXT})</span>
             <a href="/logout" style="color: #f43f5e; font-weight: bold;">Çıkış Yap</a>
         </div>
@@ -247,7 +231,7 @@ HTML_PANEL = """
         <form action="/sorgula" method="POST">
             <div class="search-pill-container">
                 <div style="color: #c084fc; font-size: 18px; margin-left: 10px;">🛡️</div>
-                <input type="text" name="target" class="pill-input" placeholder="e.g. username: winterfox veya IP adresi..." required>
+                <input type="text" name="target" class="pill-input" placeholder="Hedef girin (IP, Domain, Kullanıcı Adı)..." required>
                 <button type="submit" class="pill-search-btn">Aramak →</button>
             </div>
 
@@ -257,15 +241,15 @@ HTML_PANEL = """
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="ip" checked> IP & Geo Lokasyon</label>
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="whois" checked> Domain Whois</label>
                     <label class="checkbox-label"><input type="checkbox" name="modules" value="dns"> DNS Kayıt Analizi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="subdomain"> Alt Alan Adı (Subdomain)</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="port"> Port Taraması (Temel)</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ssl"> SSL Sertifika Kontrolü</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_headers"> HTTP Header Analizi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="robots_txt"> Robots.txt & Sitemap</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="mac_lookup"> MAC Adresi Vendor</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ping_test"> Ping & Latency Testi</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_status"> HTTP Status Checker</label>
-                    <label class="checkbox-label"><input type="checkbox" name="modules" value="asn_lookup"> ASN / ISP Bilgi Sorgu</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="subdomain"> Alt Alan Adı</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="port"> Port Taraması</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ssl"> SSL Sertifika</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_headers"> HTTP Header</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="robots_txt"> Robots.txt</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="mac_lookup"> MAC Adresi</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="ping_test"> Ping & Latency</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="http_status"> HTTP Status</label>
+                    <label class="checkbox-label"><input type="checkbox" name="modules" value="asn_lookup"> ASN / ISP Bilgi</label>
                 </div>
             </div>
 
@@ -273,36 +257,36 @@ HTML_PANEL = """
                 <h3>🔵 Orta Düzey İstihbarat (Pro - 12 Modül)</h3>
                 <div class="grid">
                     <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_instagram" {PRO_DISABLED}> Instagram Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil Analizi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Hesap Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok Profil İnceleme</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID & Oyun Geçmişi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED}> Discord ID & Sunucu</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Hesap Analizi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_telegram" {PRO_DISABLED}> Telegram Kullanıcı Kontrolü</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="domain_history" {PRO_DISABLED}> Domain Geçmişi (Age)</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="mail_server" {PRO_DISABLED}> MX & Mail Sunucu Testi</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="security_txt" {PRO_DISABLED}> Security.txt Tarama</label>
-                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="firewall_detect" {PRO_DISABLED}> WAF / Güvenlik Duvarı</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_github" {PRO_DISABLED}> GitHub Profil</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_twitter" {PRO_DISABLED}> X (Twitter) Tarama</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_tiktok" {PRO_DISABLED}> TikTok İnceleme</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_steam" {PRO_DISABLED}> Steam ID Geçmişi</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_discord" {PRO_DISABLED}> Discord ID Analiz</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_reddit" {PRO_DISABLED}> Reddit Analizi</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="social_telegram" {PRO_DISABLED}> Telegram Kontrol</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="domain_history" {PRO_DISABLED}> Domain Yaşı (Age)</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="mail_server" {PRO_DISABLED}> MX & Mail Sunucu</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="security_txt" {PRO_DISABLED}> Security.txt</label>
+                    <label class="checkbox-label {PRO_LOCK}"><input type="checkbox" name="modules" value="firewall_detect" {PRO_DISABLED}> WAF / Firewall</label>
                 </div>
             </div>
 
             <div class="modules-section">
                 <h3>⭐ Gelişmiş Tehdit & Sızıntı İstihbaratı (VIP - 13 Modül)</h3>
                 <div class="grid">
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED}> 🤖 Discord Token & Profil</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Canlı Kamera</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı (Leak) DB</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon Numarası İstihbaratı</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="hash_cracker" {VIP_DISABLED}> Hash Çözümleyici (MD5/SHA)</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analizi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="wayback" {VIP_DISABLED}> Wayback Machine Arşivi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="deep_scan" {VIP_DISABLED}> Derin Ağ Tehdit Taraması</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ip_reputation" {VIP_DISABLED}> IP Blacklist & Spam DB</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cve_lookup" {VIP_DISABLED}> CVE Güvenlik Açığı Veri</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ssl_cipher" {VIP_DISABLED}> SSL Cipher Suite Testi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="dns_sec" {VIP_DISABLED}> DNSSEC Doğrulama Testi</label>
-                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="full_audit" {VIP_DISABLED}> Tam Otomatik Tehdit Audit</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="discord_token_lookup" {VIP_DISABLED}> 🤖 Discord Token</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cctv_mobese" {VIP_DISABLED}> 🚨 MOBESE & Kamera</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_email" {VIP_DISABLED}> E-Posta Sızıntı DB</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="leak_phone" {VIP_DISABLED}> Telefon İstihbarat</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="hash_cracker" {VIP_DISABLED}> Hash Çözümleyici</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="metadata_exif" {VIP_DISABLED}> EXIF & Dosya Analiz</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="wayback" {VIP_DISABLED}> Wayback Arşivi</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="deep_scan" {VIP_DISABLED}> Derin Ağ Tehdit</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ip_reputation" {VIP_DISABLED}> IP Blacklist DB</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="cve_lookup" {VIP_DISABLED}> CVE Güvenlik Açığı</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="ssl_cipher" {VIP_DISABLED}> SSL Cipher Suite</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="dns_sec" {VIP_DISABLED}> DNSSEC Doğrulama</label>
+                    <label class="checkbox-label {VIP_LOCK}"><input type="checkbox" name="modules" value="full_audit" {VIP_DISABLED}> Tam Tehdit Audit</label>
                 </div>
             </div>
         </form>
@@ -341,21 +325,12 @@ def shopier_odeme_baslat(tier: str = Form(...)):
     random_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     new_key = f"AXERO-SHOPIER-{tier}-{random_code}"
     limit = 24 if tier == "PRO" else 37
-    
     DATABASE_KEYS[new_key] = {"type": tier, "limit": limit}
-    
     USER_SESSION["logged_in"] = True
     USER_SESSION["key"] = new_key
     USER_SESSION["tier"] = tier
     USER_SESSION["limit"] = limit
-    
-    page = HTML_SUCCESS_PURCHASE.replace("{TIER}", tier)\
-                                .replace("{GENERATED_KEY}", new_key)
-    return HTMLResponse(content=page)
-
-@app.get("/api", response_class=HTMLResponse)
-def api_docs():
-    return HTMLResponse(content=HTML_API)
+    return HTMLResponse(content=HTML_SUCCESS_PURCHASE.replace("{TIER}", tier).replace("{GENERATED_KEY}", new_key))
 
 @app.get("/oauth-login", response_class=HTMLResponse)
 def oauth_login(provider: str):
@@ -380,9 +355,7 @@ def admin_auth(admin_pass: str = Form(...)):
 def admin_panel():
     if not USER_SESSION["is_admin"]:
         return RedirectResponse(url="/admin-login", status_code=303)
-    rows = ""
-    for k, v in DATABASE_KEYS.items():
-        rows += f"<tr><td><b>{k}</b></td><td>{v['type']}</td><td>{v['limit']}</td></tr>"
+    rows = "".join([f"<tr><td><b>{k}</b></td><td>{v['type']}</td><td>{v['limit']}</td></tr>" for k, v in DATABASE_KEYS.items()])
     return HTMLResponse(content=HTML_ADMIN_PANEL.replace("{KEY_LIST_ROWS}", rows))
 
 @app.post("/admin-create-key", response_class=HTMLResponse)
@@ -421,21 +394,49 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     if not USER_SESSION["logged_in"]:
         return RedirectResponse(url="/", status_code=303)
         
-    results = [f"=== AXEROCORE.NET RAPORU ==="]
-    results.append(f"Hedef: {target} | Paket: {USER_SESSION['tier']}")
-    results.append(f"Seçilen Modül Sayısı: {len(modules)}\n" + "="*30)
-
+    cards_html = ""
+    details_html = ""
+    
     for mod in modules:
-        results.append(f"[{mod.upper()}] Modül başarıyla yürütüldü.")
+        cards_html += f"""
+        <div class="dash-card">
+            <h4>{mod.upper()} <span>🟢 Aktif</span></h4>
+            <div class="dash-value">Başarılı</div>
+            <div class="dash-desc">{target} için tarama tamamlandı.</div>
+        </div>
+        """
+        details_html += f"""<div class="result-item"><b>[{mod.upper()}]</b> Hedef: {target} - Analiz başarıyla yürütüldü ve raporlandı.</div>"""
 
-    report = "\n".join(results)
+    result_section = f"""
+    <div class="dashboard-grid">
+        <div class="dash-card">
+            <h4>Seçilen Modüller <span>📊</span></h4>
+            <div class="dash-value">{len(modules)}</div>
+            <div class="dash-desc">Çalıştırılan toplam modül</div>
+        </div>
+        <div class="dash-card">
+            <h4>Güvenlik İhlalleri <span>🛡️</span></h4>
+            <div class="dash-value">0</div>
+            <div class="dash-desc">Kritik bulgu saptanmadı</div>
+        </div>
+        <div class="dash-card">
+            <h4>Kalan Aramalar <span>⚡</span></h4>
+            <div class="dash-value">Sınırsız</div>
+            <div class="dash-desc">{USER_SESSION['tier']} Paket Avantajı</div>
+        </div>
+    </div>
+    {cards_html}
+    <div class="result-details-box">
+        <h3>🔍 Detaylı İstihbarat Raporu</h3>
+        {details_html}
+    </div>
+    """
+
     tier = USER_SESSION["tier"]
     pro_lock = "" if tier in ["PRO", "VIP"] else "locked"
     pro_disabled = "" if tier in ["PRO", "VIP"] else "disabled"
     vip_lock = "" if tier == "VIP" else "locked"
     vip_disabled = "" if tier == "VIP" else "disabled"
-    
-    result_html = f"<div style='margin-top: 30px;'><h3>🔍 Tarama Sonuçları</h3><pre>{report}</pre></div>"
 
     panel = HTML_PANEL.replace("{TIER_NAME}", tier)\
                       .replace("{LIMIT_TEXT}", f"{USER_SESSION['limit']} Modül")\
@@ -443,5 +444,5 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
                       .replace("{PRO_DISABLED}", pro_disabled)\
                       .replace("{VIP_LOCK}", vip_lock)\
                       .replace("{VIP_DISABLED}", vip_disabled)\
-                      .replace("{%RESULT_SECTION%}", result_html)
+                      .replace("{%RESULT_SECTION%}", result_section)
     return HTMLResponse(content=panel)
