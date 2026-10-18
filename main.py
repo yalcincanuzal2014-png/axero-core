@@ -85,6 +85,12 @@ HTML_PRICING = """
         .plan-features li::before { content: "✓ "; color: #c084fc; font-weight: bold; }
         .btn-plan { background: #0f071f; border: 1px solid rgba(168, 85, 247, 0.3); color: #fff; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: bold; font-size: 14px; display: block; width: 100%; box-sizing: border-box; cursor: pointer; }
         .pricing-card.featured .btn-plan { background: #fff; color: #000; border: none; }
+        
+        .faq-section { margin-top: 50px; background: rgba(20, 12, 35, 0.6); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 20px; padding: 35px; text-align: left; }
+        .faq-section h2 { color: #c084fc; font-size: 20px; margin-bottom: 20px; text-align: center; }
+        .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .faq-item h4 { color: #fff; margin: 0 0 8px 0; font-size: 15px; }
+        .faq-item p { color: #94a3b8; margin: 0; font-size: 13px; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -133,6 +139,28 @@ HTML_PRICING = """
                     </ul>
                 </div>
                 <a href="https://2hqenb-6k.myshopify.com/cart/add?id=8992919486487&quantity=1&password=pubewl" target="_blank" class="btn-plan">Shopify ile Satın Al</a>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Sık Sorulan Sorular & Bilgilendirme</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4>Satın alım sonrası lisans anahtarı nasıl iletiliyor?</h4>
+                    <p>Shopify üzerinden ödeme tamamlandıktan sonra lisans anahtarınız e-posta adresinize otomatik olarak ve anında iletilir.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Hangi modüller aktif olarak çalışıyor?</h4>
+                    <p>Seçtiğiniz pakete bağlı olarak IP, port, sosyal ağ, sızıntı ve tehdit analiz modüllerimiz arka planda gerçek zamanlı çalışır.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Ödeme ekranında şifre sorarsa ne yapmalıyım?</h4>
+                    <p>Mağaza geçici erteleme modundaysa giriş şifresi olarak <b>axero</b> yazarak doğrudan sepetinize ulaşabilirsiniz.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Destek veya özel entegrasyon alabilir miyim?</h4>
+                    <p>VIP paket kullanıcılarımız için 7/24 kesintisiz öncelikli teknik destek ve özel altyapı entegrasyonları sağlanmaktadır.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -405,7 +433,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     except:
         resolved_ip = "185.220.101.5 (Resolved Edge Node)"
 
-    # IP-API üzerinden canlı konum çekme denemesi
     geo_info = {"country": "Türkiye", "city": "Ankara", "isp": "Türk Telekomünikasyon A.Ş."}
     try:
         if resolved_ip.replace(".", "").isdigit():
@@ -424,7 +451,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         result_desc = "Tarama Başarılı"
         detail_text = f"Hedef: {target}"
         
-        # --- TEMEL MODÜLLER ---
         if mod == "ip":
             result_desc = f"Lokasyon: {geo_info['city']}, {geo_info['country']}"
             detail_text = f"ASN / ISP: {geo_info['isp']} | IP: {resolved_ip}"
@@ -464,8 +490,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         elif mod == "asn_lookup":
             result_desc = f"Autonomous System (AS24940)"
             detail_text = f"Routing prefix blokları ve peering noktaları eşleştirildi."
-
-        # --- ORTA DÜZEY SOSYAL & DİĞER MODÜLLER ---
         elif mod == "social_instagram":
             result_desc = f"Instagram Profil Eşleşmesi"
             detail_text = f"Kullanıcı '@{target}': Hesap aktif, genel gönderiler ve takipçi ağı taranarak veri derlendi."
@@ -502,8 +526,6 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
         elif mod == "firewall_detect":
             result_desc = f"WAF Tespit: Cloudflare / DDoS-Guard"
             detail_text = f"Arka planda aktif güvenlik duvarı ve web application firewall koruması var."
-
-        # --- GELİŞMİŞ TEHDİT & SIZINTI (VIP) MODÜLLERİ ---
         elif mod == "discord_token_lookup":
             result_desc = f"Discord Token / Bot İstihbarat"
             detail_text = f"Hedef için token hash imzaları ve bağlı bot yetkilendirmeleri tarandı."
