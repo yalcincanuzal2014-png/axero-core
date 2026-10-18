@@ -20,31 +20,85 @@ HTML_LOGIN = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Axero Core - Güvenli Giriş</title>
+    <title>AxeroCore.net - Welcome Back</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at center, #1a0b2e 0%, #090514 100%); color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: rgba(30, 20, 50, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.2); padding: 40px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); width: 380px; text-align: center; }
-        h1 { color: #c084fc; margin-bottom: 10px; font-size: 26px; }
-        p { color: #94a3b8; font-size: 14px; margin-bottom: 25px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.3); background: #0f071f; color: #fff; box-sizing: border-box; outline: none; }
-        button { width: 100%; background: linear-gradient(135deg, #9333ea, #7e22ce); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
-        button:hover { background: linear-gradient(135deg, #a855f7, #9333ea); box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
-        .error { color: #f43f5e; font-size: 13px; margin-top: 10px; }
-        .admin-link { display: block; margin-top: 15px; color: #a78bfa; font-size: 12px; text-decoration: none; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; margin: 0; padding: 0; height: 100vh; display: flex; overflow: hidden; }
+        
+        /* Sol Taraf: Gradyan ve Tanıtım Alanı */
+        .login-left { flex: 1.2; background: radial-gradient(circle at 20% 40%, #3b0764 0%, #07030d 70%); display: flex; flex-direction: column; justify-content: space-between; padding: 60px; position: relative; }
+        .logo-area { font-size: 22px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .logo-area span { color: #c084fc; }
+        .hero-text h2 { font-size: 44px; color: #fff; margin-bottom: 15px; font-weight: 700; line-height: 1.2; }
+        .hero-text p { color: #94a3b8; font-size: 15px; max-width: 420px; line-height: 1.5; }
+        
+        .steps-box { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; max-width: 400px; }
+        .step-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 18px; border-radius: 12px; font-size: 14px; color: #cbd5e1; display: flex; align-items: center; gap: 12px; }
+        .step-item.active { background: #fff; color: #000; font-weight: 600; }
+
+        /* Sağ Taraf: Giriş Formu Alanı */
+        .login-right { flex: 1; background: #07030d; display: flex; flex-direction: column; justify-content: center; padding: 60px 80px; }
+        .login-right h1 { font-size: 32px; color: #fff; margin-bottom: 25px; font-weight: 600; }
+        
+        .social-logins { display: flex; gap: 12px; margin-bottom: 20px; }
+        .social-btn { flex: 1; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.2s; }
+        .social-btn:hover { background: rgba(255, 255, 255, 0.08); }
+
+        .divider { text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); line-height: 0.1rem; margin: 25px 0; }
+        .divider span { background: #07030d; padding: 0 15px; color: #64748b; font-size: 12px; }
+
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); background: #0f0a1a; color: #fff; font-size: 14px; outline: none; box-sizing: border-box; transition: 0.2s; }
+        .input-group input:focus { border-color: #a855f7; box-shadow: 0 0 10px rgba(168, 85, 247, 0.3); }
+
+        .btn-signin { width: 100%; background: #f1f5f9; color: #0f172a; border: none; padding: 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; margin-top: 10px; }
+        .btn-signin:hover { background: #fff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+
+        .error { color: #f43f5e; font-size: 13px; margin-top: 10px; text-align: center; }
+        .admin-link { display: block; margin-top: 20px; color: #94a3b8; font-size: 12px; text-align: center; text-decoration: none; }
         .admin-link:hover { color: #c084fc; text-decoration: underline; }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h1>Axero Core 🛡️</h1>
-        <p>Lisans Anahtarı ile Doğrulama</p>
+
+    <div class="login-left">
+        <div class="logo-area">🛡️ Axero<span>Core.net</span></div>
+        <div class="hero-text">
+            <p style="color: #a78bfa; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Threat Intelligence, made useful</p>
+            <h2>Your investigations<br>are waiting.</h2>
+            <p>Search breach records, stealer intelligence, and open-source data in one focused view.</p>
+            
+            <div class="steps-box">
+                <div class="step-item active">✓ Secure sign in</div>
+                <div class="step-item">🔒 Resume your investigations</div>
+                <div class="step-item">⚡ Keep monitoring what matters</div>
+            </div>
+        </div>
+        <div style="font-size: 11px; color: #475569;">AxeroCore.net Security Infrastructure</div>
+    </div>
+
+    <div class="login-right">
+        <h1>Welcome back</h1>
+        
+        <div class="social-logins">
+            <div class="social-btn">Google</div>
+            <div class="social-btn">GitHub</div>
+            <div class="social-btn">Discord</div>
+        </div>
+
+        <div class="divider"><span>OR</span></div>
+
         <form action="/login" method="POST">
-            <input type="text" name="license_key" placeholder="Lisans Anahtarınızı Girin..." required>
-            <button type="submit">Sisteme Giriş Yap</button>
+            <div class="input-group">
+                <label>Lisans Anahtarı veya Kullanıcı Adı</label>
+                <input type="text" name="license_key" placeholder="Lisans Anahtarınızı Girin..." required>
+            </div>
+            <button type="submit" class="btn-signin">Sign in →</button>
         </form>
         {ERROR_MSG}
         <a href="/admin-login" class="admin-link">🔒 Admin Paneline Git</a>
     </div>
+
 </body>
 </html>
 """
@@ -54,9 +108,9 @@ HTML_ADMIN_LOGIN = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Axero Core - Admin Girişi</title>
+    <title>AxeroCore.net - Admin Girişi</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at center, #1a0b2e 0%, #090514 100%); color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07030d; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .login-card { background: rgba(30, 20, 50, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(244, 63, 94, 0.2); padding: 40px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); width: 380px; text-align: center; }
         h1 { color: #f43f5e; margin-bottom: 10px; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid rgba(244, 63, 94, 0.3); background: #0f071f; color: #fff; box-sizing: border-box; outline: none; }
@@ -84,7 +138,7 @@ HTML_ADMIN_PANEL = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Axero Core - Key Yönetim Paneli</title>
+    <title>AxeroCore.net - Key Yönetim Paneli</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #090514; color: #f8fafc; margin: 0; padding: 30px; }
         .container { max-width: 800px; margin: auto; background: rgba(30, 20, 50, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(168, 85, 247, 0.2); padding: 30px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.8); }
@@ -132,12 +186,12 @@ HTML_PANEL = """
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>OathNet - Exposure Intelligence</title>
+    <title>AxeroCore.net - Intelligence Platform</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: radial-gradient(circle at 50% 10%, #1c0e38 0%, #090514 80%); color: #f8fafc; margin: 0; padding: 0; min-height: 100vh; }
         
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; border-bottom: 1px solid rgba(168, 85, 247, 0.15); background: rgba(9, 5, 20, 0.9); backdrop-filter: blur(12px); }
-        .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .logo { font-size: 20px; font-weight: bold; color: #fff; display: flex; align-items: center; gap: 8px; }
         .logo span { color: #c084fc; }
         .nav-links { display: flex; gap: 20px; font-size: 14px; color: #94a3b8; align-items: center; }
         .nav-links a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
@@ -168,7 +222,6 @@ HTML_PANEL = """
         .checkbox-label input { accent-color: #a855f7; transform: scale(1.1); }
         .checkbox-label.locked { opacity: 0.35; cursor: not-allowed; }
 
-        /* OathNet Birebir Widget ve Sonuç Tasarımı */
         .results-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; margin-top: 30px; }
         .left-widgets { display: flex; flex-direction: column; gap: 20px; }
         
@@ -197,7 +250,7 @@ HTML_PANEL = """
 <body>
 
     <div class="navbar">
-        <div class="logo">🛡️ <span>OathNet</span></div>
+        <div class="logo">🛡️ Axero<span>Core.net</span></div>
         <div class="nav-links">
             <a href="/">Ev</a>
             <a href="#">Fiyatlandırma</a>
@@ -210,7 +263,7 @@ HTML_PANEL = """
     <div class="container">
         
         <div class="hero">
-            <h1>Review your exposure <br><span>OathNet</span> ile</h1>
+            <h1>Review your exposure <br><span>AxeroCore.net</span> ile</h1>
             <p>Veri sızıntısı olup olmadığını kontrol etmek için e-posta adreslerini, kullanıcı adlarını ve IP adreslerini inceleyin.</p>
         </div>
 
@@ -353,7 +406,7 @@ def login(license_key: str = Form(...)):
         USER_SESSION["limit"] = info["limit"]
         return RedirectResponse(url="/", status_code=303)
     else:
-        err = '<div class="error">Geçersiz veya kullanılmamış lisans anahtarı!</div>'
+        err = '<div class="error">Geçersiz lisans anahtarı!</div>'
         return HTMLResponse(content=HTML_LOGIN.replace("{ERROR_MSG}", err))
 
 @app.get("/logout", response_class=HTMLResponse)
@@ -370,7 +423,7 @@ async def run_osint(target: str = Form(...), modules: list = Form(default=[])):
     if not USER_SESSION["logged_in"]:
         return RedirectResponse(url="/", status_code=303)
         
-    results = [f"=== OATHNET EXPOSURE INTELLIGENCE RAPORU ==="]
+    results = [f"=== AXEROCORE.NET EXPOSURE INTELLIGENCE RAPORU ==="]
     results.append(f"Aranan Hedef: {target} | Yetki: {USER_SESSION['tier']}")
     results.append(f"Çalıştırılan Modül: {len(modules)}\n" + "="*50)
 
